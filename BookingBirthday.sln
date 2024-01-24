@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingBirthday.Data", "Boo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingBirthday.Application", "BookingBirthday.Application\BookingBirthday.Application.csproj", "{D64EF4A4-CB96-4504-A66B-A3683AD30E64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingBirthday.WebApp", "BookingBirthday.WebApp\BookingBirthday.WebApp.csproj", "{78A0CFDC-3B35-48DE-B920-826D6774661F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{D64EF4A4-CB96-4504-A66B-A3683AD30E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D64EF4A4-CB96-4504-A66B-A3683AD30E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D64EF4A4-CB96-4504-A66B-A3683AD30E64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A0CFDC-3B35-48DE-B920-826D6774661F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A0CFDC-3B35-48DE-B920-826D6774661F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A0CFDC-3B35-48DE-B920-826D6774661F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A0CFDC-3B35-48DE-B920-826D6774661F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B571F57C-7B0B-45D1-8AA8-045797BAE9B6} = {37820EA8-466E-4017-B4CE-A01E145C140B}
 		{D64EF4A4-CB96-4504-A66B-A3683AD30E64} = {37820EA8-466E-4017-B4CE-A01E145C140B}
+		{78A0CFDC-3B35-48DE-B920-826D6774661F} = {F430CD79-3E6B-4A73-B5AC-EA923856969C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49433E75-B903-43F3-BE29-E4BD2235B719}
