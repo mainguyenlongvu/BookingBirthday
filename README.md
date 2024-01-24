@@ -7,7 +7,6 @@
 - Git client
 - Visual Studio 2022
 - SQL Server 2022
-- Hi
 
 ## How to configure and run
 - Clone code from Github: git clone https://github.com/0969680078/BookingBirthday.git
