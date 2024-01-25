@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Entities
 {
-    internal class Guest
+    public class Cart
     {
+        public string Id { get; set; }
+        public double total { get; set; }
+        public string GuestId { get; set; }
+        public Guest Guest { get; set;}
+        //GuestId
     }
 }
