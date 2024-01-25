@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Entities
 {
-    internal class Guest
+    public class Bill
     {
+        public string Id {  get; set; } 
+        public DateTime Date {  get; set; }
+        public decimal Discount {  get; set; }
+        public double total { get; set; }
+        public string BookingId { get; set; }
+        public Booking Booking { get; set; }
+        //BookingId
+
     }
 }
