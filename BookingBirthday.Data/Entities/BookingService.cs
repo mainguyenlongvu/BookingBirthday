@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Entities
 {
-    internal class Guest
+    public class BookingService
     {
+        public int ServiceId { get; set; }
+        public string PackageId { get; set; }
+        public Service Service { get; set; }
+        public Package Package { get; set; }
+        //PackageId
+        //ServiceId
     }
 }
