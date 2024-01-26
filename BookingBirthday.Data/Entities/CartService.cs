@@ -8,11 +8,12 @@ namespace BookingBirthday.Data.Entities
 {
     public class CartService
     {
-        public int CartId { get; set; }
-        public string ServiceId { get; set; }
-        public Cart Cart { get; set; }
-        public Service Service { get; set; }
         //CartId
+        public int CartId { get; set; }
+        public Cart Cart { get; set; }
+
         //ServiceId
+        public string ServiceId { get; set; }
+        public Service Service { get; set; }
     }
 }
