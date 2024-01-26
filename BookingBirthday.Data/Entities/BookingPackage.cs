@@ -10,11 +10,11 @@ namespace BookingBirthday.Data.Entities
     public class BookingPackage
     {
         //BookingId
-        public string BookingId { get; set; }
+        public int BookingId { get; set; }
         public Booking Booking { get; set; }
 
         //PackageId
-        public string PackageId { get; set; }
+        public int PackageId { get; set; }
         public Package Package { get; set; }
         
 

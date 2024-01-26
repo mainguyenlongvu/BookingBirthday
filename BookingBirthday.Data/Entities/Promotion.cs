@@ -9,7 +9,7 @@ namespace BookingBirthday.Data.Entities
 {
     public class Promotion
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
@@ -17,7 +17,7 @@ namespace BookingBirthday.Data.Entities
         public Status Status { get; set; }
 
         //HostId
-        public string HosId { get; set; }
+        public int HostId { get; set; }
         public Host Host { get; set; }
 
         public ICollection<Package> Packages { get; set; }

@@ -9,11 +9,11 @@ namespace BookingBirthday.Data.Entities
     public class PackageService
     {
         //PackageId
-        public string PackageId { get; set; }
+        public int PackageId { get; set; }
         public Package Package { get; set; }
 
         //ServiceId
-        public string ServiceId { get; set; }
+        public int ServiceId { get; set; }
         public Service Service { get; set; }
 
     }
