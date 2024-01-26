@@ -8,11 +8,13 @@ namespace BookingBirthday.Data.Entities
 {
     public class PackageService
     {
-        public int ServiceId { get; set; }
-        public string PackageId { get; set; }
-        public Service Service { get; set; }
-        public Package Package { get; set; }
         //PackageId
+        public string PackageId { get; set; }
+        public Package Package { get; set; }
+
         //ServiceId
+        public string ServiceId { get; set; }
+        public Service Service { get; set; }
+
     }
 }

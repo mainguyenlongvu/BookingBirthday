@@ -13,10 +13,13 @@ namespace BookingBirthday.Data.Entities
         public string Name { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+        public double DiscountPercent { get; set; }
         public Status Status { get; set; }
+
+        //HostId
         public string HosId { get; set; }
         public Host Host { get; set; }
 
-        //HosId
+        public ICollection<Package> Packages { get; set; }
     }
 }

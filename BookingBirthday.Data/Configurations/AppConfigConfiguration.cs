@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingBirthday.Data.Enums
+namespace BookingBirthday.Data.Configurations
 {
-    public enum BookingStatus
+    internal class AppConfigConfiguration
     {
-        Accepted,
-        Declined,
-        Processing
     }
 }

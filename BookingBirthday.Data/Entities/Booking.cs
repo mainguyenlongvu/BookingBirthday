@@ -13,17 +13,24 @@ namespace BookingBirthday.Data.Entities
         public DateTime Date { get; set; }
         public Status Status { get; set; }
         public double Total { get; set; }
-        public double GuestId { get; set; }
-        public double HostId { get; set; }
-        public double PaymentId { get; set; }
-        public DateTime BillId { get; set; }
-        public Guest Guest { get; set; }
-        public Host Host { get; set; }
-        public Payment Payment { get; set; }
-        public Bill Bill { get; set; }
+
         //GuestId
+        public string GuestId { get; set; }
+        public Guest Guest { get; set; }
+
         //HostId
+        public string HostId { get; set; }
+        public Host Host { get; set; }
+
         //PaymentId
+        public string PaymentId { get; set; }
+        public Payment Payment { get; set; }
+
         //BillId
+        public string BillId { get; set; }
+        public Bill Bill { get; set; }
+
+        public ICollection<BookingPackage> BookingPackages { get; set; }
+        public ICollection<BookingService> BookingServices { get; set; }
     }
 }

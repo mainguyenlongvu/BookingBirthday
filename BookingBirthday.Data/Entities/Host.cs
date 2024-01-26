@@ -11,13 +11,17 @@ namespace BookingBirthday.Data.Entities
     {
         public string Id { get; set; }
         public string Username { get; set; }
-        public String Password { get; set; }
-        public String Name { get; private set; }
+        public string Password { get; set; }
+        public string Name { get; private set; }
         public Gender Gender { get; private set; }
         public DateTime DateOfBirth { get; private set; }
-        public String Email { get; private set; }
-        public String Address { get; private set; }
-        public int Phone { get; private set; }
+        public string Email { get; private set; }
+        public string Address { get; private set; }
+        public string Phone { get; private set; }
+
+        public ICollection<Promotion> Promotions { get; set; }
+        public ICollection<Report> Reports { get; set; }
+        public ICollection<Booking> Bookings { get; set; }
 
     }
 }
