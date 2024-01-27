@@ -23,7 +23,6 @@ namespace BookingBirthday.Data.Entities
         public int CartId { get; private set; }
         public Cart Cart { get; private set; }
 
-        public ICollection<Report> Reports { get; set; }
         public ICollection<Booking> Bookings { get; set; }
     }
 }
