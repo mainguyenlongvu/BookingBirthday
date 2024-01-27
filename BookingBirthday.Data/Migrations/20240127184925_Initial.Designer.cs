@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240127165136_Initial")]
+    [Migration("20240127184925_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -64,6 +64,11 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BookingStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -74,9 +79,6 @@ namespace BookingBirthday.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<double>("Total")
@@ -352,7 +354,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("Types")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 

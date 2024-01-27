@@ -60,7 +60,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Types = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
+                    Types = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     BookingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -134,7 +134,7 @@ namespace BookingBirthday.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    BookingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
                     Total = table.Column<double>(type: "float", nullable: false),
                     GuestId = table.Column<int>(type: "int", nullable: false),
                     HostId = table.Column<int>(type: "int", nullable: false),

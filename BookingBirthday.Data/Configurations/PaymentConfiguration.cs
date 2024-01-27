@@ -22,7 +22,7 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.Types).IsRequired().HasDefaultValue(Types.ByCast);
+            builder.Property(x => x.Types).HasDefaultValue(Types.Momo);
             builder.HasIndex(x => x.BookingId).IsUnique();
 
             // 1:1 relationship with Booking

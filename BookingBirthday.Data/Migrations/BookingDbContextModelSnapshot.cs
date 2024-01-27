@@ -61,6 +61,11 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BookingStatus")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -71,9 +76,6 @@ namespace BookingBirthday.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("PaymentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<double>("Total")
@@ -349,7 +351,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("Types")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
