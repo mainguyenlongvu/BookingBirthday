@@ -8,12 +8,14 @@ namespace BookingBirthday.Data.Entities
 {
     public class Payment
     {
-        public string Id { get; set; }
-        public string Amount { get; set; }
+        public int Id { get; set; }
+        public double Amount { get; set; }
         public DateTime Date { get; set; }
         public Type Type { get; set; }
-        public string BookingId { get; set; }
-        public Booking Booking { get; set; }
+
+
         //BookingId
+        public int BookingId { get; set; }
+        public Booking Booking { get; set; }
     }
 }

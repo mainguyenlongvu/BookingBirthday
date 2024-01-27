@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Enums
 {
-    public enum BookingStatus
+    public enum Role
     {
-        Accepted,
-        Declined,
-        Processing
+        Admin,
+        Guest,
+        Host
     }
 }

@@ -10,6 +10,6 @@ namespace BookingBirthday.Data.Enums
     {
         Momo,
         Banking,
-        direct_payment
+        ByCast
     }
 }

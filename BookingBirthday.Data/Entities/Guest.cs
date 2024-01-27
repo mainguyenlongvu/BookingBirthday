@@ -9,17 +9,21 @@ namespace BookingBirthday.Data.Entities
 {
     public class Guest
     {
-        public String Id { get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
-        public String Password { get; set; }
-        public String Name { get; private set; }
-        public Gender Gender { get; private set; }
-        public DateTime DateOfBirth { get; private set; }
-        public String Email { get; private set; }
-        public String Address { get; private set;}
-        public int Phone { get; private set; }
-        public int CartId { get; private set;}
-        public Cart Cart { get; private set; }
+        public string Password { get; set; }
+        public string Name { get; set; }
+        public Gender Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+
         //CartId
+        public int CartId { get; private set; }
+        public Cart Cart { get; private set; }
+
+        public ICollection<Report> Reports { get; set; }
+        public ICollection<Booking> Bookings { get; set; }
     }
 }
