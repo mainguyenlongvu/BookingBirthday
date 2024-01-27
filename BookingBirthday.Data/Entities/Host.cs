@@ -20,7 +20,6 @@ namespace BookingBirthday.Data.Entities
         public string Phone { get; set; }
 
         public ICollection<Promotion> Promotions { get; set; }
-        public ICollection<Report> Reports { get; set; }
         public ICollection<Booking> Bookings { get; set; }
 
     }

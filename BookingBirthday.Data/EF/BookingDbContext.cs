@@ -28,7 +28,6 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new PackageServiceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
-            modelBuilder.ApplyConfiguration(new ReportConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
         }
 
@@ -45,7 +44,6 @@ namespace BookingBirthday.Data.EF
         public DbSet<PackageService> PackageServices { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<Report> Reports { get; set; }
         public DbSet<Service> Services { get; set; }
 
     }
