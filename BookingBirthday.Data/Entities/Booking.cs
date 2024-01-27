@@ -9,25 +9,25 @@ namespace BookingBirthday.Data.Entities
 {
     public class Booking
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public DateTime Date { get; set; }
-        public Status Status { get; set; }
+        public BookingStatus Status { get; set; }
         public double Total { get; set; }
 
         //GuestId
-        public string GuestId { get; set; }
+        public int GuestId { get; set; }
         public Guest Guest { get; set; }
 
         //HostId
-        public string HostId { get; set; }
+        public int HostId { get; set; }
         public Host Host { get; set; }
 
         //PaymentId
-        public string PaymentId { get; set; }
+        public int PaymentId { get; set; }
         public Payment Payment { get; set; }
 
         //BillId
-        public string BillId { get; set; }
+        public int BillId { get; set; }
         public Bill Bill { get; set; }
 
         public ICollection<BookingPackage> BookingPackages { get; set; }

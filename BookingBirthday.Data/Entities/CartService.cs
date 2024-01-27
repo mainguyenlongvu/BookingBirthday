@@ -13,7 +13,7 @@ namespace BookingBirthday.Data.Entities
         public Cart Cart { get; set; }
 
         //ServiceId
-        public string ServiceId { get; set; }
+        public int ServiceId { get; set; }
         public Service Service { get; set; }
     }
 }

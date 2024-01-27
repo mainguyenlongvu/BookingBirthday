@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingBirthday.Data.Configurations
+namespace BookingBirthday.Data.Enums
 {
-    internal class AppConfigConfiguration
+    public enum Role
     {
+        Admin,
+        Guest,
+        Host
     }
 }
