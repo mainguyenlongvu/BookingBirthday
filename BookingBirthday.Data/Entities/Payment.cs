@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookingBirthday.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace BookingBirthday.Data.Entities
         public int Id { get; set; }
         public double Amount { get; set; }
         public DateTime Date { get; set; }
-        public Type Type { get; set; }
+        public Types Types { get; set; }
 
 
         //BookingId

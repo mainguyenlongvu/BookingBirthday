@@ -1,4 +1,5 @@
 ﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -22,7 +23,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
             builder.Property(x => x.Name).IsUnicode().IsRequired();
-            builder.Property(x => x.Gender).IsRequired();
+            builder.Property(x => x.Gender).IsRequired().HasDefaultValue(Gender.Male);
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.Address).IsUnicode().IsRequired();

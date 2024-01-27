@@ -1,6 +1,7 @@
 ﻿using BookingBirthday.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using BookingBirthday.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.Type).IsRequired();
+            builder.Property(x => x.Types).IsRequired().HasDefaultValue(Types.ByCast);
             builder.HasIndex(x => x.BookingId).IsUnique();
 
             // 1:1 relationship with Booking

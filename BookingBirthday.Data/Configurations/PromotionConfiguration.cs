@@ -1,4 +1,5 @@
 ﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -23,7 +24,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.FromDate).IsRequired();
             builder.Property(x => x.ToDate).IsRequired();
             builder.Property(x => x.DiscountPercent).IsRequired();
-            builder.Property(x => x.Status).IsRequired();
+            builder.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Accept);
 
             // 1:M relationship with Host
             builder.HasOne<Host>(x => x.Host)
