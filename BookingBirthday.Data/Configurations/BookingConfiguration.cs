@@ -1,4 +1,5 @@
 ﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -21,7 +22,7 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.Status).IsRequired();
+            builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
             builder.Property(x => x.Total).IsRequired();
             builder.HasIndex(x => x.BillId).IsUnique();
             builder.HasIndex(x => x.PaymentId).IsUnique();
