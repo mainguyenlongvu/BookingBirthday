@@ -18,6 +18,7 @@ namespace BookingBirthday.Data.Configurations
 
             // Primary Key
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
             builder.Property(x => x.Name).IsUnicode().IsRequired();

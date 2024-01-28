@@ -6,11 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookingBirthday.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Bill",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Discount = table.Column<double>(type: "float", nullable: false),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bill", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Guest",
                 columns: table => new
@@ -134,7 +150,7 @@ namespace BookingBirthday.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    BookingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
+                    BookingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     Total = table.Column<double>(type: "float", nullable: false),
                     GuestId = table.Column<int>(type: "int", nullable: false),
                     HostId = table.Column<int>(type: "int", nullable: false),
@@ -144,6 +160,12 @@ namespace BookingBirthday.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Booking", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Booking_Bill_BillId",
+                        column: x => x.BillId,
+                        principalTable: "Bill",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Booking_Guest_GuestId",
                         column: x => x.GuestId,
@@ -212,28 +234,6 @@ namespace BookingBirthday.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bill",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Discount = table.Column<double>(type: "float", nullable: false),
-                    Total = table.Column<double>(type: "float", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bill", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bill_Booking_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Booking",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BookingService",
                 columns: table => new
                 {
@@ -271,14 +271,12 @@ namespace BookingBirthday.Data.Migrations
                         name: "FK_BookingPackage_Booking_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Booking",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_BookingPackage_Package_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Package",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -415,9 +413,6 @@ namespace BookingBirthday.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Bill");
-
-            migrationBuilder.DropTable(
                 name: "BookingPackage");
 
             migrationBuilder.DropTable(
@@ -443,6 +438,9 @@ namespace BookingBirthday.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Service");
+
+            migrationBuilder.DropTable(
+                name: "Bill");
 
             migrationBuilder.DropTable(
                 name: "Payment");

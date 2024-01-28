@@ -18,9 +18,9 @@ namespace BookingBirthday.Data.Entities
         public int PromotionId { get; set; }
         public Promotion Promotion { get; set; }
 
-        public ICollection<CartPackage> CartPackages { get; set; }
-        public ICollection<PackageService> PackageServices { get; set; }
-        public ICollection<BookingPackage> BookingPackages { get; set; }
+        public IList<CartPackage> CartPackages { get; set; }
+        public IList<PackageService> PackageServices { get; set; }
+        public IList<BookingPackage> BookingPackages { get; set; }
 
     }
 }

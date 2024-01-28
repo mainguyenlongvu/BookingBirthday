@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240127184925_Initial")]
-    partial class Initial
+    [Migration("20240128064035_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,7 +67,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("BookingStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(0);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -427,19 +427,14 @@ namespace BookingBirthday.Data.Migrations
                     b.ToTable("Service", (string)null);
                 });
 
-            modelBuilder.Entity("BookingBirthday.Data.Entities.Bill", b =>
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
                 {
-                    b.HasOne("BookingBirthday.Data.Entities.Booking", "Booking")
-                        .WithOne("Bill")
-                        .HasForeignKey("BookingBirthday.Data.Entities.Bill", "BookingId")
+                    b.HasOne("BookingBirthday.Data.Entities.Bill", "Bill")
+                        .WithOne("Booking")
+                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "BillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Booking");
-                });
-
-            modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
-                {
                     b.HasOne("BookingBirthday.Data.Entities.Guest", "Guest")
                         .WithMany("Bookings")
                         .HasForeignKey("GuestId")
@@ -458,6 +453,8 @@ namespace BookingBirthday.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Bill");
+
                     b.Navigation("Guest");
 
                     b.Navigation("Host");
@@ -470,13 +467,11 @@ namespace BookingBirthday.Data.Migrations
                     b.HasOne("BookingBirthday.Data.Entities.Booking", "Booking")
                         .WithMany("BookingPackages")
                         .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Package", "Package")
                         .WithMany("BookingPackages")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Booking");
@@ -593,11 +588,14 @@ namespace BookingBirthday.Data.Migrations
                     b.Navigation("Host");
                 });
 
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Bill", b =>
+                {
+                    b.Navigation("Booking")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
                 {
-                    b.Navigation("Bill")
-                        .IsRequired();
-
                     b.Navigation("BookingPackages");
 
                     b.Navigation("BookingServices");
