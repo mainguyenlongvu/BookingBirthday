@@ -11,7 +11,7 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public BookingStatus Status { get; set; }
+        public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
         //GuestId

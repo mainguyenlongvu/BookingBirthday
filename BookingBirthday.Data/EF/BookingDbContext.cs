@@ -6,9 +6,9 @@ using System.Diagnostics;
 
 namespace BookingBirthday.Data.EF
 {
-    public class BookingDBContext : DbContext
+    public class BookingDbContext : DbContext
     {
-        public BookingDBContext(DbContextOptions options) : base(options)
+        public BookingDbContext(DbContextOptions options) : base(options)
         {
             
         }

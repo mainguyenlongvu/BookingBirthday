@@ -10,5 +10,6 @@ namespace BookingBirthday.Data.Enums
     {
         Accept,
         Decline
+        
     }
 }

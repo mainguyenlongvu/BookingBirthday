@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Enums
 {
-    public enum Type
+    public enum Types
     {
         Momo,
         Banking,
