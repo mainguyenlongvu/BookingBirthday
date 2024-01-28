@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BookingBirthday.Data.EF
 {
-    internal class BookingDbContextFactory : IDesignTimeDbContextFactory<BookingDbContext>
+    public class BookingDbContextFactory : IDesignTimeDbContextFactory<BookingDbContext>
     {
         public BookingDbContext CreateDbContext(string[] args)
         {

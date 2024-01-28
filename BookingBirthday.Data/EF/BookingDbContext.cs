@@ -29,7 +29,11 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+
+            // Generate data
+            SeedData.Initialize(modelBuilder);
         }
+
 
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Booking> Bookings { get; set; }
