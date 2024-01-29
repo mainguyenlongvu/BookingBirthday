@@ -19,7 +19,7 @@
                             <div>
                                 <label for="phone" class="block text-sm font-bold ml-1 mb-2 dark:text-white"></label>
                                 <div class="relative">
-                                    <input type="phone" id="phone" name="phone" placeholder="Phone number" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error">
+                                    <input type="text" id="phone" name="phone" placeholder="Phone number" class="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 shadow-sm" required aria-describedby="email-error">
                                 </div>
                                 <div>
                                     <label for="FirstName" class="block text-sm font-bold ml-1 mb-2 dark:text-white"></label>
@@ -64,11 +64,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false">Quay Lại</button>
-                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false">Lưu</button>
+                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false" id="quayLaiBtn">Quay Lại</button>
+                            <button type="button" class="btn btn-solid-primary btn--m btn--inline" aria-disabled="false" id="luuBtn">Lưu</button>
                         </div>
                 </form>
             </div>
         </div>
     </div>
 </main>
+<script>
+    // Get the button element by its ID
+    var quayLaiBtn = document.getElementById('quayLaiBtn');
+
+    // Add a click event listener to the button
+    quayLaiBtn.addEventListener('click', function() {
+        // Change the window location to index.html
+        window.location.href = 'index.html';
+    });
+</script>
+<script>
+  // Get the button element by its ID
+  var quayLaiBtn = document.getElementById('luuBtn');
+
+  // Add a click event listener to the button
+  quayLaiBtn.addEventListener('click', function() {
+      // Change the window location to index.html
+      window.location.href = 'guesthome.html';
+  });
+</script>
