@@ -29,7 +29,7 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
-
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
             // Generate data
             SeedData.Initialize(modelBuilder);
         }
@@ -49,6 +49,7 @@ namespace BookingBirthday.Data.EF
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Service> Services { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 

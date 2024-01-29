@@ -9,9 +9,7 @@ namespace BookingBirthday.Data.Entities
 {
     public class Guest
     {
-        public int Id { get; set; }
-        public string   Username      { get; set; }
-        public string   Password      { get; set; }
+        public int Id { get; set; } 
         public string   Name          { get; set; }
         public Gender   Gender        { get; set; }
         public DateTime DateOfBirth { get; set; }
