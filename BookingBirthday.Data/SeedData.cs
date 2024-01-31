@@ -69,8 +69,6 @@ namespace BookingBirthday.Data
                         guest.Add(new Guest
                         {
                             Id = int.Parse(guestData[0].Trim()),
-                            Username = guestData[1].Trim(),
-                            Password = guestData[2].Trim(),
                             Name = guestData[3].Trim(),
                             Gender = (guestData[4].Trim() == "Male") ? Gender.Male : Gender.Female,
                             DateOfBirth = DateTime.ParseExact(guestData[5].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
@@ -102,8 +100,6 @@ namespace BookingBirthday.Data
                         host.Add(new Host
                         {
                             Id = int.Parse(hostData[0].Trim()),
-                            Username = hostData[1].Trim(),
-                            Password = hostData[2].Trim(),
                             Name = hostData[3].Trim(),
                             Gender = (hostData[4].Trim() == "Male") ? Gender.Male : Gender.Female,
                             DateOfBirth = DateTime.ParseExact(hostData[5].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
