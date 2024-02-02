@@ -17,7 +17,7 @@ namespace BookingBirthday.Data.EF
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("BookingBirhdayDb");
+            var connectionString = configuration.GetConnectionString("BookingBirthdayDb");
 
             var optionsBuilder = new DbContextOptionsBuilder<BookingDbContext>();
             optionsBuilder.UseSqlServer(connectionString);

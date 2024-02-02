@@ -8,14 +8,14 @@ namespace BookingBirthday.Data.Entities
 {
     public class Package
     {
-        public int    Id        { get; set; }
-        public string Name      { get; set; }
-        public double Price     { get; set; }
-        public string Venue     { get; set; }
-        public string Detail    { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public string Venue { get; set; }
+        public string Detail { get; set; }
 
         //PromotionId
-        public int PromotionId { get; set; }
+        public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }
 
         public IList<CartPackage> CartPackages { get; set; }

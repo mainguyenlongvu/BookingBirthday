@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Enums
 {
-    public  enum Gender
+    public enum Gender
     {
-        Male,
-        Female
+        Male = 0,
+        Female = 1
     }
 }

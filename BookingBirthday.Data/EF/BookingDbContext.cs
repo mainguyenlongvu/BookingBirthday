@@ -50,8 +50,5 @@ namespace BookingBirthday.Data.EF
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<User> Users { get; set; }
-
     }
-
-
 }
