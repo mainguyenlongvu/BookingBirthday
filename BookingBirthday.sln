@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingBirthday.Data", "Boo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingBirthday.Application", "BookingBirthday.Application\BookingBirthday.Application.csproj", "{D64EF4A4-CB96-4504-A66B-A3683AD30E64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingBirthday.WebApp", "BookingBirthday.WebApp\BookingBirthday.WebApp.csproj", "{78A0CFDC-3B35-48DE-B920-826D6774661F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingBirthday.WebApp", "BookingBirthday.WebApp\BookingBirthday.WebApp.csproj", "{78A0CFDC-3B35-48DE-B920-826D6774661F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
