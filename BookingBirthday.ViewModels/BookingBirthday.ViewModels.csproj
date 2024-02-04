@@ -8,11 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.1.39" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Bookingbirthday.Data\BookingBirthday.Data.csproj" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
   </ItemGroup>
 
 </Project>
