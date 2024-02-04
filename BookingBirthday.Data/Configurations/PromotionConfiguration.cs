@@ -18,13 +18,14 @@ namespace BookingBirthday.Data.Configurations
 
             // Primary Key
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
             builder.Property(x => x.Name).IsUnicode().IsRequired();
             builder.Property(x => x.FromDate).IsRequired();
             builder.Property(x => x.ToDate).IsRequired();
             builder.Property(x => x.DiscountPercent).IsRequired();
-            builder.Property(x => x.Status).HasDefaultValue(Status.Accept);
+            builder.Property(x => x.Status).IsRequired();
 
             // 1:M relationship with Host
             builder.HasOne<Host>(x => x.Host)

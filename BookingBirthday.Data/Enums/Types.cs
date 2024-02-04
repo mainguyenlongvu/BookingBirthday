@@ -8,8 +8,8 @@ namespace BookingBirthday.Data.Enums
 {
     public enum Types
     {
-        Momo,
         Banking,
-        ByCast
+        ByCast,
+        Installment
     }
 }

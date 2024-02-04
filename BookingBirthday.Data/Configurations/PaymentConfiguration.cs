@@ -18,11 +18,12 @@ namespace BookingBirthday.Data.Configurations
 
             // Primary Key
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.Types).HasDefaultValue(Types.Momo);
+            builder.Property(x => x.Types).IsRequired();
             builder.HasIndex(x => x.BookingId).IsUnique();
 
             // 1:1 relationship with Booking

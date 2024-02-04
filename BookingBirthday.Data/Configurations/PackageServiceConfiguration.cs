@@ -19,8 +19,13 @@ namespace BookingBirthday.Data.Configurations
             builder.HasKey(ps => new { ps.PackageId, ps.ServiceId });
 
             // Foreign Key
-            builder.HasOne(ps => ps.Package).WithMany(x => x.PackageServices).HasForeignKey(ps => ps.PackageId);
-            builder.HasOne(ps => ps.Service).WithMany(x => x.PackageServices).HasForeignKey(ps => ps.ServiceId);
+            builder.HasOne(ps => ps.Package)
+                .WithMany(x => x.PackageServices)
+                .HasForeignKey(ps => ps.PackageId);
+
+            builder.HasOne(ps => ps.Service)
+                .WithMany(x => x.PackageServices)
+                .HasForeignKey(ps => ps.ServiceId);
         }
     }
 }

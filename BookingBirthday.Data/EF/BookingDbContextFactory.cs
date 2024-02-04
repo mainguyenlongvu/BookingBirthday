@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BookingBirthday.Data.EF
 {
-    internal class BookingDbContextFactory : IDesignTimeDbContextFactory<BookingDbContext>
+    public class BookingDbContextFactory : IDesignTimeDbContextFactory<BookingDbContext>
     {
         public BookingDbContext CreateDbContext(string[] args)
         {
@@ -17,7 +17,7 @@ namespace BookingBirthday.Data.EF
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("BookingBirhdayDb");
+            var connectionString = configuration.GetConnectionString("BookingBirthdayDb");
 
             var optionsBuilder = new DbContextOptionsBuilder<BookingDbContext>();
             optionsBuilder.UseSqlServer(connectionString);

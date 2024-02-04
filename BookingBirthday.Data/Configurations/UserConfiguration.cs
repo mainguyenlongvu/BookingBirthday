@@ -9,24 +9,21 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Configurations
 {
-    public class CartConfiguration : IEntityTypeConfiguration<Cart>
+    public class UserConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Cart> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("Cart");
+            builder.ToTable("User");
 
             // Primary Key
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.Total).IsRequired();
-            builder.HasIndex(x => x.GuestId).IsUnique();
-
-            // 1:1 relationship with Guest
-            builder.HasOne(x => x.Guest)
-                .WithOne(x => x.Cart)
-                .HasForeignKey<Guest>(x => x.CartId);
+            builder.Property(x => x.Username).IsRequired();
+            builder.Property(x => x.Password).IsRequired();
+            builder.Property(x => x.Email).IsRequired();
+            builder.Property(x => x.Role).IsRequired();
         }
     }
 }

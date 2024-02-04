@@ -30,7 +30,7 @@ namespace BookingBirthday.Data.Entities
         public int BillId { get; set; }
         public Bill Bill { get; set; }
 
-        public ICollection<BookingPackage> BookingPackages { get; set; }
-        public ICollection<BookingService> BookingServices { get; set; }
+        public IList<BookingPackage> BookingPackages { get; set; }
+        public IList<BookingService> BookingServices { get; set; }
     }
 }

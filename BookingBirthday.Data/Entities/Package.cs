@@ -15,12 +15,12 @@ namespace BookingBirthday.Data.Entities
         public string Detail { get; set; }
 
         //PromotionId
-        public int PromotionId { get; set; }
+        public int? PromotionId { get; set; }
         public Promotion Promotion { get; set; }
 
-        public ICollection<CartPackage> CartPackages { get; set; }
-        public ICollection<PackageService> PackageServices { get; set; }
-        public ICollection<BookingPackage> BookingPackages { get; set; }
+        public IList<CartPackage> CartPackages { get; set; }
+        public IList<PackageService> PackageServices { get; set; }
+        public IList<BookingPackage> BookingPackages { get; set; }
 
     }
 }
