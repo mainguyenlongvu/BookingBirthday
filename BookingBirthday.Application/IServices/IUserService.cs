@@ -1,7 +1,5 @@
 ﻿using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
-using BookingBirthday.ViewModels.Common;
-using BookingBirthday.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;

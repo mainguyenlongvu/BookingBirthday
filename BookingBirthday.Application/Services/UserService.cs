@@ -1,8 +1,6 @@
 ﻿using BookingBirthday.Application.IServices;
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
-using BookingBirthday.ViewModels.Common;
-using BookingBirthday.ViewModels.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
