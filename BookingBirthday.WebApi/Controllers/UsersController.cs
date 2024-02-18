@@ -25,14 +25,14 @@ namespace BookingBirthday.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            return await _context.Users!.ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var user = await _context.Users!.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
 
             if (user == null)
             {

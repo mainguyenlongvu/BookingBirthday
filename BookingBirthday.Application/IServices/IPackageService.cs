@@ -1,4 +1,5 @@
 ﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace BookingBirthday.Application.IServices
 {
     public interface IPackageService
     {
-        public Task<List<Package>> GetAllPackagesAsync();
-        public Task<Package> GetPackageAsync(int id);
-        public Task<int> AddPackageAsync(Package model);
-        public Task UpdatePackageAsync(int id, Package model);
-        public Task DeletePackageAsync(int id);
+        public List<PackageModel> GetAllPackages();
+        public Task<PackageModel>? GetPackage(int id);
+        public Task<int> AddPackageAsync(PackageModel model);
+        public Task UpdatePackage(int id, PackageModel model);
+        public Task DeletePackage(int id);
     }
 }

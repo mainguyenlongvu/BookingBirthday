@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
+using BookingBirthday.Application.IServices;
 
 namespace BookingBirthday.WebApi.Controllers
 {
@@ -15,36 +16,26 @@ namespace BookingBirthday.WebApi.Controllers
     public class PackagesController : ControllerBase
     {
         private readonly BookingDbContext _context;
+        private readonly IPackageService _package;
 
-        public PackagesController(BookingDbContext context)
+        public PackagesController(BookingDbContext context, IPackageService package)
         {
             _context = context;
+            _package= package;
         }
 
         // GET: api/Packages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Package>>> GetPackages()
+        public IActionResult GetAllPackages()
         {
-            //return await _context.Packages.ToListAsync();
+            
             try
             {
-                if (_context.Packages == null)
-                {
-                    return new NotFoundResult();
-                }
-
-                var packages = await _context.Packages.ToListAsync();
-
-                if (packages == null)
-                {
-                    return NotFound("No package found!");
-                }
-
-                return Ok(packages);
+                return Ok(_package.GetAllPackages());
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, $"Internal server error: {ex}");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
