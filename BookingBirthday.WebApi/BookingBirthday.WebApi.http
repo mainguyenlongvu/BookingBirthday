@@ -1,0 +1,6 @@
+@BookingBirthday.WebApi_HostAddress = http://localhost:7124
+
+GET {{BookingBirthday.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

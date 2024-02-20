@@ -11,7 +11,7 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public BookingStatus Status { get; set; }
+        public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
         //GuestId
@@ -30,7 +30,7 @@ namespace BookingBirthday.Data.Entities
         public int BillId { get; set; }
         public Bill Bill { get; set; }
 
-        public ICollection<BookingPackage> BookingPackages { get; set; }
-        public ICollection<BookingService> BookingServices { get; set; }
+        public IList<BookingPackage> BookingPackages { get; set; }
+        public IList<BookingService> BookingServices { get; set; }
     }
 }

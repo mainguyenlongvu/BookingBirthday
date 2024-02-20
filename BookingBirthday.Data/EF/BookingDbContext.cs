@@ -6,9 +6,9 @@ using System.Diagnostics;
 
 namespace BookingBirthday.Data.EF
 {
-    public class BookingDBContext : DbContext
+    public class BookingDbContext : DbContext
     {
-        public BookingDBContext(DbContextOptions options) : base(options)
+        public BookingDbContext(DbContextOptions options) : base(options)
         {
             
         }
@@ -28,9 +28,12 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new PackageServiceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
-            modelBuilder.ApplyConfiguration(new ReportConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            // Generate data
+            SeedData.Initialize(modelBuilder);
         }
+
 
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Booking> Bookings { get; set; }
@@ -45,10 +48,7 @@ namespace BookingBirthday.Data.EF
         public DbSet<PackageService> PackageServices { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
-        public DbSet<Report> Reports { get; set; }
         public DbSet<Service> Services { get; set; }
-
+        public DbSet<User> Users { get; set; }
     }
-
-
 }
