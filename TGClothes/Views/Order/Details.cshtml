@@ -1,0 +1,80 @@
+﻿@model  IEnumerable<Data.EF.OrderDetail>
+@using Common;
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var orderDetail = ViewBag.OrderDetails;
+}
+
+<div class="container">
+    <div class="body fix-width scroll-inner">
+        <table class="table table-striped">
+            <tr class="mtext-106">
+                <th>Tên sản phẩm</th>
+                <th class="text-center">Hình ảnh</th>
+                <th class="text-center">Size</th>
+                <th class="text-center">Số lượng</th>
+                <th class="text-center">Giá</th>
+                <th class="text-center">Đánh giá</th>
+            </tr>
+
+            @foreach (var item in orderDetail)
+            {
+                <tr class="mtext-107  text-center">
+                    <td class="text-left">
+                        @item.Product.Name
+                    </td>
+                    <td>
+                        <img src=" @item.Product.Image" height="100px" />
+                    </td>
+                    <td>
+                        @item.Size.Name
+                    </td>
+                    <td>
+                        @item.OrderDetail.Quantity
+                    </td>
+                    <td>
+                        @if (item.Product.Promotion == 0 || item.Product.Promotion == null)
+                        {
+                            @item.Product.Price.ToString("N0")
+                        }
+                        else
+                        {
+                            <span class="stext-105 cl3 text-decoration-line-through">
+                                @item.Product.Price.ToString("N0")
+                            </span>
+                            <span class="stext-105 cl3 text-danger">
+                                @item.Product.PromotionPrice.ToString("N0")
+                            </span>
+                        }
+                    </td>
+                    @if (item.Order.Status != (int)OrderStatus.SUCCESSFUL)
+                    {
+                        <td>&nbsp;</td>
+                    }
+                    else if (item.Order.Status == (int)OrderStatus.SUCCESSFUL)
+                    {
+                        var url = "/chi-tiet/" + item.Product.MetaTitle + "-" + item.Product.Id;
+                        <td><a href="@url">Đánh giá</a></td>
+                    }
+                </tr>
+            }
+
+        </table>
+    </div>
+    @foreach (var item in Model.Take(1))
+    {
+        <div class="text-right pb-4">
+            <div class="mtext-106 p-2">
+                <span class="cl2 p-r-3">Tổng số lượng: </span> 
+                <span class="cl13">@item.TotalQuantity</span>
+            </div>
+            <div class="mtext-106 p-2">
+                <span class="cl2 p-r-3">Tổng tiền: </span>
+                <span class="cl13">@String.Format("{0:N0}", item.TotalPrice) đ</span>
+            </div>
+        </div>
+    }
+
+</div>

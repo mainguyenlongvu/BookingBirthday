@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "OrderFailure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <center style="height: 300px; padding-top: 10px;">
+            <h1 class="mtext-114 cl13">Đặt Hàng Thất Bại!</h1>
+            <div class="pt-4 mtext-108">
+                <h3>@ViewBag.Message</h3>
+                <h3>Vui lòng kiểm tra lại phương thức thanh toán và tiến hành đặt hàng lại!</h3>
+            </div>
+        </center>
+
+        <a href="/san-pham">
+            Về trang chủ
+        </a>
+    </div>
+</section>

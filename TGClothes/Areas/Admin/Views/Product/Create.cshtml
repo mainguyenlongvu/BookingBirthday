@@ -1,0 +1,224 @@
+﻿@model TGClothes.Models.ProductModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var categories = ViewBag.CategoryId;
+    var sizes = ViewBag.Sizes;
+}
+
+@section header{
+    Thêm mới sản phẩm
+}
+
+@{
+    var sizesJson = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Sizes);
+}
+
+@section CustomJs{
+    <script>
+        $('#btnSelectImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+
+        $('#btnSelectImage1').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage1').val(url);
+            };
+            finder.popup();
+        })
+
+        $('#btnSelectImage2').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage2').val(url);
+            };
+            finder.popup();
+        })
+
+        $('#btnSelectImage3').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage3').val(url);
+            };
+            finder.popup();
+        })
+
+        var editor = CKEDITOR.replace('txtContent', {
+            customConfig: '/Assets/Admin/plugin/ckeditor/config.js',
+        });
+    </script>
+
+    <script>
+        var editor = CKEDITOR.replace('inputDetails', {
+            customConfig: '/Assets/Admin/plugin/ckeditor/config.js'
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Gửi yêu cầu để lấy danh sách danh mục cha
+            $.ajax({
+                url: '/ProductCategory/GetParentCategories',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    // Xử lý dữ liệu danh mục cha và hiển thị lên dropdown
+                    var dropdown = $('#parentCategoryDropdown');
+                    $.each(data, function (index, item) {
+                        dropdown.append($('<option></option>').val(item.Id).text(item.Name));
+                    });
+                }
+            });
+
+        // Xử lý sự kiện khi chọn danh mục cha
+        $('#parentCategoryDropdown').change(function () {
+                var parentId = $(this).val();
+
+        // Gửi yêu cầu để lấy danh sách danh mục con của danh mục cha đã chọn
+        $.ajax({
+            url: '/ProductCategory/GetChildCategories',
+        type: 'GET',
+        dataType: 'json',
+        data: {parentId: parentId },
+        success: function (data) {
+                        // Xử lý dữ liệu danh mục con và hiển thị lên dropdown
+                        var dropdown = $('#childCategoryDropdown');
+        dropdown.empty(); // Xóa các danh mục con hiện tại (nếu có)
+        $.each(data, function (index, item) {
+            dropdown.append($('<option></option>').val(item.Id).text(item.Name));
+                        });
+                    }
+                });
+            });
+
+        $('#parentCategoryDropdown').trigger('change');
+        });
+    </script>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group row">
+        <div class="col-md-6">
+            Tên sản phẩm
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Product.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Product.Name, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            Mô tả
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Product.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Product.Description, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            <div class="col-md-4">
+                <label for="parentCategoryDropdown">Danh mục cha:</label>
+                <select id="parentCategoryDropdown">
+                    <option value="">-- Chọn danh mục cha --</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="childCategoryDropdown">Danh mục con:</label>
+                <select id="childCategoryDropdown" name="ParentId">
+                    <option value="">-- Chọn danh mục con --</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            Hình đại diện
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Product.Image, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" }, id = "txtImage" })
+                <a id="btnSelectImage" href="#">Chọn ảnh</a>
+                @Html.ValidationMessageFor(model => model.Product.Image, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            Thư viện ảnh 1
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Gallery.Image1, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" }, id = "txtImage1" })
+                <a id="btnSelectImage1" href="#">Chọn ảnh</a>
+                @Html.ValidationMessageFor(model => model.Gallery.Image1, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            Thư viện ảnh 2
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Gallery.Image2, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" }, id = "txtImage2" })
+                <a id="btnSelectImage2" href="#">Chọn ảnh</a>
+                @Html.ValidationMessageFor(model => model.Gallery.Image2, "", new { @class = "text-danger" })
+            </div>
+            <br />
+            Thư viện ảnh 3
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Gallery.Image3, new { htmlAttributes = new { @class = "form-control", @id = "txtImage" }, id = "txtImage3" })
+                <a id="btnSelectImage3" href="#">Chọn ảnh</a>
+                @Html.ValidationMessageFor(model => model.Gallery.Image3, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        Chi tiết sản phẩm
+        <div class="col-md-10">
+            @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.TextAreaFor(model => model.Product.Details, new { htmlAttributes = new { @class = "form-control" }, id = "inputDetails" })
+            @Html.ValidationMessageFor(model => model.Product.Details, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        Giá nhập
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Product.OriginalPrice, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product.OriginalPrice, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        Giá bán
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Product.Price, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product.Price, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        Khuyến mại
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Product.Promotion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Product.Promotion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        Size:
+        @foreach (var size in Model.Sizes)
+        {
+            <label name="ProductSizes[@Model.Sizes.IndexOf(size)].SizeId">@size.Name</label>
+            <input type="number" name="ProductSizes[@Model.Sizes.IndexOf(size)].SizeId" value="@size.Id" hidden />
+            <input type="number" name="ProductSizes[@Model.Sizes.IndexOf(size)].Stock" value="0" />
+        }
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 d-flex justify-content-end">
+            <input type="submit" value="Thêm mới" class="btn btn-primary mr-2" />
+            <a href="@Url.Action("Index", "Product")" class="btn btn-danger mr-2">Quay lại</a>
+        </div>
+    </div>
+</div>
+}

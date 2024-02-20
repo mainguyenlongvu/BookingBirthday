@@ -1,0 +1,20 @@
+﻿@model List<Data.EF.Category>
+
+<div class="flex-w flex-l-m filter-tope-group m-tb-10">
+    <div>
+        <h4 class="mtext-112 cl2 p-b-33">
+            Danh mục tin tức
+        </h4>
+
+        <ul>
+            @foreach (var item in Model.OrderBy(x => x.DisplayOrder))
+            {
+                <li class="bor18">
+                    <a href="/category/@item.Id" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+                        @item.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

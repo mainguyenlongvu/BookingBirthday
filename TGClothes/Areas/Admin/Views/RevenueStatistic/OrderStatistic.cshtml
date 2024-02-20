@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewBag.Title = "OrderStatistic";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Thống kê đơn hàng    
+}
+
+<div class="row">
+    <div class="col-xl-12 col-lg-12 mb-3">
+        @using (Html.BeginForm("OrderStatistic", "RevenueStatistic", FormMethod.Get))
+        {
+            <div class="row form-group">
+                <div class="col-lg-12 row">
+                    <div class="col-md-12">
+                        <span>Từ ngày</span>
+                        <input type="date" name="fromDate" required class="mr-2" id="fromDate"/>
+                        <span>Đến ngày</span>
+                        <input type="date" name="toDate" required class="mr-2" id="toDate"/>
+                        <button type="submit" class="btn btn-outline-success">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-info">Số lượng đơn hàng theo mốc</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Tổng đơn: @ViewBag.TotalOrder</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="myAreaChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section CustomJs{
+    <!-- Page level plugins -->
+    <script src="/Assets/Admin/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="/Assets/Admin/js/demo/chart-area-demo.js"></script>
+
+    <script>
+        var ctx = document.getElementById("myAreaChart");
+
+        var numOfOrder =  @Html.Raw(Json.Encode(ViewBag.NumOfOrder));
+        var dateOrder =  @Html.Raw(Json.Encode(ViewBag.DateOrder));
+
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dateOrder,
+                datasets: [{
+                    label: "Tổng đơn hàng",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: numOfOrder,
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 10,
+                            callback: function (value) {
+                                return value.substr(0, 10)+"...";
+                            },
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            // Include a dollar sign in the ticks
+                            callback: function (value, index, values) {
+                                return number_format(value);
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function (tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

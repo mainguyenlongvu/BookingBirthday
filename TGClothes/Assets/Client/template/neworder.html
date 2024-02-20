@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Thông tin đơn hàng vừa đặt</title>
+    <style>
+        .order-details {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .detail-content {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .order-item {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+        }
+
+        .value {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-details">
+        <h1>Thông tin đơn hàng mới</h1>
+        <div class="detail-content">
+            <div class="order-item">
+                <span class="label">Tên khách hàng:</span>
+                <span class="value">{{CustomerName}}</span>
+            </div>
+            <div class="order-item">
+                <span class="label">Điện thoại:</span>
+                <span class="value">{{Phone}}</span>
+            </div>
+            <div class="order-item">
+                <span class="label">Ngày đặt:</span>
+                <span class="value">{{OrderDate}}</span>
+            </div>
+            <div class="order-item">
+                <span class="label">Địa chỉ giao:</span>
+                <span class="value">{{Address}}</span>
+            </div>
+            <div class="order-item">
+                <span class="label">Tổng tiền:</span>
+                <span class="value">{{Total}}</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿<div class="content-topbar flex-sb-m h-full container">
+    <div class="left-top-bar">
+        Miễn phí ship cho hóa đơn từ 999.000
+    </div>
+
+    @{
+        var session = (Common.UserLogin)Session[Common.CommonConstants.USER_SESSION];
+    }
+    @if (session == null)
+    {
+
+        <div class="right-top-bar flex-w h-full">
+            <a href="/dang-ky" class="flex-c-m trans-04 p-lr-25">
+                Đăng ký
+            </a>
+
+            <a href="/dang-nhap" class="flex-c-m trans-04 p-lr-25">
+                Đăng nhập
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="right-top-bar flex-w h-full">
+            <a href="" class="flex-c-m trans-04 p-lr-25">
+                Xin chào: @session.Name
+            </a>
+
+            <a href="/dang-xuat" class="flex-c-m trans-04 p-lr-25">
+                Đăng xuất
+            </a>
+        </div>
+    }
+</div>

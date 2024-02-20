@@ -1,0 +1,105 @@
+﻿@model List<Data.EF.Product>
+
+<!-- Product -->
+<div class="bg0 m-t-23 p-b-70">
+    <div class="container">
+        @{Html.RenderAction("ProductCategory", "Product");}
+
+        <div class="row isotope-grid">
+            @foreach (var item in Model)
+            {
+                var id = item.Id;
+                var url = "/chi-tiet/" + item.MetaTitle + "-" + id;
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                    <!-- Block2 -->
+                    <div class="block2">
+                        <div class="block2-pic hov-img0 rounded">
+                            <a href="@url"><img src="@item.Image" alt="@item.MetaTitle" style="object-fit: cover; height: 472px;"></a>
+                            <div class="product__sale">
+                                <span class="mtext-107 cl0">@item.Promotion%</span>
+                            </div>
+                            <a href="#" data-product-id="@item.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                Xem nhanh
+                            </a>
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14">
+                            <div class="block2-txt-child1 flex-col-l d-block text-truncate">
+                                <a href="@url" class="stext-118 cl2 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    @item.Name
+                                </a>
+
+
+                                <div>
+                                    <span class="stext-105 cl3 text-decoration-line-through pr-2">
+                                        @item.Price.Value.ToString("N0")
+                                    </span>
+                                    <span class="stext-105 cl3 text-danger">
+                                        @item.PromotionPrice.Value.ToString("N0")
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                    <img class="icon-heart1 dis-block trans-04" src="/Assets/Client/images/icons/icon-heart-01.png" alt="ICON">
+                                    <img class="icon-heart2 dis-block trans-04 ab-t-l" src="/Assets/Client/images/icons/icon-heart-02.png" alt="ICON">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+        </div>
+        <!-- Pagination -->
+        @if (ViewBag.ToTalPage > 1)
+        {
+            var pageDisplay = (int)ViewBag.MaxPage;
+            var totalPage = (int)ViewBag.TotalPage;
+            var currentPage = (int)ViewBag.Page;
+
+            //Create numeric link
+            var startPageIndex = Math.Max(1, currentPage - pageDisplay / 2);
+            var endPageIndex = Math.Min(totalPage, currentPage + pageDisplay / 2);
+
+            var link = "/san-pham/sale";
+            <nav class="d-flex justify-content-center">
+                <ul class="pagination">
+                    @if (currentPage > ViewBag.First)
+                    {
+                        <li class="page-item"><a href="@link?page=@ViewBag.First" title="Trang đầu" class="first flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-double-left"></i></a></li>
+                        <li class="page-item">
+                            <a href="@link?page=@ViewBag.Prev" title="Trang trước" class="prev flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-left"></i></a>
+                        </li>
+
+                    }
+                    @for (int i = startPageIndex; i <= endPageIndex; i++)
+                    {
+                        if (currentPage == i)
+                        {
+
+                            <li class="page-item active"> <a href="@link?page=@i" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1" title="Trang @i">@i</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a href="@link?page=@i" title="Trang @i" class="pos flex-c-m how-pagination1 trans-04 m-all-7">@i</a></li>
+                        }
+                    }
+                    @if (currentPage < totalPage)
+                    {
+                        <li class="page-item"><a href="@link?page=@ViewBag.Next" class="next flex-c-m how-pagination1 trans-04 m-all-7" title="Trang sau"><i class="fa fa-angle-right"></i></a></li>
+                        <li class="page-item"> <a href="@link?page=@ViewBag.Last" class="last flex-c-m how-pagination1 trans-04 m-all-7" title="Trang cuối"><i class="fa fa-angle-double-right"></i></a></li>
+                    }
+
+                </ul>
+            </nav>
+        }
+        else if (ViewBag.ToTalPage == 1)
+        {
+            <span></span>
+        }
+        else
+        {
+            <span>Không có bản ghi nào</span>
+        }
+    </div>
+</div>

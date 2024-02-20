@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Revenue";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Thống kê doanh thu
+}
+
+<h3>Tổng Doanh Thu Đạt Được</h3>
+
+<h2>@String.Format("{0:N0}", @ViewBag.TongDoanhThu) vnđ</h2>
+
+@using (Html.BeginForm("DoanhThuNgay", "Admin", FormMethod.Post))
+{
+    <h4 class="text-danger">@Html.Raw(TempData["msgDate"])</h4>
+    <h3 class="mt-5">Doanh thu theo ngày</h3>
+    <input type="date" name="NgayGiao" required />
+
+    <input type="submit" value="Kiểm tra" />
+
+}

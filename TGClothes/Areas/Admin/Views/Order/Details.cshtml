@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Data.EF.OrderDetail>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Chi tiết đơn hàng
+}
+
+<div class="col-lg-12 p-all-8">
+
+    <h3>Thông tin khách hàng</h3>
+    @foreach (var item in ViewBag.Customer)
+    {
+        <h5>Họ tên: @item.Order.Name</h5>
+        <h5>Email: @item.Order.Email</h5>
+        <h5>Địa chỉ: @item.Order.DeliveryAddress</h5>
+        <h5>Số điện thoại: @item.Order.Phone</h5>
+    }
+
+    <h3>Chi tiết sản phẩm</h3>
+
+    <table class="table">
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Hình ảnh</th>
+            <th>Giá bán</th>
+            <th>Giảm giá</th>
+            <th>Giá K/m</th>
+            <th>Số lượng</th>
+        </tr>
+
+        @foreach (var item in ViewBag.OrderDetail)
+        {
+            <tr>
+                <td>
+                    @item.Product.Name
+                </td>
+                <td>
+                    <img src=" @item.Product.Image" height="100px" />
+                </td>
+                <td>@item.Product.Price</td>
+                <td>
+                    @item.Product.Promotion %
+                </td>
+                <td>
+                    @String.Format("{0:N0}", @item.Product.PromotionPrice ?? 0)
+                </td>
+
+                <td>
+                    @item.OrderDetail.Quantity
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    @foreach (var item in Model.Take(1))
+    {
+        <tr>
+            <td>
+                <strong> Tổng số lượng</strong>
+
+                @Html.DisplayFor(modelItem => item.TotalQuantity)
+            </td>
+            <td>
+                <strong> Tổng giá tiền</strong>
+
+                @String.Format("{0:N0}", item.TotalPrice) đ
+            </td>
+
+        </tr>
+    }
+
+
+</div>
+
+<div class="body padding-8" style="border: none; box-shadow: none; border-radius: none; margin-top: 10px;">
+    <div class="mt-2">
+        <a href="@Url.Action("Index", "Order")" class="btn btn-danger">Quay lại</a>
+    </div>
+</div>

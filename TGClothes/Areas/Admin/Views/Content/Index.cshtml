@@ -1,0 +1,94 @@
+﻿@model PagedList.IPagedList<Data.EF.Content>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Quản lý tin tức";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Danh sách tin tức
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách tin tức</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Index", "Content", FormMethod.Get))
+        {
+            <div class="row form-group">
+                <div class="col-lg-12 row">
+                    <div class="col-md-4">
+                        <input type="text" value="@ViewBag.SearchString" class="form-control" name="searchString" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Tìm kiếm</button>
+                        <a href="/Admin/Content/Index" class="btn btn-outline-success">Refresh</a>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-lg-end">
+                        <a href="/Admin/Content/Create" class="btn btn-primary">Thêm mới</a>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="table-responsive" style="overflow-x: hidden;">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Ngày đăng</th>
+                                    <th>Ngày cập nhật</th>
+                                    <th>Trạng thái</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var checkStatus = "";
+                                    if (item.Status)
+                                    { checkStatus = "text-success"; }
+
+                                    else
+                                    {
+                                        checkStatus = "text-danger";
+                                    }
+
+                                    <tr id="row_@item.Id">
+                                        <td>@item.Name</td>
+                                        <td><img src=" @Html.DisplayFor(modelItem => item.Image)" height="100px" /></td>
+                                        <td>@item.CreatedDate</td>
+                                        <td>@item.ModifiedDate</td>
+                                        <td><a href="#" class="btn-active @checkStatus" data-id="@item.Id">@(item.Status ? "Kích hoạt" : "Khóa")</a></td>
+                                        <td>
+                                            <a href="@Url.Action("Edit", "Content", new { id = item.Id })" class="btn text-primary f2"><i class="fas fa-edit"></i></a>
+                                            @Ajax.ActionLink(" ", "Delete", new { @id = item.Id }, new AjaxOptions
+                                           {
+                                               Confirm = "Bạn có muốn xóa bản ghi này?",
+                                               OnComplete = "$('#row_" + @item.Id + "').remove()",
+                                               HttpMethod = "Delete"
+                                           }, new { @class = "btn text-primary f1 myActionLink" })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, @searchString = @ViewBag.SearchString }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section CustomJs {
+    <script src="/Assets/Admin/js/controller/contentController.js"></script>
+}

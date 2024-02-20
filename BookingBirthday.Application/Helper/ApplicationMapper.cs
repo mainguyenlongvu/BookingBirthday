@@ -14,6 +14,7 @@ namespace BookingBirthday.Application.Helper
         public ApplicationMapper()
         {
             CreateMap<Package, PackageModel>().ReverseMap();
+            CreateMap<User, UserModel>().ReverseMap();
         }
     }
 }

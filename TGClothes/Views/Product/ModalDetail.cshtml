@@ -1,0 +1,247 @@
+﻿@model Data.EF.Product
+
+@{
+    var category = (Data.EF.ProductCategory)ViewBag.Category;
+    var sizes = (List<Data.EF.Size>)ViewBag.Sizes;
+    var sizestock = (List<TGClothes.Models.ProductDetailModel>)ViewBag.SizeStock;
+    var galleries = (TGClothes.Models.ProductGalleryModel)ViewBag.Galleries;
+}
+
+<div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
+    <h4 class="text-danger">@Html.Raw(TempData["Success"])</h4>
+    <h4 class="text-danger">@Html.Raw(TempData["OutOfStock"])</h4>
+    <div class="overlay-modal1 js-hide-modal1"></div>
+
+    <div class="container">
+        <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
+            <button class="how-pos3 hov3 trans-04 js-hide-modal1">
+                <img src="/Assets/Client/images/icons/icon-close.png" alt="CLOSE">
+            </button>
+
+            <div id="modal1-content" class="row">
+                <div class="col-md-6 col-lg-7 p-b-30">
+                    <div class="p-l-25 p-r-30 p-lr-0-lg">
+                        <div class="wrap-slick3 flex-sb flex-w">
+                            <div class="wrap-slick3-dots"></div>
+                            <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+                            <div class="slick3 gallery-lb">
+                                <div class="item-slick3" data-thumb="@Model.Image">
+                                    <div class="wrap-pic-w pos-relative">
+                                        <img src="@Model.Image" alt="IMG-PRODUCT">
+
+                                        <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="@Model.Image">
+                                            <i class="fa fa-expand"></i>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                @for (int i = 1; i <= 3; i++)
+                                {
+                                    var imageUrl = galleries.Gallery.GetType().GetProperty($"Image{i}").GetValue(galleries.Gallery, null);
+                                    <div class="item-slick3" data-thumb="@imageUrl">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="@imageUrl" alt="IMG-PRODUCT">
+
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="@imageUrl">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5 p-b-30">
+                    <div class="p-r-50 p-t-5 p-lr-0-lg">
+                        <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                            @Model.Name
+                        </h4>
+
+                        <span class="mtext-106 cl2">
+                            Giá: @(Model.Price.HasValue ? Model.Price.Value.ToString("N0") : "Liên hệ")
+                        </span>
+
+                        <p class="stext-102 cl3 p-t-23">
+                            @Model.Description
+                        </p>
+
+                        <!-- Size & Cart -->
+                        <div class="p-t-33">
+                            <div class="size-selector stext-110">
+
+                                <ul>
+                                    @{ var isFirstSizeSelected = false; }
+                                    @foreach (var item in sizestock)
+                                    {
+                                        if (item.Stock == 0)
+                                        {
+                                            <li class="size-option" style="background-color: #f6f6f6; pointer-events: none; color: #dedddd; ">
+                                                <input class="size" type="radio" name="size" data-size="@item.SizeId" value="@item.SizeId" style="width:100%;" hidden>@item.SizeName
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            if (!isFirstSizeSelected)
+                                            { // Nếu chưa chọn size đầu tiên, thì chọn size hiện tại
+                                                <li class="size-option selected" onclick="selectSize(this)">
+                                                    <input class="size" type="radio" name="size" data-size="@item.SizeId" value="@item.SizeId" style="width:100%;" hidden checked>@item.SizeName
+                                                </li>
+                                                isFirstSizeSelected = true; // Đánh dấu đã chọn size đầu tiên
+                                            }
+                                            else
+                                            {
+                                                <li class="size-option" onclick="selectSize(this)">
+                                                    <input class="size" type="radio" name="size" data-size="@item.SizeId" value="@item.SizeId" style="width:100%;" hidden>@item.SizeName
+                                                </li>
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="flex-w flex-r-m p-b-10">
+                                <div class="size-204 flex-w flex-m respon6-next">
+                                    <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                        <a href="/them-gio-hang?productId=@Model.Id&sizeId=...&quantity=1" id="addToCartLink" class="text-white">Thêm vào giỏ</a>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Icons -->
+                        <div class="flex-w flex-m p-l-100 p-t-40 respon7">
+                            <div class="flex-m bor9 p-r-10 m-r-11">
+                                <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+                                    <i class="zmdi zmdi-favorite"></i>
+                                </a>
+                            </div>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
+                                <i class="fa fa-facebook"></i>
+                            </a>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
+                                <i class="fa fa-twitter"></i>
+                            </a>
+
+                            <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Google Plus">
+                                <i class="fa fa-google-plus"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/Assets/Client/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/Assets/Client/js/jquery-ui.js"></script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/bootstrap/js/popper.js"></script>
+<script src="/Assets/Client/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/daterangepicker/moment.min.js"></script>
+<script src="/Assets/Client/vendor/slick/slick.min.js"></script>
+<script src="/Assets/Client/js/slick-custom.js"></script>
+<script>
+    $('.wrap-slick3').each(function () {
+        $(this).find('.slick3').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            fade: true,
+            infinite: true,
+            autoplay: false,
+            autoplaySpeed: 6000,
+
+            arrows: true,
+            appendArrows: $(this).find('.wrap-slick3-arrows'),
+            prevArrow: '<button class="arrow-slick3 prev-slick3"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
+            nextArrow: '<button class="arrow-slick3 next-slick3"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
+
+            dots: true,
+            appendDots: $(this).find('.wrap-slick3-dots'),
+            dotsClass: 'slick3-dots',
+            customPaging: function (slick, index) {
+                var portrait = $(slick.$slides[index]).data('thumb');
+                return '<img src=" ' + portrait + ' "/><div class="slick3-dot-overlay"></div>';
+            },
+        });
+    });
+</script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+<script src="/Assets/Client/vendor/sweetalert/sweetalert.min.js"></script>
+<script>
+  // JavaScript code
+  $('#addToCartLink').off('click').on('click', function (e) {
+        e.preventDefault();
+        const productId = '@Model.Id';
+        const selectedSize = document.querySelector('input[name="size"]:checked');
+        const sizeId = selectedSize ? selectedSize.value : '';
+
+        if (sizeId > 0) {
+            const url = `/them-gio-hang?productId=${productId}&sizeId=${sizeId}&quantity=1`;
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function (response) {
+                    // Xử lý khi AJAX thành công
+                    if (response.success) {
+                        swal("Thành công", "Thêm vào giỏ hàng thành công.", "success");
+                        setTimeout(function () {
+                            window.location.href = window.location.href;
+                        }, 500);
+                    }
+                    else {
+                        swal("Thất bại", "Sản phẩm không được vượt quá số lượng tồn.", "error");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý khi AJAX thất bại
+                    swal("Lỗi", "Có lỗi xảy ra trong quá trình thêm vào giỏ hàng!", "error");
+                }
+            });
+
+        } else if (sizeId === '') {
+            swal("Lỗi", "Vui lòng chọn size!", "error");
+        }
+  });
+</script>
+<script>
+    function selectSize(selectedOption) {
+        const radioInput = selectedOption.querySelector('input[type="radio"]');
+
+        if (radioInput) {
+            radioInput.checked = true;
+        }
+
+        const sizeOptions = document.querySelectorAll('.size-option');
+
+        // Xóa lớp 'selected' khỏi tất cả các ô chọn size
+        sizeOptions.forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        // Thêm lớp 'selected' vào ô chọn size được chọn
+        selectedOption.classList.add('selected');
+    }
+</script>
+
+<script src="/Assets/Client/js/main.js"></script>
+
+<script>
+
+    $('.js-hide-modal1').on('click', function () {
+        $('#modalContainer').empty();
+        $('.js-modal1').removeClass('show-modal1');
+    });
+</script>

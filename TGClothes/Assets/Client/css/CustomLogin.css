@@ -1,0 +1,40 @@
+﻿.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    height: 40px;
+    width: 40px;
+    margin: 0 5px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    color: #000;
+}
+
+.social-container a {
+  height: 40px;
+  width: 40px;
+  margin: 0 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  color: #000;
+  transition: transform 0.5s ease;
+}
+
+.social-container a:first-child:hover {
+  background-color: #0866ff;
+  color: #fff;
+  transform: scale(1.2);
+}
+
+    .social-container a:last-child:hover {
+        background-color: #ed4436;
+        color: #fff;
+        transform: scale(1.2);
+    }

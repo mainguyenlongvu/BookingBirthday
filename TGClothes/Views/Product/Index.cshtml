@@ -1,0 +1,265 @@
+﻿@model List<TGClothes.Models.ProductStockViewModel>
+
+<!-- Product -->
+<div class="bg0 m-t-23 p-b-70">
+    <div class="container">
+        <div class="flex-w flex-sb-m p-b-23">
+            @{Html.RenderAction("ProductCategory", "Product");}
+
+            <div class="flex-w flex-c-m m-tb-10">
+                <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
+                    <i class="icon-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-filter-list"></i>
+                    <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none" style="display:none;"></i>
+                    Bộ lọc
+                </div>
+
+                <div class="flex-c-m stext-106 cl6 size-105 bor4 pointer hov-btn3 trans-04 m-tb-4 js-show-search">
+                    <i class="icon-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-search"></i>
+                    <i class="icon-close-search cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none" style="display:none;"></i>
+                    Tìm kiếm
+                </div>
+            </div>
+
+            <!-- Search product -->
+            <div class="dis-none panel-search w-full p-t-10 p-b-15">
+                <div class="bor8 dis-flex p-l-15">
+                    <form action="/san-pham/filter" method="get" style="display: contents;">
+                        <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                            <i class="zmdi zmdi-search"></i>
+                        </button>
+
+                        <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" id="txtSearch" name="searchkeyword" placeholder="Nhập từ khóa tìm kiếm...">
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filter -->
+            <div class="dis-none panel-filter w-full p-t-10">
+                <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+                    <div class="filter-col1 p-r-15 p-b-27">
+                        <div class="mtext-102 cl2 p-b-15">
+                            Sắp xếp theo
+                        </div>
+
+                        <ul>
+                            <li class="p-b-6">
+                                <a href="/san-pham?orderBy=date" class="filter-link stext-106 trans-04 filter-link-active">
+                                    Mặc định
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham?orderBy=date_desc" class="filter-link stext-106 trans-04">
+                                    Mới nhất
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham?orderBy=price" class="filter-link stext-106 trans-04">
+                                    Giá: Thấp đến cao
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham?orderBy=price_desc" class="filter-link stext-106 trans-04">
+                                    Giá: Cao đến thấp
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="filter-col2 p-r-15 p-b-27" id="sort">
+                        <div class="mtext-102 cl2 p-b-15">
+                            Giá
+                        </div>
+
+                        <ul>
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=0&maxPrice=@Int32.MaxValue" class="filter-link stext-106 trans-04 filter-link-active">
+                                    Tất cả
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=0&maxPrice=200000" class="filter-link stext-106 trans-04">
+                                    0 - 200,000 đ
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=200001&maxPrice=400000" class="filter-link stext-106 trans-04">
+                                    200,000 - 400,000 đ
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=400001&maxPrice=600000" class="filter-link stext-106 trans-04">
+                                    400,000 - 600,000 đ
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=600001&maxPrice=1000000" class="filter-link stext-106 trans-04">
+                                    600,000 - 1,000,000 đ
+                                </a>
+                            </li>
+
+                            <li class="p-b-6">
+                                <a href="/san-pham/filter?minPrice=1000001&maxPrice=@Int32.MaxValue" class="filter-link stext-106 trans-04">
+                                    1,000,000+ đ
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row isotope-grid" id="products">
+            @foreach (var item in Model)
+            {
+                var id = item.Product.Id;
+                var dayDiff = (DateTime.Now.Subtract(item.Product.CreatedDate.Value).Days);
+                var url = "/chi-tiet/" + item.Product.MetaTitle + "-" + id;
+                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item">
+                    <!-- Block2 -->
+                    <div class="block2" data-productprice="@item.Product.Price">
+                        <div class="block2-pic hov-img0 rounded">
+                            <a href="@url"><img src="@item.Product.Image" alt="@item.Product.MetaTitle" style="object-fit: cover; height: 472px;"></a>
+                            @if (dayDiff <= 30)
+                            {
+                        <div class="product__sale">
+                            <span class="mtext-107 cl0">Mới</span>
+                        </div> }
+                                        else if (item.Stock == 0)
+                                        {
+                        <div class="product__sale">
+                            <span class="mtext-107 cl0">Hết hàng</span>
+                        </div> }
+                                        else if (item.Product.Promotion.HasValue && item.Product.Promotion != 0)
+                                        {
+                        <div class="product__sale">
+                            <span class="mtext-107 cl0">@item.Product.Promotion%</span>
+                        </div>}
+
+                            <a href="#" data-product-id="@item.Product.Id" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                                Xem nhanh
+                            </a>
+                        </div>
+
+                        <div class="block2-txt flex-w flex-t p-t-14">
+                            <div class="block2-txt-child1 flex-col-l d-block text-truncate">
+                                <a href="@url" class="stext-118 cl2 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    @item.Product.Name
+                                </a>
+
+                                @if (item.Product.Promotion == 0 || item.Product.Promotion == null)
+                                {
+                                    <div>
+                                        <span class="stext-105 cl3">
+                                            @(item.Product.Price.HasValue ? item.Product.Price.Value.ToString("N0") : "Liên hệ")
+                                        </span>
+                                    </div> 
+                                }
+                                else
+                                {
+                                    <div>
+                                        <span class="stext-105 cl3 text-decoration-line-through pr-2">
+                                            @item.Product.Price.Value.ToString("N0")
+                                        </span>
+                                        <span class="stext-105 cl3 text-danger">
+                                            @item.Product.PromotionPrice.Value.ToString("N0")
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="block2-txt-child2 flex-r p-t-3">
+                                <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                    <img class="icon-heart1 dis-block trans-04" src="/Assets/Client/images/icons/icon-heart-01.png" alt="ICON">
+                                    <img class="icon-heart2 dis-block trans-04 ab-t-l" src="/Assets/Client/images/icons/icon-heart-02.png" alt="ICON">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Pagination -->
+        @if (ViewBag.ToTalPage > 1)
+        {
+            var pageDisplay = (int)ViewBag.MaxPage;
+            var totalPage = (int)ViewBag.TotalPage;
+            var currentPage = (int)ViewBag.Page;
+
+            //Create numeric link
+            var startPageIndex = Math.Max(1, currentPage - pageDisplay / 2);
+            var endPageIndex = Math.Min(totalPage, currentPage + pageDisplay / 2);
+
+            var link = "/san-pham?orderBy=" + ViewBag.OrderBy;
+<nav class="d-flex justify-content-center">
+    <ul class="pagination">
+        @if (currentPage > ViewBag.First)
+        {
+<li class="page-item"><a href="@link&page=@ViewBag.First" title="Trang đầu" class="first flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-item">
+                        <a href="@link&page=@ViewBag.Prev" title="Trang trước" class="prev flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-left"></i></a>
+                    </li>}
+        @for (int i = startPageIndex; i <= endPageIndex; i++)
+        {
+            if (currentPage == i)
+            {
+
+<li class="page-item active"> <a href="@link&page=@i" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1" title="Trang @i">@i</a></li> }
+                    else
+                    {
+<li class="page-item"><a href="@link&page=@i" title="Trang @i" class="pos flex-c-m how-pagination1 trans-04 m-all-7">@i</a></li>}
+                }
+        @if (currentPage < totalPage)
+        {
+<li class="page-item"><a href="@link&page=@ViewBag.Next" class="next flex-c-m how-pagination1 trans-04 m-all-7" title="Trang sau"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="page-item"> <a href="@link&page=@ViewBag.Last" class="last flex-c-m how-pagination1 trans-04 m-all-7" title="Trang cuối"><i class="fa fa-angle-double-right"></i></a></li>}
+
+    </ul>
+</nav> }
+else if (ViewBag.ToTalPage == 1)
+{
+<span></span> }
+else
+{
+<span>Không có bản ghi nào</span>}
+    </div>
+</div>
+
+@section jsFooter {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var filterLinks = document.querySelectorAll('.filter-link');
+
+            filterLinks.forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    // Xóa class 'filter-link-active' khỏi tất cả các thẻ <a>
+                    filterLinks.forEach(function (link) {
+                        link.classList.remove('filter-link-active');
+                    });
+
+                    // Thêm class 'filter-link-active' vào thẻ được nhấp vào
+                    this.classList.add('filter-link-active');
+
+                    // Lấy href của thẻ được nhấp vào
+                    var selectedHref = this.getAttribute('href');
+
+                    // Cập nhật href của thẻ đầu tiên
+                    var firstLink = document.querySelector('.filter-link.filter-link-active');
+                    firstLink.setAttribute('href', selectedHref);
+
+                    window.location.href = firstLink;
+                });
+            });
+        });
+    </script>
+}
+

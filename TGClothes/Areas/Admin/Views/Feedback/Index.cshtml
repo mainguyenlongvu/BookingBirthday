@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Data.EF.Feedback>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Quản lý Feedback
+}
+
+<div class="table-responsive" style="overflow-x: hidden;">
+    <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-left">Tên khách hàng</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Nội dung</th>
+                            <th>Ngày tạo</th>
+                            <th>Chức năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr id="row_@item.Id" class="text-center">
+                                <td style="word-wrap: break-word; max-width: 240px;" class="text-left">@item.Name</td>
+                                <td>@item.Email</td>
+                                <td>@item.Phone</td>
+                                <td>@item.Address</td>
+                                <td>@item.Content</td>
+                                <td>@item.CreatedDate</td>
+                                <td>
+                                    <a href="@Url.Action("Delete", "Feedback", new { id = item.Id })"
+                                       class="btn text-primary f1"
+                                       data-ajax="true"
+                                       data-ajax-method="delete"
+                                       data-ajax-confirm="Bạn có muốn xóa bản ghi này?"
+                                       data-ajax-complete="false">
+                                        <i class='fa-solid fa-trash-can'></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

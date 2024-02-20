@@ -1,0 +1,108 @@
+﻿@model Data.EF.Content
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var day = Model.CreatedDate.Value.Day;
+    var month = Model.CreatedDate.Value.Month;
+    var year = Model.CreatedDate.Value.Year;
+}
+
+@{ 
+    var tags = (List<Data.EF.Tag>)ViewBag.Tags;
+}
+
+<!-- breadcrumb -->
+<div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+        <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+            Trang chủ
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <a href="/tin-tuc" class="stext-109 cl8 hov-cl1 trans-04">
+            Tin tức
+            <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+        </a>
+
+        <span class="stext-109 cl4" style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            @Model.Description
+        </span>
+    </div>
+</div>
+
+
+<!-- Content page -->
+<section class="bg0 p-t-52 p-b-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-9 p-b-80">
+                <div class="p-r-45 p-r-0-lg">
+                    <!--  -->
+                    <div class="wrap-pic-w how-pos5-parent">
+                        <img src="@Model.Image" alt="IMG-BLOG" width="960px" height="480px">
+
+                        <div class="flex-col-c-m size-123 bg9 how-pos5">
+                            <span class="ltext-107 cl2 txt-center">
+                                @day
+                            </span>
+
+                            <span class="stext-109 cl3 txt-center">
+                                @month @year
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="p-t-32">
+                        <span class="flex-w flex-m stext-111 cl2 p-b-19">
+
+                            <span>
+                                @Model.CreatedDate.Value.ToString("dd-MMM-yyyy") 
+                                <span class="cl12 m-l-4 m-r-6">|</span>
+                            </span>
+
+                            <span>
+                                @foreach (var item in tags)
+                                {
+                                    <a href="/tag/@item.Id" class="stext-111 cl2">@item.Name</a>
+                                    if (item != tags.Last())
+                                    {
+                                        <span>, </span>
+                                    }
+                                }
+                            </span>
+                        </span>
+
+                        <h4 class="mtext-101 cl2 p-b-16 font-italic">
+                            @Model.Description
+                        </h4>
+
+                        @Html.Raw("<div class='lh-17'>" + Model.Detail + "</div>")
+                    </div>
+
+                    <div class="flex-w flex-t p-t-16">
+                        <span class="size-216 stext-116 cl8 p-t-4">
+                            Tags
+                        </span>
+
+                        <div class="flex-w size-217">
+                            @foreach (var item in tags)
+                            {
+                                <a href="/tag/@item.Id" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                                    @item.Name
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-3 p-b-80">
+                <div class="side-menu">
+                    @{Html.RenderAction("ContentCategory", "Content");}
+
+                    @{Html.RenderAction("ContentTag", "Content");}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>	

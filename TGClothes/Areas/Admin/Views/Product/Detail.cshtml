@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var product = (Data.EF.Product)ViewBag.Product;
+    var gallery = (Data.EF.Gallery)ViewBag.ProductGallery;
+    var productSizes = (List<TGClothes.Models.SizeModel>)ViewBag.ProductSizes;
+}
+
+@section header {
+    Chi tiết sản phẩm    
+}
+
+<div class="col-lg-12 padding-8">
+    <hr />
+    <dl class="dl-horizontal" style="overflow: hidden;">
+        <dt>Tên sản phẩm</dt>
+
+        <dd><p>@product.Name</p></dd>
+
+        <dt>Hình đại diện</dt>
+
+        <dd><img src="@product.Image" height="200px" /></dd>
+
+        @{
+            string[] imageFields = { gallery.Image1, gallery.Image2, gallery.Image3 };
+        }
+
+        @for (int i = 0; i < imageFields.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(imageFields[i]))
+            {
+                <dt>
+                    Thư viện ảnh @(i + 1)
+                </dt>
+
+                <dd>
+                    <img src="@imageFields[i]" height="200px" />
+                </dd>
+            }
+        }
+
+        <dt>Giá Nhập</dt>
+
+        <dd>@String.Format("{0:N0}", @product.OriginalPrice) vnđ</dd>
+
+        <dt>Giá bán</dt>
+
+        <dd>@String.Format("{0:N0}", @product.Price) vnđ</dd>
+
+        <dt>Khuyến mại</dt>
+
+        <dd>@String.Format("{0}%", @product.Promotion)</dd>
+
+        <dt>
+            Ngày tạo
+        </dt>
+
+        <dd>
+            <p>@product.CreatedDate</p>
+        </dd>
+
+        <dt>
+            Ngày cập nhật
+        </dt>
+
+        <dd>
+            <p>@product.ModifiedDate</p>
+        </dd>
+
+        <dt>Size và số lượng tồn</dt>
+        <ul>
+            @{ int totalQuantity = 0; }
+            @foreach (var productSize in productSizes)
+            {
+
+                <li>Size: @productSize.SizeName, Số lượng: @productSize.Stock</li>
+                totalQuantity += productSize.Stock;
+            }
+        </ul>
+    </dl>
+
+    <a href="@Url.Action("Index", "Product")" class="btn btn-danger">Quay lại</a>
+</div>
+

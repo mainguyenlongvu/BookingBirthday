@@ -1,0 +1,60 @@
+﻿@model TGClothes.Models.LoginModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section CustomCSS{
+    <link href="/Assets/Client/css/CustomLogin.css" rel="stylesheet" />
+}
+
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <div class="flex-w flex-tr justify-content-center">
+            <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                @using (Html.BeginForm("Login", "User", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                <form>
+                    <h4 class="mtext-113 cl2 txt-center p-b-30">
+                        Đăng nhập
+                    </h4>
+
+                    <div class="social-container text-center">
+                        <a href="/User/LoginWithFacebook"><i class="fa fa-facebook-f"></i></a>
+                        <a href="@ViewBag.Response"><i class="fa fa-google-plus"></i></a>
+                    </div>
+                    <p class="text-center stext-111">Hoặc đăng nhập bằng tài khoản của bạn</p>
+                    <div class="bor8 m-t-20 how-pos4-parent">
+                        <span class="how-pos4 pointer-none lnr lnr-envelope"></span>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập email" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                    <div class="bor8 m-t-20 how-pos4-parent">
+                        <span class="how-pos4 pointer-none lnr lnr-bubble"></span>
+                        @Html.PasswordFor(model => model.Password, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập mật khẩu" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger stext-111 plh3" })
+
+                    <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 m-t-20 trans-04 pointer">
+                        Đăng nhập
+                    </button>
+
+                    <div class="m-t-20 stext-103 how-pos4-parent text-center">
+                        <p>Chưa có tài khoản? <a class="register" href="/dang-ky">Đăng ký ngay</a></p>
+                    </div>
+
+                    <div class="m-t-20 stext-103 how-pos4-parent text-center">
+                        <p>Quên mật khẩu? <a href="/quen-mat-khau">Lấy lại mật khẩu</a></p>
+                    </div>
+
+                </form>
+                }
+            </div>
+        </div>
+    </div>
+</section>

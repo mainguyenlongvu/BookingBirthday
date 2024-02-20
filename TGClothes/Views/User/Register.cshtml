@@ -1,0 +1,119 @@
+﻿@model TGClothes.Models.RegisterModel
+@using BotDetect.Web.Mvc;
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl"
+      rel="stylesheet" type="text/css" />
+@{
+    MvcCaptcha registerCaptcha = new MvcCaptcha("RegisterCaptcha");
+    registerCaptcha.UserInputID = "CaptchaCode";
+}
+
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <div class="flex-w flex-tr justify-content-center">
+            <div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+                @using (Html.BeginForm("Register", "User", FormMethod.Post))
+                {
+                <form>
+                    <h4 class="mtext-113 cl2 txt-center p-b-30">
+                        Đăng ký
+                    </h4>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @if (ViewBag.Success != null)
+                    {
+                        <div class="alert alert-success">@ViewBag.Success</div>
+                    }
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                <span class="how-pos4 pointer-none lnr lnr-user"></span>
+                                @*<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" id="txtName" name="UserName" placeholder="Nhập họ tên">*@
+                                @Html.TextBoxFor(model => model.Name, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập họ tên" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                <span class="how-pos4 pointer-none lnr lnr-phone-handset"></span>
+                                @Html.TextBoxFor(model => model.Phone, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập số điện thoại", @maxlength = "11" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    <div class="bor8 m-t-20 how-pos4-parent">
+                        <span class="how-pos4 pointer-none lnr lnr-envelope"></span>
+                        @Html.TextBoxFor(model => model.Email, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập email" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                <span class="how-pos4 pointer-none lnr lnr-bubble"></span>
+                                @Html.PasswordFor(model => model.Password, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập mật khẩu" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                <span class="how-pos4 pointer-none lnr lnr-bubble"></span>
+                                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Xác nhận mật khẩu" })
+                            </div>
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="bor8 m-t-20 how-pos4-parent">
+                        <span class="how-pos4 pointer-none lnr lnr-map-marker"></span>
+                        @Html.TextBoxFor(model => model.Address, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập địa chỉ" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                <span class="how-pos4 pointer-none lnr lnr-bubble"></span>
+                                @Html.TextBox("CaptchaCode", null, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập mã captcha" })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="bor8 m-t-20 how-pos4-parent">
+                                @Html.Captcha(registerCaptcha)
+                            </div>
+                        </div>
+                        @Html.ValidationMessage("CaptchaCode", new { @class = "text-danger" })
+
+                    </div>
+
+                    @*<div class="bor8 m-t-20 how-pos4-parent">
+                        <span class="how-pos4 pointer-none lnr lnr-bubble"></span>
+                        @Html.TextBox("CaptchaCode", null, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập mã captcha" })
+                    </div>
+                    @Html.Captcha(registerCaptcha)
+                    @Html.ValidationMessage("CaptchaCode", new { @class = "text-danger" })*@
+
+                    <button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 m-t-20 trans-04 pointer">
+                        Đăng ký
+                    </button>
+
+                    <div class="m-t-20 how-pos4-parent text-center">
+                        <p>Đã có tài khoản? <a href="/dang-nhap">Đăng nhập ngay</a></p>
+                    </div>
+
+                </form>
+
+                }
+            </div>
+        </div>
+    </div>
+</section>

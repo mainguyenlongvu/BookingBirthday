@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Data.EF.Order>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Thống kê    
+}
+
+    <div class="col-lg-12 padding-8">
+
+
+        @using (Html.BeginForm("RevenueByDay", "RevenueStatistic", FormMethod.Post))
+        {
+            <h4 class="text-danger">@Html.Raw(TempData["msgDate"])</h4>
+            <h3 class="mt-5">Doanh thu theo ngày</h3>
+            <input type="date" name="date" required />
+
+            <input type="submit" value="Kiểm tra" />
+
+        }
+
+        @using (Html.BeginForm("DoanhThuThang", "Admin", FormMethod.Post))
+        {
+            <h3 class="mt-5">Doanh thu theo tháng</h3>
+            <input type="date" name="NgayGiao" required />
+
+            <input type="submit" value="Kiểm tra" />
+
+        }
+
+        @using (Html.BeginForm("DoanhThuNam", "Admin", FormMethod.Post))
+        {
+            <h3 class="mt-5">Doanh thu theo năm</h3>
+            <input type="date" name="NgayGiao" required />
+
+            <input type="submit" value="Kiểm tra" />
+
+        }
+
+
+    </div>

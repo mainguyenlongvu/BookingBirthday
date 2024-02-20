@@ -1,0 +1,15 @@
+﻿@model List<Data.EF.Menu>
+@using Common;
+
+@foreach (var item in Model)
+{
+    <li>
+        <a href="@item.Link" target="@item.Target">@item.Text</a>
+    </li>
+}
+@if (Session[CommonConstants.USER_SESSION] != null)
+{
+    <li>
+        <a href="@Url.Action("Index", "Order")">Đơn hàng của tôi</a>
+    </li>
+}

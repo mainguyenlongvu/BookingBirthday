@@ -1,0 +1,103 @@
+﻿@model PagedList.IPagedList<TGClothes.Models.ProductStockViewModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var searchString = HttpContext.Current.Request.QueryString["searchString"];
+}
+
+@section header {
+    Danh sách sản phẩm
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách sản phẩm</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+        {
+            <div class="row form-group">
+                <div class="col-lg-12 row">
+                    <div class="col-md-4">
+                        <input type="text" value="@ViewBag.SearchString" class="form-control" name="searchString" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success">Tìm kiếm</button>
+                        <a href="/Admin/Product/Index" class="btn btn-outline-success">Refresh</a>
+                    </div>
+                    <div class="col-md-4 d-flex justify-content-lg-end">
+                        <a href="/Admin/Product/Create" class="btn btn-primary">Thêm mới</a>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="table-responsive" style="overflow-x: hidden;">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr class="text-center">
+                                    <th class="text-left">Tên sản phẩm</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá nhập</th>
+                                    <th>Giá</th>
+                                    <th>Giảm giá</th>
+                                    <th>Giá k/m</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhật</th>
+                                    <th>Tồn kho</th>
+                                    <th>Trạng thái</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var checkStatus = "";
+                                    if (item.Product.Status)
+                                    { checkStatus = "text-success"; }
+
+                                    else
+                                    {
+                                        checkStatus = "text-danger";
+                                    }
+                                    <tr id="row_@item.Product.Id" class="text-center">
+                                        <td style="word-wrap: break-word; max-width: 240px;" class="text-left">@item.Product.Name</td>
+                                        <td>
+                                            <img src=" @Html.DisplayFor(modelItem => item.Product.Image)" height="100px" />
+                                        </td>
+                                        <td>@item.Product.OriginalPrice</td>
+                                        <td>@item.Product.Price</td>
+                                        <td>@item.Product.Promotion</td>
+                                        <td>@item.Product.PromotionPrice</td>
+                                        <td>@item.Product.CreatedDate</td>
+                                        <td>@item.Product.ModifiedDate</td>
+                                        <td>@item.Stock</td>
+                                        <td><a href="#" class="btn-active @checkStatus" data-id="@item.Product.Id">@(item.Product.Status ? "Kích hoạt" : "Khóa")</a></td>
+                                        <td>
+                                            <a href="@Url.Action("Detail", "Product", new { id = item.Product.Id })" class="btn text-primary f1"><i class="fa-solid fa-eye"></i></a>
+                                            <a href="@Url.Action("Edit", "Product", new { id = item.Product.Id })" class="btn text-primary f1"><i class="fas fa-edit"></i></a>
+                                            <a href="#" data-id="@item.Product.Id" class="btn text-primary f1 delete-btn"><i class="fa-solid fa-trash-can"></i></a>
+                                            
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { searchString, page }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section CustomJs {
+    <script src="~/Assets/Admin/js/controller/productController.js"></script>
+}

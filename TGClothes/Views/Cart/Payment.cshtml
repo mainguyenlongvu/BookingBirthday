@@ -1,0 +1,165 @@
+﻿@model TGClothes.Models.CustomerInfo
+@{
+    ViewBag.Title = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var subtotal = ViewBag.SubTotal;
+    var promotion = ViewBag.Promotion;
+}
+
+<section class="bg0 p-t-104 p-b-116">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-7 bor10 m-l-25 m-r--38">
+                <div class="m-lr-0-xl m-tb-30">
+                    <h4 class="mtext-109 cl2 txt-center p-b-30">
+                        Thông tin người nhận
+                    </h4>
+                    @using (Html.BeginForm())
+                    {
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="bor8 m-t-20 how-pos4-parent">
+                            <span class="how-pos4 pointer-none lnr lnr-user"></span>
+                            @Html.TextBoxFor(model => model.Name, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập tên người nhận" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                        <div class="bor8 m-t-20 how-pos4-parent">
+                            <span class="how-pos4 pointer-none lnr lnr-envelope"></span>
+                            @Html.TextBoxFor(model => model.Email, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập email" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                        <div class="bor8 m-t-20 how-pos4-parent">
+                            <span class="how-pos4 pointer-none lnr lnr-phone-handset"></span>
+                            @Html.TextBoxFor(model => model.Phone, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập số điện thoại", @maxlength="11" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                        <div class="bor8 m-t-20 how-pos4-parent">
+                            <span class="how-pos4 pointer-none lnr lnr-map-marker"></span>
+                            @Html.TextBoxFor(model => model.Address, new { @class = "stext-111 cl2 plh3 size-116 p-l-62 p-r-30", @placeholder = "Nhập địa chỉ" })
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger stext-111 plh3 size-116" })
+
+                        <h4 class="mtext-109 cl2 txt-center p-b-30 p-t-30">
+                            Hình thức thanh toán
+                        </h4>
+                        <div class="p-l-268">
+                            <div class="m-b-20">
+                                <input type="radio" id="cash" name="payment" style="display:inline-block" required checked>
+                                <label for="cash" class="mtext-110 cl2" style="display:inline-block">
+                                    Trả tiền khi nhận hàng
+                                </label>
+                            </div>
+                            <div class="m-b-20">
+                                <input type="radio" id="vnpay" name="payment" style="display:inline-block" required>
+                                <img src="/Assets/Client/images/icons/icon-vnpay.png" alt="ICON-PAY" style="width:20px">
+                                <label for="vnpay" class="mtext-110 cl2" style="display:inline-block">
+                                    Thanh toán qua VNPay
+                                </label>
+                            </div>
+                        </div>
+
+                        <button id="confirmOrder" formaction="" type="submit" onclick='myFunction()' class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">Đặt hàng</button>
+                    }
+                </div>
+            </div>
+            <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+                <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+                    <h4 class="mtext-109 cl2 p-b-30">
+                        Thông tin giỏ hàng
+                    </h4>
+
+                    <div class="flex-w flex-t bor12 p-b-13">
+                        <div class="size-209">
+                            <span class="stext-110 cl2">
+                                Giá trị đơn hàng:
+                            </span>
+                        </div>
+
+                        <div class="size-208 text-right">
+                            <span class="mtext-110 cl2">
+                                @(subtotal.ToString("N0"))
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex-w flex-t bor12 p-t-15 p-b-30">
+                        <div class="size-209">
+                            <span class="stext-110 cl2">
+                                Giảm giá:
+                            </span>
+                        </div>
+
+                        <div class="size-208 text-right">
+                            <span class="mtext-110 cl2 text-danger">
+                                -@(promotion.ToString("N0"))
+                            </span>
+                        </div>
+
+                        <div class="size-209">
+                            <span class="stext-110 cl2">
+                                Phí giao hàng:
+                            </span>
+                        </div>
+
+                        <div class="size-208 text-right">
+                            @if (subtotal > 1000000)
+                            {
+                                <span class="stext-112 cl2">
+                                    Miễn phí
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="mtext-110 cl2 text-danger">
+                                    @(21000.ToString("N0"))
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="flex-w flex-t p-t-27 p-b-33">
+                        <div class="size-209">
+                            <span class="mtext-101 cl2">
+                                Tổng:
+                            </span>
+                        </div>
+
+                        <div class="size-208 p-t-1 text-right">
+                            @if (subtotal > 1000000)
+                            {
+                                <span class="mtext-110 cl2">
+                                    @((subtotal - promotion).ToString("N0"))
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="mtext-110 cl2">
+                                    @((subtotal - promotion + 21000).ToString("N0"))
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section jsFooter{
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        function myFunction() {
+            if (document.getElementById('cash').checked) {
+                document.getElementById('confirmOrder').setAttribute("formaction", "/Cart/PaymentCOD");
+            }
+            if (document.getElementById('vnpay').checked) {
+                document.getElementById('confirmOrder').setAttribute("formaction", "/Cart/PaymentVnPay");
+            }
+        }
+    </script>
+}

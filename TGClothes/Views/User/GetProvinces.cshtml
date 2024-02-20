@@ -1,0 +1,12 @@
+﻿@model TGClothes.Models.AddressModel.Root
+@{
+    ViewBag.Title = "GetProvinces";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GetProvinces</h2>
+
+@foreach(var item in Model)
+            {
+                @Html.DisplayFor(model => item.Districts);
+            }

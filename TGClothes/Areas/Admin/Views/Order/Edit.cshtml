@@ -1,0 +1,80 @@
+﻿@model Data.EF.Order
+@using Common
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var today = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+}
+
+@section header {
+    Cập nhật đơn hàng
+}
+
+<div class="col-lg-12 padding-8">
+    <h4 class="text-danger">@Html.Raw(TempData["Errnull"])</h4>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Mã KH</label>
+                <div class="col-md-10">
+                    <div class="form-control">@Model.CustomerId</div>
+                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class = "control-label col-md-2">Hình thức thanh toán</label>
+                <div class="col-md-10">
+                    <div class="form-control">@Enum.GetName(typeof(PaymentMethods), Model.PaymentMethod)</div>
+                    @Html.ValidationMessageFor(model => model.PaymentMethod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="status" class="control-label col-md-2">Trạng thái</label>
+                <div class="col-md-10">
+                    <select name="status" id="status" class="form-control">
+                        <option value="@Model.Status" checked>@EnumExtensions.GetDisplayName((OrderStatus)Model.Status)</option>
+                        <option value="@OrderStatus.PENDING.">@OrderStatus.PENDING.GetDisplayName()</option>
+                        <option value="@OrderStatus.PROCESSING">@OrderStatus.PROCESSING.GetDisplayName()</option>
+                        <option value="@OrderStatus.TRANSPORTING">@OrderStatus.TRANSPORTING.GetDisplayName()</option>
+                        <option value="@OrderStatus.SUCCESSFUL">@OrderStatus.SUCCESSFUL.GetDisplayName()</option>
+                        <option value="@OrderStatus.CANCELLED">@OrderStatus.CANCELLED.GetDisplayName()</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Ngày đặt</label>
+                <div class="col-md-10">
+                    <input type="text" value="@Model.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")" readonly />
+                    @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Ngày giao</label>
+                <div class="col-md-10">
+                    <input type="text" name="date" value="@today" readonly />
+                    @Html.ValidationMessageFor(model => model.DeliveryDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-actions no-color ml-2">
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
+                <a href="@Url.Action("Index", "Order")" class="btn btn-danger">Quay lại</a>
+            </div>
+        </div>
+    }
+</div>

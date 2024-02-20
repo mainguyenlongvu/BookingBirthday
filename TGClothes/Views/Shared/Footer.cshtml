@@ -1,0 +1,76 @@
+﻿@model List<Data.EF.ProductCategory>
+@{ 
+    var content = (List<Data.EF.Category>)ViewBag.Category;
+}
+
+<footer class="bg3 p-t-75 p-b-32">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-lg-4 p-b-50">
+                <h4 class="mtext-103 cl0 p-b-30">
+                    Danh mục
+                </h4>
+                @foreach (var item in Model.Where(x => x.ParentId == null).OrderBy(x => x.DisplayOrder))
+                {
+                    <ul>
+                        <li class="p-b-10">
+                            <a href="/san-pham/@item.MetaTitle-@item.Id" class="stext-118 cl7 hov-cl1 trans-04 categoryLink" data-filter="*">
+                                @item.Name
+                            </a>
+                        </li>
+                    </ul>
+                }
+            </div>
+
+            <div class="col-sm-6 col-lg-4 p-b-50">
+                <h4 class="mtext-103 cl0 p-b-30">
+                    Tin tức
+                </h4>
+                @foreach (var item in content.OrderBy(x => x.DisplayOrder))
+                {
+                    <ul>
+                        <li class="p-b-10">
+                            <a href="/category/@item.Id" class="stext-118 cl7 hov-cl1 trans-04 categoryLink" data-filter="*">
+                                @item.Name
+                            </a>
+                        </li>
+                    </ul>
+                }
+            </div>
+
+            <div class="col-sm-6 col-lg-4 p-b-50">
+                <h4 class="mtext-103 cl0 p-b-30">
+                    Liên hệ với chúng tôi
+                </h4>
+
+                <p class="stext-118 cl7 size-201">
+                    Có bất cứ thắc mắc nào? Hãy cho chúng tôi biết tại địa chỉ: HD hoặc email: tunaclothes.tunacorp@gmail.com hoặc qua số điện thoại: 0369280523
+                </p>
+
+                <div class="p-t-27">
+                    <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+
+                    <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                        <i class="fa fa-instagram"></i>
+                    </a>
+
+                    <a href="#" class="fs-18 cl7 hov-cl1 trans-04 m-r-16">
+                        <i class="fa fa-pinterest-p"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-t-40">
+            <p class="stext-118 cl6 txt-center">
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                Copyright &copy;
+                <script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">TunaCorp</a> &amp; distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+
+            </p>
+        </div>
+    </div>
+</footer>

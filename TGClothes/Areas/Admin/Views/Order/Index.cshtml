@@ -1,0 +1,107 @@
+﻿@model PagedList.IPagedList<Data.EF.Order>
+@using PagedList.Mvc;
+@using Common;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var fromDate = ViewBag.FromDate;
+    var toDate = ViewBag.ToDate;
+}
+
+@section header {
+    Danh sách đơn hàng
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Danh sách đơn hàng</h6>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Index", "Order", FormMethod.Post))
+        {
+            <div class="row form-group">
+                <div class="col-lg-12 row">
+                    <div class="col-md-5">
+                        <span>Từ ngày</span>
+                        <input type="date" name="fromDate" value="" required class="mr-2" />
+                        <span>Đến ngày</span>
+                        <input type="date" name="toDate" value="" required class="mr-2" />
+                        <button type="submit" class="btn btn-outline-success">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="table-responsive" style="overflow-x: hidden;">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Mã khách hàng</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Hình thức thanh toán</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Ngày giao</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr id="row_@item.Id">
+                                    <td>@item.CustomerId</td>
+                                    <td>@item.Name</td>
+                                    <td>@Enum.GetName(typeof(PaymentMethods), item.PaymentMethod)</td>
+                                    <td>
+                                        @if (item.Status == (int)OrderStatus.PENDING)
+                                        {
+                                            <div style="color: #007bff;">Chờ xử lý</div>
+                                        }
+                                        else if (item.Status == (int)OrderStatus.PROCESSING)
+                                        {
+                                            <div style="color: orange;">Đang xử lý</div>
+                                        }
+                                        else if (item.Status == (int)OrderStatus.TRANSPORTING)
+                                        {
+                                            <div style="color: forestgreen;">Đang vận chuyển</div>
+                                        }
+                                        else if (item.Status == (int)OrderStatus.SUCCESSFUL)
+                                        {
+                                            <div style="color: green;">Giao thành công</div>
+                                        }
+                                        else if (item.Status == (int)OrderStatus.CANCELLED)
+                                        {
+                                            <div style="color: red;">Đã hủy</div>
+                                        }
+                                    </td>
+                                    <td>@item.OrderDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                    <td>@if (item.DeliveryDate.HasValue)
+                                    {@item.DeliveryDate.Value.ToString("dd/MM/yyyy HH:mm:ss")}</td>
+                                    <td>
+                                        <a href="@Url.Action("Details", "Order", new { id = item.Id })" class="btn text-primary f2"><i class="fa-solid fa-eye"></i></a>
+                                        @if (item.Status == (int)OrderStatus.SUCCESSFUL || item.Status == (int)OrderStatus.CANCELLED)
+                                        {
+                                            <a href="@Url.Action("Edit", "Order", new { id = item.Id })" class="btn disabled text-primary f2"><i class="fas fa-edit"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Edit", "Order", new { id = item.Id })" class="btn text-primary f2"><i class="fas fa-edit"></i></a>
+                                        }
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { fromDate, toDate, page = page }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

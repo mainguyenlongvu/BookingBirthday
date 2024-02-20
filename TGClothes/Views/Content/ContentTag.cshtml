@@ -1,0 +1,17 @@
+﻿@model List<Data.EF.Tag>
+
+<div class="p-t-50">
+    <h4 class="mtext-112 cl2 p-b-27">
+        Tags
+    </h4>
+    <div class="flex-w m-r--5">
+        @{
+            foreach (var item in Model.OrderByDescending(x => x.Id).Take(10))
+            {
+                <a href="/tag/@item.Id" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                    @item.Name
+                </a>
+            }
+        }
+    </div>
+    </div>

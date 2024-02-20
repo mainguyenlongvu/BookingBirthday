@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Data.EF.Order>
+@{
+    ViewBag.Title = "RevenueByDay";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header {
+    Doanh thu ngày
+}
+
+<div class="col-lg-12 padding-8 ViewPrint">
+    @*<h3>Doanh thu theo Ngày @ViewBag.Ngay<span> Tháng @ViewBag.Thang</span> <span> Năm @ViewBag.Nam</span></h3>*@
+
+    <h3>Tổng số lượng sản phẩm bán được trong ngày: @ViewBag.CountOfOrder</h3>
+
+    @*<h2>Tổng doanh thu trong ngày: @String.Format("{0:N0}", @ViewBag.DoanhThuNgay) vnđ</h2>*@
+
+    <div class="body fix-width scroll-inner">
+        <table class="table table-striped">
+            <tr>
+                <th>Tên khách hàng</th>
+                <th>Phương thức thanh toán</th>
+                <th>Ngày đặt</th>
+                <th>Ngày giao</th>
+                <th>Thao tác</th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.PaymentMethod</td>
+                    <td>@item.OrderDate</td>
+                    <td>@item.DeliveryDate</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Order", new { id = @item.Id })">Chi tiết đơn hàng</a>
+                    </td>
+                </tr>
+
+            }
+        </table>
+    </div>
+    @if (ViewBag.ToTalPage > 1)
+    {
+        var pageDisplay = (int)ViewBag.MaxPage;
+        var totalPage = (int)ViewBag.TotalPage;
+        var currentPage = (int)ViewBag.Page;
+
+        //Create numeric link
+        var startPageIndex = Math.Max(1, currentPage - pageDisplay / 2);
+        var endPageIndex = Math.Min(totalPage, currentPage + pageDisplay / 2);
+
+        var link = "/RevenueStatistic/RevenueByDay?date=" + ViewBag.Date;
+<nav class="d-flex justify-content-center">
+    <ul class="pagination">
+        @if (currentPage > ViewBag.First)
+        {
+<li class="page-item"><a href="@link&page=@ViewBag.First" title="Trang đầu" class="first flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-item">
+                        <a href="@link&page=@ViewBag.Prev" title="Trang trước" class="prev flex-c-m how-pagination1 trans-04 m-all-7"><i class="fa fa-angle-left"></i></a>
+                    </li>}
+        @for (int i = startPageIndex; i <= endPageIndex; i++)
+        {
+            if (currentPage == i)
+            {
+
+<li class="page-item active"> <a href="@link&page=@i" class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1" title="Trang @i">@i</a></li> }
+                    else
+                    {
+<li class="page-item"><a href="@link&page=@i" title="Trang @i" class="pos flex-c-m how-pagination1 trans-04 m-all-7">@i</a></li>}
+                }
+        @if (currentPage < totalPage)
+        {
+<li class="page-item"><a href="@link&page=@ViewBag.Next" class="next flex-c-m how-pagination1 trans-04 m-all-7" title="Trang sau"><i class="fa fa-angle-right"></i></a></li>
+                    <li class="page-item"> <a href="@link&page=@ViewBag.Last" class="last flex-c-m how-pagination1 trans-04 m-all-7" title="Trang cuối"><i class="fa fa-angle-double-right"></i></a></li>}
+
+    </ul>
+</nav> }
+            else if (ViewBag.ToTalPage == 1)
+            {
+<span></span> }
+            else
+            {
+<span>Không có bản ghi nào</span>}
+</div>
+
+<div class="body padding-8" style="border: none; box-shadow: none; border-radius: none; margin-top: 10px;">
+    <div>
+        <button id="Print" class="btn btn-primary">Print</button>
+    </div>
+
+    <div class="mt-2">
+        @Html.ActionLink("Quay lại", "Index")
+    </div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="~/Content/admin/js/printThis.js"></script>
+
+
+<script>
+    jQuery(document).ready(function ($) {
+        $('#Print').on("click", function () {
+            $('.ViewPrint').printThis({
+                debug: false,               // show the iframe for debugging
+                importCSS: true,            // import parent page css
+                importStyle: false,         // import style tags
+                printContainer: true,       // print outer container/$.selector
+                loadCSS: "",                // path to additional css file - use an array [] for multiple
+                pageTitle: "",              // add title to print page
+                removeInline: false,        // remove inline styles from print elements
+                removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+                printDelay: 333,            // variable print delay
+                header: null,               // prefix to html
+                footer: null,               // postfix to html
+                base: false,                // preserve the BASE tag or accept a string for the URL
+                formValues: true,           // preserve input/form values
+                canvas: false,              // copy canvas content
+                doctypeString: '...',       // enter a different doctype for older markup
+                removeScripts: false,       // remove script tags from print content
+                copyTagClasses: false,      // copy classes from the html & body tag
+                beforePrintEvent: null,     // function for printEvent in iframe
+                beforePrint: null,          // function called before iframe is filled
+                afterPrint: null            // function called before iframe is removed
+            });
+        });
+    });
+</script>

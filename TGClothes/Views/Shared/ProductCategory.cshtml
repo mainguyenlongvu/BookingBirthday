@@ -1,0 +1,42 @@
+﻿@model List<Data.EF.ProductCategory>
+
+@section customCSS {
+    <link rel="stylesheet" type="text/css" href="/Assets/Client/css/main.css">
+}
+<div class="flex-w flex-l-m filter-tope-group m-tb-10">
+        <ul class="main-menu pl-0">
+    @foreach (var item in Model.Where(x => x.ParentId == null).OrderBy(x => x.DisplayOrder))
+    {
+        var child = Model.Where(x => x.ParentId == item.Id).OrderBy(x => x.Name);
+        //var parentClass = child.Count() > 0 ? "data-bs-hover=dropdown" : "";
+            <li>
+                <a href="/san-pham/@item.MetaTitle-@item.Id" class="stext-101 cl2 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="*">
+                    @item.Name
+                </a>
+                @if (child.Count() > 0)
+                {
+                    <ul class="sub-menu" style="min-width: 200px; height: 360px; overflow-y: auto; z-index:50;">
+                        @foreach (var childItem in child)
+                        {
+                            <li class="p-all-8 dropdown-item">
+                                <a href="/san-pham/@childItem.MetaTitle-@childItem.Id" class="stext-106 cl2 hov1 bor3 trans-04 m-tb-5">
+                                    @childItem.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+            
+    }
+        <li>
+            <a href="/san-pham/sale" class="stext-101 cl2 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter="*">
+                Sale
+            </a>
+        </li>
+        </ul>
+</div>
+
+@section jsFooter {
+    <script src="/Assets/Client/js/main.js"></script>    
+}
