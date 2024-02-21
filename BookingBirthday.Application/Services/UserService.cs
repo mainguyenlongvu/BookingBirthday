@@ -2,7 +2,6 @@
 using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
-using BookingBirthday.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +25,7 @@ namespace BookingBirthday.Application.Services
             _context = context;
         }
 
-        public Task<UserModel> AddUser(User user)
+        public Task<User> AddUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -41,27 +40,27 @@ namespace BookingBirthday.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<UserModel>> GetAllUsers()
+        public Task<List<User>> GetAllUsers()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<UserModel>> GetManagerUsers()
+        public Task<List<User>> GetManagerUsers()
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<UserModel>> GetStudentUsers()
+        public Task<List<User>> GetStudentUsers()
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserModel> GetUserByUsername(string username)
+        public Task<User> GetUserByUsername(string username)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserModel> LoginUser(string username, string password)
+        public Task<User> LoginUser(string username, string password)
         {
             throw new NotImplementedException();
         }

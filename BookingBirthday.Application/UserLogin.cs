@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Application
 {
-    public static class GlobalConfig
+    [Serializable]
+    public class UserLogin
     {
-
+        public long UserId { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
     }
 }

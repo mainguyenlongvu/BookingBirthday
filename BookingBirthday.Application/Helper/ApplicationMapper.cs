@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BookingBirthday.Data.Entities;
-using BookingBirthday.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +12,8 @@ namespace BookingBirthday.Application.Helper
     {
         public ApplicationMapper()
         {
-            CreateMap<Package, PackageModel>().ReverseMap();
-            CreateMap<User, UserModel>().ReverseMap();
+            CreateMap<Package, Package>().ReverseMap();
+            CreateMap<User, User>().ReverseMap();
         }
     }
 }

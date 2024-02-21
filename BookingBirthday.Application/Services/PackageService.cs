@@ -1,7 +1,6 @@
 ﻿using BookingBirthday.Application.IServices;
 using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
-using BookingBirthday.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingBirthday.Application.Services
@@ -16,13 +15,13 @@ namespace BookingBirthday.Application.Services
             _context=context;
         }
 
-        public List<PackageModel> GetAllPackages()
+        public List<Package> GetAllPackages()
         {
             //int page = 1;
             //var allPackages = _context.Packages.Include(hh => hh.Promotion).AsQueryable();
 
             //var result = PaginatedList<Package>.Create(allPackages, page, PAGE_SIZE);
-            var result = _context.Packages.Select(hh => new PackageModel
+            var result = _context.Packages.Select(hh => new Package
             {
                 Id = hh.Id,
                 Name = hh.Name,
@@ -36,7 +35,7 @@ namespace BookingBirthday.Application.Services
         }
 
 
-        public Task<int> AddPackageAsync(PackageModel model)
+        public Task<int> AddPackageAsync(Package model)
         {
             throw new NotImplementedException();
         }
@@ -48,12 +47,12 @@ namespace BookingBirthday.Application.Services
 
 
 
-        public Task<PackageModel>? GetPackage(int id)
+        public Task<Package>? GetPackage(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task UpdatePackage(int id, PackageModel model)
+        public Task UpdatePackage(int id, Package model)
         {
             throw new NotImplementedException();
         }
