@@ -21,12 +21,15 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Total).IsRequired();
-            builder.HasIndex(x => x.GuestId).IsUnique();
+            builder.HasIndex(x => x.Booking).IsUnique();
+            builder.HasIndex(x => x.Price).IsUnique();
+            builder.HasIndex(x => x.PackageId).IsUnique();
+            builder.HasIndex(x => x.ServiceId).IsUnique();
 
-            // 1:1 relationship with Guest
-            builder.HasOne(x => x.Guest)
-                .WithOne(x => x.Cart)
-                .HasForeignKey<Guest>(x => x.CartId);
+            //// 1:1 relationship with Guest
+            //builder.HasOne(x => x.Guest)
+            //    .WithOne(x => x.Cart)
+            //    .HasForeignKey<Guest>(x => x.CartId);
         }
     }
 }

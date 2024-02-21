@@ -28,9 +28,9 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Status).IsRequired();
 
             // 1:M relationship with Host
-            builder.HasOne<Host>(x => x.Host)
+            builder.HasOne<User>(x => x.User)
                 .WithMany(x => x.Promotions)
-                .HasForeignKey(x => x.HostId);
+                .HasForeignKey(x => x.UserId);
         }
     }
 }

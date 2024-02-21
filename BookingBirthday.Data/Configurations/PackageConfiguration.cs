@@ -23,7 +23,10 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Venue).IsUnicode().IsRequired();
             builder.Property(x => x.Detail).IsUnicode().IsRequired();
+            builder.Property(x => x.image_url).IsRequired();
             builder.HasIndex(p => p.PromotionId);
+            builder.HasIndex(p => p.UserId);
+
 
             // 1:M relationship with Promotion
             builder.HasOne<Promotion>(x => x.Promotion)

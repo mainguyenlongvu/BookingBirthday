@@ -12,7 +12,9 @@ namespace BookingBirthday.Data.Entities
         public string Name { get; set; }
         public double Price { get; set; }
         public string Detail { get; set; }
+        public string? image_url { get; set; }
 
+        public Package Package { get; set; }
         public ICollection<CartService> CartServices { get; set; }
         public ICollection<PackageService> PackageServices { get; set; }
         public ICollection<BookingService> BookingServices { get; set; }

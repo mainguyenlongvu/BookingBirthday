@@ -22,11 +22,10 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.Date).IsRequired();
+            builder.Property(x => x.Date_order).IsRequired();
             builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
             builder.Property(x => x.Total).IsRequired();
-            builder.HasIndex(b => b.GuestId);
-            builder.HasIndex(b => b.HostId);
+            builder.HasIndex(b => b.UserId);
             builder.HasIndex(x => x.BillId).IsUnique();
             builder.HasIndex(x => x.PaymentId).IsUnique();
 
@@ -41,14 +40,9 @@ namespace BookingBirthday.Data.Configurations
             //    .HasForeignKey<Payment>(x => x.BookingId);
 
             // 1:M relationship with Host
-            builder.HasOne(x => x.Host)
+            builder.HasOne(x => x.User)
                 .WithMany(x => x.Bookings)
-                .HasForeignKey(x => x.HostId);
-
-            // 1:M relationship with Guest
-            builder.HasOne(x => x.Guest).
-                WithMany(x => x.Bookings).
-                HasForeignKey(x => x.GuestId);
+                .HasForeignKey(x => x.UserId);
         }
     }
 }
