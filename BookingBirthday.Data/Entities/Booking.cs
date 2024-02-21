@@ -10,17 +10,13 @@ namespace BookingBirthday.Data.Entities
     public class Booking
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime Date_order { get; set; }
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
-        //GuestId
-        public int GuestId { get; set; }
-        public Guest Guest { get; set; }
-
-        //HostId
-        public int HostId { get; set; }
-        public Host Host { get; set; }
+        //UserId
+        public int UserId { get; set; }
+        public User? User { get; set; }
 
         //PaymentId
         public int PaymentId { get; set; }
@@ -30,6 +26,7 @@ namespace BookingBirthday.Data.Entities
         public int BillId { get; set; }
         public Bill Bill { get; set; }
 
+        public List<Cart>? Cart { get; set; }
         public IList<BookingPackage> BookingPackages { get; set; }
         public IList<BookingService> BookingServices { get; set; }
     }

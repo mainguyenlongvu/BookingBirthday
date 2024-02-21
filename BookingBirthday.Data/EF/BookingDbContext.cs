@@ -22,8 +22,6 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartPackageConfiguration());
             modelBuilder.ApplyConfiguration(new CartServiceConfiguration());
-            modelBuilder.ApplyConfiguration(new GuestConfiguration());
-            modelBuilder.ApplyConfiguration(new HostConfiguration());
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
             modelBuilder.ApplyConfiguration(new PackageServiceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
@@ -42,8 +40,6 @@ namespace BookingBirthday.Data.EF
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartPackage> CartPackages { get; set; }
         public DbSet<CartService> CartServices { get; set; }
-        public DbSet<Guest> Guests { get; set; }
-        public DbSet<Host> Hosts { get; set; }
         public DbSet<Package> Packages { get; set; }
         public DbSet<PackageService> PackageServices { get; set; }
         public DbSet<Payment> Payments { get; set; }

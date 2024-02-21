@@ -35,8 +35,6 @@ namespace BookingBirthday.Data
 
         public static void Initialize(ModelBuilder modelBuilder)
         {
-            InitializeGuest(modelBuilder);
-            InitializeHost(modelBuilder);
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
             InitializeBill(modelBuilder);
@@ -50,65 +48,6 @@ namespace BookingBirthday.Data
             InitializeBookingPackage(modelBuilder);
             InitializeBookingService(modelBuilder);
             InitializeUser(modelBuilder);
-        }
-
-        private static void InitializeGuest(ModelBuilder modelBuilder)
-        {
-            var guest = new List<Guest>();
-
-            if (File.Exists(GUEST_FILE_PATH))
-            {
-                using StreamReader sr = new(GUEST_FILE_PATH);
-                int guestId = 1;
-                string? guestLine;
-
-                while ((guestLine = sr.ReadLine()) != null)
-                {
-                    string[]? guestData = guestLine!.Split('|');
-
-                    guest.Add(new Guest
-                    {
-                        Id = guestId++,
-                        Name = guestData[0].Trim(),
-                        Gender = (int.Parse(guestData[1].Trim()) == 0) ? Gender.Male : Gender.Female,
-                        DateOfBirth = DateTime.ParseExact(guestData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Email = guestData[3].Trim(),
-                        Address = guestData[4].Trim(),
-                        Phone = guestData[5].Trim(),
-                        CartId = int.Parse(guestData[6].Trim())
-                    });
-                }
-                modelBuilder.Entity<Guest>().HasData(guest);
-            }
-        }
-
-        private static void InitializeHost(ModelBuilder modelBuilder)
-        {
-            var host = new List<Host>();
-
-            if (File.Exists(HOST_FILE_PATH))
-            {
-                using StreamReader sr = new(HOST_FILE_PATH);
-                int hostId = 1;
-                string? hostLine;
-
-                while ((hostLine = sr.ReadLine()) != null)
-                {
-                    string[]? hostData = hostLine!.Split('|');
-
-                    host.Add(new Host
-                    {
-                        Id = hostId++,
-                        Name = hostData[0].Trim(),
-                        Gender = (int.Parse(hostData[1].Trim()) == 0) ? Gender.Male : Gender.Female,
-                        DateOfBirth = DateTime.ParseExact(hostData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Email = hostData[3].Trim(),
-                        Address = hostData[4].Trim(),
-                        Phone = hostData[5].Trim()
-                    });
-                }
-                modelBuilder.Entity<Host>().HasData(host);
-            }
         }
 
         private static void InitializePackage(ModelBuilder modelBuilder)
@@ -157,7 +96,6 @@ namespace BookingBirthday.Data
                     {
                         Id = cartID++,
                         Total = double.Parse(cartData[0].Trim()),
-                        GuestId = int.Parse(cartData[1].Trim())
                     });
                 }
                 modelBuilder.Entity<Cart>().HasData(cart);
@@ -218,13 +156,12 @@ namespace BookingBirthday.Data
                     booking.Add(new Booking
                     {
                         Id = bookingId++,
-                        Date = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                        Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         BookingStatus = bookingStatus,
                         Total = double.Parse(bookingData[2].Trim()),
-                        GuestId = int.Parse(bookingData[3].Trim()),
-                        HostId = int.Parse(bookingData[4].Trim()),
-                        PaymentId = int.Parse(bookingData[5].Trim()),
-                        BillId = int.Parse(bookingData[6].Trim())
+                        UserId = int.Parse(bookingData[3].Trim()),
+                        PaymentId = int.Parse(bookingData[4].Trim()),
+                        BillId = int.Parse(bookingData[5].Trim())
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);
@@ -279,7 +216,7 @@ namespace BookingBirthday.Data
                         ToDate = DateTime.ParseExact(promotionData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         DiscountPercent = double.Parse(promotionData[3].Trim()),
                         Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
-                        HostId = int.Parse(promotionData[5].Trim()),
+                        UserId = int.Parse(promotionData[5].Trim()),
                     });
                 }
                 modelBuilder.Entity<Promotion>().HasData(promotion);
