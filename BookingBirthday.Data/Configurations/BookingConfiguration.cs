@@ -25,6 +25,9 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Date_order).IsRequired();
             builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
             builder.Property(x => x.Total).IsRequired();
+            builder.Property(x => x.phone).IsRequired();
+            builder.Property(x => x.email).IsRequired();
+            builder.Property(x => x.note).IsRequired();
             builder.HasIndex(b => b.UserId);
             builder.HasIndex(x => x.BillId).IsUnique();
             builder.HasIndex(x => x.PaymentId).IsUnique();
@@ -39,7 +42,7 @@ namespace BookingBirthday.Data.Configurations
             //    .WithOne(x => x.Booking)
             //    .HasForeignKey<Payment>(x => x.BookingId);
 
-            // 1:M relationship with Host
+            // 1:M relationship with User
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Bookings)
                 .HasForeignKey(x => x.UserId);
