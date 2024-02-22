@@ -19,16 +19,16 @@ namespace BookingBirthday.Server.Controllers
         }
 
         public const string CARTKEY = "cart";
-        public List<Cart> GetCartItems()
+        public List<CartModel> GetCartItems()
         {
 
             var session = HttpContext.Session;
             string jsoncart = session.GetString(CARTKEY)!;
             if (jsoncart != null)
             {
-                return JsonConvert.DeserializeObject<List<Cart>>(jsoncart)!;
+                return JsonConvert.DeserializeObject<List<CartModel>>(jsoncart)!;
             }
-            return new List<Cart>();
+            return new List<CartModel>();
         }
 
         void ClearCart()
@@ -37,7 +37,7 @@ namespace BookingBirthday.Server.Controllers
             session.Remove(CARTKEY);
         }
 
-        void SaveCartSession(List<Cart> ls)
+        void SaveCartSession(List<CartModel> ls)
         {
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
@@ -104,7 +104,7 @@ namespace BookingBirthday.Server.Controllers
             }
             else
             {
-                cart.Add(new Cart() {  Package = product });
+                cart.Add(new CartModel() {  Package = product });
             }
 
             SaveCartSession(cart);
@@ -159,29 +159,29 @@ namespace BookingBirthday.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrder(Bill request)
+        public async Task<IActionResult> AddOrder(BookingModel request)
         {
             if (HttpContext.Session.GetString("user_id") != null)
             {
 
                 try
                 {
-                    request.Cart = GetCartItems();
+                    request.CartModels = GetCartItems();
                     request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
                     donHang.Id = request.Id;
                     donHang.Date_order = DateTime.Now;
                     donHang.BookingStatus= Data.Enums.BookingStatus.Processing;
-                    donHang.phone = request.phone;
-                    donHang.note = request.note;
-                    donHang.email = request.email;
+                    donHang.Phone = request.Phone;
+                    donHang.Note = request.Note;
+                    donHang.Email = request.Email;
                     donHang.Total = request.Total;
                     await _appContext.AddAsync(donHang);
                     await _appContext.SaveChangesAsync();
 
-                    if (request.Cart != null)
+                    if (request.CartModels != null)
                     {
-                        foreach (var item in request.Cart)
+                        foreach (var item in request.CartModels)
                         {
                             var chiTietDonHang = new Cart();
                             chiTietDonHang.Id = donHang.Id;

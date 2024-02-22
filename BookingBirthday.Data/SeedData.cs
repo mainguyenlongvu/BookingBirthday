@@ -66,7 +66,7 @@ namespace BookingBirthday.Data
                     {
                         Id = packageId++,
                         Name = packageeData[0].Trim(),
-                        Price = double.Parse(packageeData[1].Trim()),
+                        Price = decimal.Parse(packageeData[1].Trim()),
                         Venue = packageeData[2].Trim(),
                         Detail = packageeData[3].Trim(),
                         PromotionId = string.IsNullOrEmpty(packageeData[4].Trim()) ? (int?)null : int.Parse(packageeData[4].Trim())
@@ -99,6 +99,7 @@ namespace BookingBirthday.Data
                 modelBuilder.Entity<Cart>().HasData(cart);
             }
         }
+
 
         public static void InitializeBooking(ModelBuilder modelBuilder)
         {

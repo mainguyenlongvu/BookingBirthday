@@ -30,7 +30,8 @@ namespace BookingBirthday.Data.EF
             // Generate data
             SeedData.Initialize(modelBuilder);
         }
-        
+
+
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingPackage> BookingPackages { get; set; }
         public DbSet<BookingService> BookingServices { get; set; }
