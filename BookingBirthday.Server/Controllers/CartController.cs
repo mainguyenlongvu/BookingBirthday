@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using static NuGet.Packaging.PackagingConstants;
 using System;
 using BookingBirthday.Data.EF;
+using BookingBirthday.Application.Payment.Models;
+using BookingBirthday.Application.Payment.Services;
 
 
 namespace BookingBirthday.Server.Controllers
@@ -13,9 +15,11 @@ namespace BookingBirthday.Server.Controllers
     public class CartController : Controller
     {
         private readonly BookingDbContext _appContext;
-        public CartController(BookingDbContext appContext)
+        private readonly IVnPayService _vnPayService;
+        public CartController(BookingDbContext appContext, IVnPayService vnPayService)
         {
             _appContext = appContext;
+            _vnPayService = vnPayService;
         }
 
         public const string CARTKEY = "cart";
@@ -221,6 +225,25 @@ namespace BookingBirthday.Server.Controllers
                 }
             }
             return RedirectToAction("Login", "Account");
+        }
+
+        // POST: Cart/Payment
+        public IActionResult Payment()
+        {
+            return View();
+        }
+        public IActionResult CreatePaymentUrl(PaymentInformationModel model)
+        {
+            var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
+
+            return Redirect(url);
+        }
+
+        public IActionResult PaymentCallback()
+        {
+            var response = _vnPayService.PaymentExecute(Request.Query);
+
+            return Json(response);
         }
     }
 }

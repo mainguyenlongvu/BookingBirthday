@@ -28,7 +28,6 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(p => p.UserId);
             builder.Property(x => x.ServiceId).IsRequired();
 
-
             // 1:M relationship with Promotion
             builder.HasOne<Promotion>(x => x.Promotion)
                 .WithMany(x => x.Services)
