@@ -22,7 +22,7 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new CartPackageConfiguration());
             modelBuilder.ApplyConfiguration(new CartServiceConfiguration());
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
-            modelBuilder.ApplyConfiguration(new PackageServiceConfiguration());
+            modelBuilder.ApplyConfiguration(new ServiceserviceConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new ServiceConfiguration());

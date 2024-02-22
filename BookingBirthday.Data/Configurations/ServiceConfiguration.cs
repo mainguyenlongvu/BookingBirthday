@@ -22,6 +22,8 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Name).IsUnicode().IsRequired();
             builder.Property(x => x.Price).IsRequired();
+            builder.Property(x => x.PromotionId).IsRequired();
+            builder.Property(x => x.Venue).IsRequired(); 
             builder.Property(x => x.Detail).IsUnicode().IsRequired();
             builder.Property(x => x.image_url).IsRequired();
         }

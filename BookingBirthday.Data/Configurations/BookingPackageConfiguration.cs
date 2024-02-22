@@ -20,12 +20,12 @@ namespace BookingBirthday.Data.Configurations
 
             // Foreign Keys
             builder.HasOne(bp => bp.Booking)
-                .WithMany(b => b.BookingPackages)
+                .WithMany(b => b.BookingPackage)
                 .HasForeignKey(bp => bp.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             builder.HasOne(bp => bp.Package)
-                .WithMany(p => p.BookingPackages)
+                .WithMany(p => p.BookingServices)
                 .HasForeignKey(bp => bp.PackageId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }

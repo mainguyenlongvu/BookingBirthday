@@ -118,7 +118,7 @@ namespace BookingBirthday.Server.Controllers
         //    var cartitem = cart.Find(p => p.Package!.Id == productid);
         //    if (cartitem != null)
         //    {
-        //        var product = _appContext.Packages
+        //        var product = _appContext.Services
         //        .Where(p => p.product_id == productid)
         //        .FirstOrDefault();
         //        if (product != null)

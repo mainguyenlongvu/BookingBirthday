@@ -6,6 +6,7 @@ namespace BookingBirthday.Server.Models
     {
         public int Id { get; set; }
         public double Total { get; set; }
+        public string? Package_Name { get; set; }
 
         //GuestId
         public int BookingId { get; set; }

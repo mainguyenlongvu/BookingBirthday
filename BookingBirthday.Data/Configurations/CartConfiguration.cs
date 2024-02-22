@@ -24,6 +24,9 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Total).IsRequired();
             builder.HasIndex(x => x.Booking).IsUnique();
             builder.HasIndex(x => x.Price).IsUnique();
+            builder.HasIndex(x => x.Total);
+            builder.HasIndex(x => x.Package_Name);
+            builder.HasIndex(x => x.BookingId);
             builder.HasIndex(x => x.PackageId).IsUnique();
             builder.HasIndex(x => x.ServiceId).IsUnique();
 

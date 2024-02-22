@@ -1,4 +1,6 @@
-﻿namespace BookingBirthday.Server.Models
+﻿using BookingBirthday.Data.Enums;
+
+namespace BookingBirthday.Server.Models
 {
     public class RegisterModel
     {
@@ -10,7 +12,7 @@
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Address { get; set; }
-        public string? Role { get; set; }
+        public Role? Role { get; set; }
         public string? Image_url { get; set; }
         public IFormFile? File { get; set; }
     }

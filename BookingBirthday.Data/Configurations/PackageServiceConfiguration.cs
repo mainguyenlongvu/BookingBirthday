@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Configurations
 {
-    public class PackageServiceConfiguration : IEntityTypeConfiguration<PackageService>
+    public class ServiceserviceConfiguration : IEntityTypeConfiguration<PackageService>
     {
         public void Configure(EntityTypeBuilder<PackageService> builder)
         {
@@ -20,11 +20,11 @@ namespace BookingBirthday.Data.Configurations
 
             // Foreign Key
             builder.HasOne(ps => ps.Package)
-                .WithMany(x => x.PackageServices)
+                .WithMany(x => x.PackageService)
                 .HasForeignKey(ps => ps.PackageId);
 
             builder.HasOne(ps => ps.Service)
-                .WithMany(x => x.PackageServices)
+                .WithMany(x => x.PackageService)
                 .HasForeignKey(ps => ps.ServiceId);
         }
     }
