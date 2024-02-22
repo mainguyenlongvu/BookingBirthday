@@ -77,7 +77,6 @@ namespace BookingBirthday.Server.Controllers
             // Logic filter danh sách sản phẩm theo category
             var filteredProducts = from a in _dbContext.Packages.Include(x => x.Service)
                                    select new { a };
-
             if (ServiceId != 0)
             {
                 filteredProducts = filteredProducts.Where(x => x.a.ServiceId == ServiceId);

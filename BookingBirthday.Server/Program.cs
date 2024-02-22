@@ -1,3 +1,4 @@
+using BookingBirthday.Application.Payment.Services;
 using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +27,7 @@ namespace BookingBirthday.Server
             });
 
             builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<IVnPayService, VnPayService>();
 
             var app = builder.Build();
 
