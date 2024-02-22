@@ -21,7 +21,6 @@ namespace BookingBirthday.Data
         private static readonly string HOST_FILE_PATH = "Resources/hosts.txt";
         private static readonly string PACKAGE_FILE_PATH = "Resources/packages.txt";
         private static readonly string CART_FILE_PATH = "Resources/carts.txt";
-        private static readonly string BILL_FILE_PATH = "Resources/bills.txt";
         private static readonly string BOOKING_FILE_PATH = "Resources/bookings.txt";
         private static readonly string SERVICE_FILE_PATH = "Resources/services.txt";
         private static readonly string PROMOTION_FILE_PATH = "Resources/promotions.txt";

@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
