@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240222093657_initial")]
+    [Migration("20240222104117_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -116,7 +116,8 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Package_Name")
+                    b.Property<string>("PackageName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("Price")
@@ -491,19 +492,19 @@ namespace BookingBirthday.Data.Migrations
                     b.HasOne("BookingBirthday.Data.Entities.Booking", "Booking")
                         .WithMany("cart")
                         .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Package", "Package")
                         .WithMany("Cart")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Service", "Service")
                         .WithMany("Cart")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Booking");
@@ -516,7 +517,7 @@ namespace BookingBirthday.Data.Migrations
             modelBuilder.Entity("BookingBirthday.Data.Entities.CartPackage", b =>
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Cart", "Cart")
-                        .WithMany("CartPackage")
+                        .WithMany("CartPackages")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -581,13 +582,13 @@ namespace BookingBirthday.Data.Migrations
                     b.HasOne("BookingBirthday.Data.Entities.Package", "Package")
                         .WithMany("PackageService")
                         .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Service", "Service")
                         .WithMany("PackageService")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Package");
@@ -617,7 +618,7 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Cart", b =>
                 {
-                    b.Navigation("CartPackage");
+                    b.Navigation("CartPackages");
 
                     b.Navigation("CartServices");
                 });

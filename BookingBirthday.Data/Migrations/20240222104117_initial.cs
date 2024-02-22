@@ -235,7 +235,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Total = table.Column<double>(type: "float", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: true),
-                    Package_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PackageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BookingId = table.Column<int>(type: "int", nullable: false),
                     PackageId = table.Column<int>(type: "int", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false)
@@ -247,20 +247,17 @@ namespace BookingBirthday.Data.Migrations
                         name: "FK_Cart_Booking_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Booking",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cart_Package_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Package",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cart_Service_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Service",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -277,14 +274,12 @@ namespace BookingBirthday.Data.Migrations
                         name: "FK_PackageService_Package_PackageId",
                         column: x => x.PackageId,
                         principalTable: "Package",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PackageService_Service_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Service",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
