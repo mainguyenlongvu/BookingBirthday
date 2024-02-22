@@ -20,6 +20,6 @@ namespace BookingBirthday.Data.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<Package> Packages { get; set; }
+        public ICollection<Package> Services { get; set; }
     }
 }

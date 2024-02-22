@@ -26,10 +26,11 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.image_url).IsRequired();
             builder.HasIndex(p => p.PromotionId);
             builder.HasIndex(p => p.UserId);
+            builder.Property(x => x.ServiceId).IsRequired();
 
             // 1:M relationship with Promotion
             builder.HasOne<Promotion>(x => x.Promotion)
-                .WithMany(x => x.Packages)
+                .WithMany(x => x.Services)
                 .HasForeignKey(x => x.PromotionId);
         }
     }

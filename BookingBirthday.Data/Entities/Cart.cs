@@ -10,19 +10,21 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public double Total { get; set; }
-        public decimal? Price { get; set; }
+        public double? Price { get; set; } // Nullable Price property
+        public string PackageName { get; set; } // Renamed Package_Name to follow naming convention
 
-        //BookingId
+        // Foreign key properties
         public int BookingId { get; set; }
-        public Booking? Booking { get; set; }
-        //PackageId
         public int PackageId { get; set; }
-        public Package? Package { get; set; }
-        //ServiceId
         public int ServiceId { get; set; }
-        public Service? Service { get; set; }
 
-        public ICollection<CartService> CartServices { get; set; }
-        public ICollection<CartPackage> CartPackages { get; set; }
+        // Navigation properties
+        public Booking Booking { get; set; }
+        public Package Package { get; set; }
+        public Service Service { get; set; }
+
+        // Collection navigation properties
+        public ICollection<CartService> CartServices { get; set; } = new List<CartService>(); // Initialize collection in constructor
+        public ICollection<CartPackage> CartPackages { get; set; } = new List<CartPackage>(); // Renamed to follow naming convention
     }
 }

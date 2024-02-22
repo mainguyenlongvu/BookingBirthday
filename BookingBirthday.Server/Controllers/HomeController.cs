@@ -1,34 +1,48 @@
-using BookingBirthday.Application.Payment.Models;
-using BookingBirthday.Application.Payment.Services;
-using BookingBirthday.Server.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
-namespace BookingBirthday.Server.Controllers
-{
-    public class HomeController : Controller
-    {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
+if (ServiceId != 0)
+            {
+                filteredProducts = filteredProducts.Where(x => x.a.ServiceId == ServiceId);
+            }
+            if (filteredProducts != null)
+            {
+                var lstProducts = filteredProducts.Select(x => new PackageModel()
+                {
+                    Id = x.a.Id,
+                    Name = x.a.Name,
+                    Detail = x.a.Detail,
+                    Venue = x.a.Venue,
+                    ServiceId = x.a.ServiceId,
+                    PromotionId = x.a.PromotionId,
+                    Service_Name = x.a.Service!.Name,
+                    Price = x.a.Price,
+                    image_url = x.a.image_url
+                }).ToList();
+                return PartialView("ProductList", lstProducts);
+            }
+            return PartialView("ProductList", null);
         }
-
-        public IActionResult Index()
+        public IActionResult Search(string keyword)
         {
-            return View();
-        }
+            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Service)
+                                   select new { a };
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new Models.ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword));
+            if (filteredProducts != null)
+            {
+                var lstProducts = filteredProducts.Select(x => new PackageModel()
+                {
+                    Id = x.a.Id,
+                    Name = x.a.Name,
+                    Detail = x.a.Detail,
+                    Venue = x.a.Venue,
+                    ServiceId = x.a.ServiceId,
+                    PromotionId = x.a.PromotionId,
+                    Service_Name = x.a.Service!.Name,
+                    Price = x.a.Price,
+                    image_url = x.a.image_url
+                }).ToList();
+                return View(lstProducts);
+            }
+            return View(filteredProducts);
         }
     }
 }

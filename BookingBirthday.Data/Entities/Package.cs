@@ -11,7 +11,7 @@ namespace BookingBirthday.Data.Entities
         public int Id { get; set; }
        
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public Double Price { get; set; }
         public string Venue { get; set; }
         public string Detail { get; set; }
         public string? image_url { get; set; }
@@ -22,11 +22,13 @@ namespace BookingBirthday.Data.Entities
         //UserId
         public int UserId { get; set; }
         public User User { get; set; }
+        public int? ServiceId { get; set; }
+        public Service? Service { get; set; }
 
         public List<Cart>? Cart { get; set; }
-        public IList<CartPackage> CartPackages { get; set; }
-        public IList<PackageService> PackageServices { get; set; }
-        public IList<BookingPackage> BookingPackages { get; set; }
+        public IList<CartPackage> CartServices { get; set; }
+        public IList<PackageService> PackageService { get; set; }
+        public IList<BookingPackage> BookingServices { get; set; }
 
     }
 }

@@ -66,7 +66,7 @@ namespace BookingBirthday.Data
                     {
                         Id = packageId++,
                         Name = packageeData[0].Trim(),
-                        Price = decimal.Parse(packageeData[1].Trim()),
+                        Price = Double.Parse(packageeData[1].Trim()),
                         Venue = packageeData[2].Trim(),
                         Detail = packageeData[3].Trim(),
                         PromotionId = string.IsNullOrEmpty(packageeData[4].Trim()) ? (int?)null : int.Parse(packageeData[4].Trim())
@@ -234,25 +234,25 @@ namespace BookingBirthday.Data
 
         public static void InitializePackageService(ModelBuilder modelBuilder)
         {
-            var packageService = new List<PackageService>();
+            var PackageService = new List<PackageService>();
 
             if (File.Exists(PACKAGE_SERVICE_FILE_PATH))
             {
                 using StreamReader sr = new(PACKAGE_SERVICE_FILE_PATH);
 
-                string? packageServiceLine;
+                string? PackageServiceLine;
 
-                while ((packageServiceLine = sr.ReadLine()) != null)
+                while ((PackageServiceLine = sr.ReadLine()) != null)
                 {
-                    string[] packageServiceData = packageServiceLine!.Split("|");
+                    string[] PackageServiceData = PackageServiceLine!.Split("|");
 
-                    packageService.Add(new PackageService
+                    PackageService.Add(new PackageService
                     {
-                        PackageId = int.Parse(packageServiceData[0].Trim()),
-                        ServiceId = int.Parse(packageServiceData[1].Trim())
+                        PackageId = int.Parse(PackageServiceData[0].Trim()),
+                        ServiceId = int.Parse(PackageServiceData[1].Trim())
                     });
                 }
-                modelBuilder.Entity<PackageService>().HasData(packageService);
+                modelBuilder.Entity<PackageService>().HasData(PackageService);
             }
         }
 
