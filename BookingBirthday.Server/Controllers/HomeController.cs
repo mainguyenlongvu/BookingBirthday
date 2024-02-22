@@ -1,3 +1,5 @@
+using BookingBirthday.Application.Payment.Models;
+using BookingBirthday.Application.Payment.Services;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -26,7 +28,7 @@ namespace BookingBirthday.Server.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new Models.ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
