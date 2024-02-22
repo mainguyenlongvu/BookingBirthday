@@ -8,8 +8,8 @@ namespace BookingBirthday.Data.Enums
 {
     public enum Role
     {
-        Admin,
-        Guest,
-        Host
+        Admin = 0,
+        Guest = 1,
+        Host = 2
     }
 }

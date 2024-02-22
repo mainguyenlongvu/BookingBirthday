@@ -21,16 +21,16 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.HasIndex(x => x.name);
+            builder.HasIndex(x => x.Name);
             builder.Property(x => x.Gender).HasDefaultValue(Gender.Male);
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.HasIndex(x => x.phone);
-            builder.HasKey(x => x.address);
+            builder.HasIndex(x => x.Phone);
+            builder.HasKey(x => x.Address);
             builder.Property(x => x.Role).IsRequired();
-            builder.HasKey(x => x.image_url);
+            builder.HasKey(x => x.Image_url);
         }
     }
 }
