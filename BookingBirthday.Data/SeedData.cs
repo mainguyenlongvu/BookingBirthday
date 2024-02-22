@@ -37,7 +37,6 @@ namespace BookingBirthday.Data
         {
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
-            InitializeBill(modelBuilder);
             InitializeBooking(modelBuilder);
             InitializeService(modelBuilder);
             InitializePromotion(modelBuilder);
@@ -68,7 +67,7 @@ namespace BookingBirthday.Data
                     {
                         Id = packageId++,
                         Name = packageeData[0].Trim(),
-                        Price = double.Parse(packageeData[1].Trim()),
+                        Price = decimal.Parse(packageeData[1].Trim()),
                         Venue = packageeData[2].Trim(),
                         Detail = packageeData[3].Trim(),
                         PromotionId = string.IsNullOrEmpty(packageeData[4].Trim()) ? (int?)null : int.Parse(packageeData[4].Trim())
@@ -102,32 +101,6 @@ namespace BookingBirthday.Data
             }
         }
 
-        private static void InitializeBill(ModelBuilder modelBuilder)
-        {
-            var bill = new List<Bill>();
-
-            if (File.Exists(BILL_FILE_PATH))
-            {
-                using StreamReader sr = new(BILL_FILE_PATH);
-                int billId = 1;
-                string? billLine;
-
-                while ((billLine = sr.ReadLine()) != null)
-                {
-                    string[]? billData = billLine!.Split('|');
-
-                    bill.Add(new Bill
-                    {
-                        Id = billId++,
-                        Date = DateTime.ParseExact(billData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Discount = double.Parse(billData[1].Trim()),
-                        Total = double.Parse(billData[2].Trim()),
-                        BookingId = int.Parse(billData[3].Trim())
-                    });
-                }
-                modelBuilder.Entity<Bill>().HasData(bill);
-            }
-        }
 
         public static void InitializeBooking(ModelBuilder modelBuilder)
         {
