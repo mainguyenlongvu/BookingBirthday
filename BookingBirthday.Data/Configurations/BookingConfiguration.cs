@@ -31,20 +31,11 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(b => b.UserId);
             builder.HasIndex(x => x.PaymentId).IsUnique();
 
-            //// 1:1 relationship with Bill
-            //builder.HasOne(x => x.Bill)
-            //    .WithOne(x => x.Booking)
-            //    .HasForeignKey<Bill>(x => x.BookingId);
-
-            //// 1:1 relationship with Payment
-            //builder.HasOne(x => x.Payment)
-            //    .WithOne(x => x.Booking)
-            //    .HasForeignKey<Payment>(x => x.BookingId);
-
             // 1:M relationship with User
-            builder.HasOne(x => x.User)
-                .WithMany(x => x.Bookings)
-                .HasForeignKey(x => x.UserId);
+            builder.HasOne(b => b.User)
+                   .WithMany(u => u.Bookings)
+                   .HasForeignKey(b => b.UserId)
+                   .IsRequired();
         }
     }
 }

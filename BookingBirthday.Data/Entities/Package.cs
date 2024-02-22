@@ -11,7 +11,7 @@ namespace BookingBirthday.Data.Entities
         public int Id { get; set; }
        
         public string Name { get; set; }
-        public decimal Price { get; set; }
+        public Double Price { get; set; }
         public string Venue { get; set; }
         public string Detail { get; set; }
         public string? image_url { get; set; }

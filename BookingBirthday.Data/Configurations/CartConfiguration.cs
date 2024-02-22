@@ -22,34 +22,27 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Total).IsRequired();
-            builder.HasIndex(x => x.Booking).IsUnique();
-            builder.HasIndex(x => x.Price).IsUnique();
-            builder.HasIndex(x => x.Total);
-            builder.HasIndex(x => x.Package_Name);
-            builder.HasIndex(x => x.BookingId);
-            builder.HasIndex(x => x.PackageId).IsUnique();
-            builder.HasIndex(x => x.ServiceId).IsUnique();
+            builder.Property(x => x.Price); // Assuming Price can be null
+            builder.Property(x => x.Package_Name);
 
-            // 1:N relationship with Booking
+            // Indexes
+            builder.HasIndex(x => x.BookingId).IsUnique(false); // Foreign key property should not be unique
+            builder.HasIndex(x => x.PackageId).IsUnique(false); // Foreign key property should not be unique
+            builder.HasIndex(x => x.ServiceId).IsUnique(false); // Foreign key property should not be unique
+
+            // Relationships
             builder.HasOne(x => x.Booking)
-                .WithMany(x => x.Cart)
+                .WithMany(b => b.cart)
                 .HasForeignKey(x => x.BookingId);
-            // 1:N relationship with Package
+
             builder.HasOne(x => x.Package)
-                .WithMany(x => x.Cart)
+                .WithMany(p => p.Cart)
                 .HasForeignKey(x => x.PackageId);
-            // 1:N relationship with Service
+
             builder.HasOne(x => x.Service)
-                .WithMany(x => x.Cart)
+                .WithMany(s => s.Cart)
                 .HasForeignKey(x => x.ServiceId);
-            // modelBuilder.Entity<Order_items>()
-            //.HasOne(p => p.Order)
-            //.WithMany(b => b.order_Items)
-            //.HasForeignKey(p => p.order_id);
-            // modelBuilder.Entity<Order_items>()
-            // .HasOne(p => p.Product)
-            // .WithMany(b => b.order_Items)
-            // .HasForeignKey(p => p.product_id);
         }
     }
 }
+

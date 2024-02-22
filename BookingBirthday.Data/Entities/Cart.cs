@@ -10,15 +10,17 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public double Total { get; set; }
-        public decimal? Price { get; set; }
+        public Double? Price { get; set; }
         public string? Package_Name { get; set; }
 
         //BookingId
         public int BookingId { get; set; }
         public Booking? Booking { get; set; }
+
         //PackageId
         public int PackageId { get; set; }
         public Package? Package { get; set; }
+
         //ServiceId
         public int ServiceId { get; set; }
         public Service? Service { get; set; }
