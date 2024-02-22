@@ -1,4 +1,6 @@
-﻿namespace BookingBirthday.Server.Models
+﻿using BookingBirthday.Data.Entities;
+
+namespace BookingBirthday.Server.Models
 {
     public class CartModel
     {
@@ -8,7 +10,9 @@
         //GuestId
         public int BookingId { get; set; }
         public int PackageId { get; set; }
-        public string? Package_name { get; set; }
-        public decimal price { get; set; }
+        public int ServiceId { get; set; }
+        public decimal? Price { get; set; }
+        public Package? Package { get; set; }
+        public Service? Service { get; set; }
     }
 }

@@ -7,6 +7,9 @@ namespace BookingBirthday.Server.Models
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string? Note { get; set; }
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
@@ -21,5 +24,6 @@ namespace BookingBirthday.Server.Models
 
         //BillId
         public int BillId { get; set; }
+        public List<CartModel>? CartModels { get; set; }
     }
 }

@@ -134,7 +134,6 @@ namespace BookingBirthday.Data
                         Total = double.Parse(bookingData[2].Trim()),
                         UserId = int.Parse(bookingData[3].Trim()),
                         PaymentId = int.Parse(bookingData[4].Trim()),
-                        BillId = int.Parse(bookingData[5].Trim())
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);
