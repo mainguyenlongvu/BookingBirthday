@@ -15,7 +15,6 @@ namespace BookingBirthday.Data.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //Configure using Fluent API
-            modelBuilder.ApplyConfiguration(new BillConfiguration());
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
             modelBuilder.ApplyConfiguration(new BookingPackageConfiguration());
             modelBuilder.ApplyConfiguration(new BookingServiceConfiguration());
@@ -31,9 +30,7 @@ namespace BookingBirthday.Data.EF
             // Generate data
             SeedData.Initialize(modelBuilder);
         }
-
-
-        public DbSet<Bill> Bills { get; set; }
+        
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingPackage> BookingPackages { get; set; }
         public DbSet<BookingService> BookingServices { get; set; }

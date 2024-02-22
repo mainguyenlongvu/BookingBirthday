@@ -21,7 +21,6 @@ namespace BookingBirthday.Data
         private static readonly string HOST_FILE_PATH = "Resources/hosts.txt";
         private static readonly string PACKAGE_FILE_PATH = "Resources/packages.txt";
         private static readonly string CART_FILE_PATH = "Resources/carts.txt";
-        private static readonly string BILL_FILE_PATH = "Resources/bills.txt";
         private static readonly string BOOKING_FILE_PATH = "Resources/bookings.txt";
         private static readonly string SERVICE_FILE_PATH = "Resources/services.txt";
         private static readonly string PROMOTION_FILE_PATH = "Resources/promotions.txt";
@@ -37,7 +36,6 @@ namespace BookingBirthday.Data
         {
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
-            InitializeBill(modelBuilder);
             InitializeBooking(modelBuilder);
             InitializeService(modelBuilder);
             InitializePromotion(modelBuilder);
@@ -102,33 +100,6 @@ namespace BookingBirthday.Data
             }
         }
 
-        private static void InitializeBill(ModelBuilder modelBuilder)
-        {
-            var bill = new List<Bill>();
-
-            if (File.Exists(BILL_FILE_PATH))
-            {
-                using StreamReader sr = new(BILL_FILE_PATH);
-                int billId = 1;
-                string? billLine;
-
-                while ((billLine = sr.ReadLine()) != null)
-                {
-                    string[]? billData = billLine!.Split('|');
-
-                    bill.Add(new Bill
-                    {
-                        Id = billId++,
-                        Date = DateTime.ParseExact(billData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Discount = double.Parse(billData[1].Trim()),
-                        Total = double.Parse(billData[2].Trim()),
-                        BookingId = int.Parse(billData[3].Trim())
-                    });
-                }
-                modelBuilder.Entity<Bill>().HasData(bill);
-            }
-        }
-
         public static void InitializeBooking(ModelBuilder modelBuilder)
         {
             var booking = new List<Booking>();
@@ -161,7 +132,6 @@ namespace BookingBirthday.Data
                         Total = double.Parse(bookingData[2].Trim()),
                         UserId = int.Parse(bookingData[3].Trim()),
                         PaymentId = int.Parse(bookingData[4].Trim()),
-                        BillId = int.Parse(bookingData[5].Trim())
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);

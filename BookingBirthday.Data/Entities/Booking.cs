@@ -11,9 +11,9 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public DateTime Date_order { get; set; }
-        public string? phone { get; set; }
-        public string? email { get; set; }
-        public string? note { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string? Note { get; set; }
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
@@ -24,10 +24,6 @@ namespace BookingBirthday.Data.Entities
         //PaymentId
         public int PaymentId { get; set; }
         public Payment Payment { get; set; }
-
-        //BillId
-        public int BillId { get; set; }
-        public Bill Bill { get; set; }
 
         public List<Cart>? Cart { get; set; }
         public IList<BookingPackage> BookingPackages { get; set; }

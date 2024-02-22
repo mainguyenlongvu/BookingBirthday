@@ -39,14 +39,6 @@ namespace BookingBirthday.Data.Configurations
             builder.HasOne(x => x.Service)
                 .WithMany(x => x.Cart)
                 .HasForeignKey(x => x.ServiceId);
-            // modelBuilder.Entity<Order_items>()
-            //.HasOne(p => p.Order)
-            //.WithMany(b => b.order_Items)
-            //.HasForeignKey(p => p.order_id);
-            // modelBuilder.Entity<Order_items>()
-            // .HasOne(p => p.Product)
-            // .WithMany(b => b.order_Items)
-            // .HasForeignKey(p => p.product_id);
         }
     }
 }
