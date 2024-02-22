@@ -10,11 +10,11 @@ using BookingBirthday.Data.Entities;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class BillsController : Controller
+    public class BillController : Controller
     {
         private readonly BookingDbContext _context;
 
-        public BillsController(BookingDbContext context)
+        public BillController(BookingDbContext context)
         {
             _context = context;
         }

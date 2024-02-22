@@ -216,7 +216,7 @@ namespace BookingBirthday.Data
                         ToDate = DateTime.ParseExact(promotionData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         DiscountPercent = double.Parse(promotionData[3].Trim()),
                         Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
-                        UserId = int.Parse(promotionData[5].Trim()),
+                        //UserId = int.Parse(promotionData[5].Trim()),
                     });
                 }
                 modelBuilder.Entity<Promotion>().HasData(promotion);
