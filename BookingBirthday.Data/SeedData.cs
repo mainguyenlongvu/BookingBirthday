@@ -66,7 +66,7 @@ namespace BookingBirthday.Data
                     {
                         Id = packageId++,
                         Name = packageeData[0].Trim(),
-                        Price = decimal.Parse(packageeData[1].Trim()),
+                        Price = Double.Parse(packageeData[1].Trim()),
                         Venue = packageeData[2].Trim(),
                         Detail = packageeData[3].Trim(),
                         PromotionId = string.IsNullOrEmpty(packageeData[4].Trim()) ? (int?)null : int.Parse(packageeData[4].Trim())
