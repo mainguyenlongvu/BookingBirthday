@@ -28,7 +28,7 @@ namespace BookingBirthday.Data.Entities
 
 
         public List<Cart>? Cart { get; set; }
-        public IList<BookingPackage> BookingPackages { get; set; }
+        public IList<BookingPackage> BookingPackage { get; set; }
         public IList<BookingService> BookingServices { get; set; }
     }
 }

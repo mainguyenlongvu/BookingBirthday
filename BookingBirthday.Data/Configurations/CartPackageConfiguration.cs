@@ -20,11 +20,11 @@ namespace BookingBirthday.Data.Configurations
 
             // Foreign Key
             builder.HasOne(cp => cp.Cart)
-                .WithMany(x => x.CartPackages)
+                .WithMany(x => x.CartPackage)
                 .HasForeignKey(cp => cp.CartId);
 
             builder.HasOne(cp => cp.Package)
-                .WithMany(x => x.CartPackages)
+                .WithMany(x => x.CartServices)
                 .HasForeignKey(cp => cp.PackageId);
         }
     }
