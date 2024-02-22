@@ -25,6 +25,9 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Discount).IsRequired();
             builder.Property(x => x.Total).IsRequired();
             builder.HasIndex(x => x.BookingId).IsUnique();
+            builder.Property(x => x.phone).IsRequired();
+            builder.Property(x => x.email).IsRequired();
+            builder.Property(x => x.note).IsRequired();
 
             // 1:1 relationship with Booking
             builder.HasOne(x => x.Booking)

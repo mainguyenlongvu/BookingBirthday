@@ -11,6 +11,9 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public DateTime Date_order { get; set; }
+        public string? phone { get; set; }
+        public string? email { get; set; }
+        public string? note { get; set; }
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 

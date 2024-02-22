@@ -15,6 +15,7 @@ namespace BookingBirthday.Data.Entities
         public string? image_url { get; set; }
 
         public Package Package { get; set; }
+        public List<Cart>? Cart { get; set; }
         public ICollection<CartService> CartServices { get; set; }
         public ICollection<PackageService> PackageServices { get; set; }
         public ICollection<BookingService> BookingServices { get; set; }
