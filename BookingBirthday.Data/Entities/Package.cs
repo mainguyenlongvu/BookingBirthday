@@ -6,7 +6,29 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Entities
 {
-    internal class Guest
+    public class Package
     {
+        public int Id { get; set; }
+       
+        public string Name { get; set; }
+        public Double Price { get; set; }
+        public string Venue { get; set; }
+        public string Detail { get; set; }
+        public string? image_url { get; set; }
+
+        //PromotionId
+        public int? PromotionId { get; set; }
+        public Promotion Promotion { get; set; }
+        //UserId
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public int? ServiceId { get; set; }
+        public Service? Service { get; set; }
+
+        public List<Cart>? Cart { get; set; }
+        public IList<CartPackage> CartServices { get; set; }
+        public IList<PackageService> PackageService { get; set; }
+        public IList<BookingPackage> BookingServices { get; set; }
+
     }
 }

@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    @if (TempData.ContainsKey("Message") && TempData.ContainsKey("Success"))
+    {
+        if (TempData["Success"] != null && Convert.ToBoolean(TempData["Success"]) == true)
+        {
+            <div id="msgAlert" class="alert alert-success" role="alert">
+                @TempData["Message"]
+            </div>
+        }
+        else
+        {
+            <div id="msgAlert" class="alert alert-danger" role="alert">
+                @TempData["Message"]
+            </div>
+        }
+    }
+}
