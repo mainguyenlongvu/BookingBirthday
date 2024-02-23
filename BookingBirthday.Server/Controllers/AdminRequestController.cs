@@ -37,40 +37,7 @@ namespace BookingBirthday.Server.Controllers
                     .ToListAsync();
             return View(all_category_request);
         }
-        //[HttpPost]
-        //public IActionResult Approved(int category_request_id, int is_approved, string? rejection_reason)
-        //{
-        //    try
-        //    {
-        //        var category_Requests = _dbContext.Category_Requests.Find(category_request_id);
-        //        if (category_Requests != null)
-        //        {
-        //            if (is_approved == 1)
-        //            {
-        //                var category = new Categories();
-        //                category.name = category_Requests.category_name;
-        //                _dbContext.Categories.Add(category);
-        //            }
-        //            category_Requests.is_approved = is_approved;
-        //            category_Requests.rejection_reason = rejection_reason;
-        //            _dbContext.SaveChanges();
-        //            TempData["Message"] = "Duyệt yêu cầu thêm mới danh mục thành công";
-        //            TempData["Success"] = true;
-        //        }
-        //        else
-        //        {
-        //            TempData["Message"] = "Yêu cầu thêm mới danh mục không tồn tại";
-        //            TempData["Success"] = false;
-        //        }
-        //        return Ok();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TempData["Message"] = "Lỗi";
-        //        TempData["Success"] = false;
-        //        return BadRequest();
-        //    }
-        //}
+        
         public IActionResult Seen(int category_request_id)
         {
             var p = _dbContext.Category_Requests.SingleOrDefault(x => x.category_request_id == category_request_id);
