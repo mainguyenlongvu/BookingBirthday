@@ -8,7 +8,8 @@ namespace BookingBirthday.Data.Enums
 {
     public enum Status
     {
-        Accept,
-        Decline
+        Active,
+        Inactive
+        
     }
 }
