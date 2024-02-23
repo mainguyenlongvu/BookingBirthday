@@ -1,0 +1,185 @@
+﻿@model List<BookingBirthday.Server.Models.CartModel>
+
+@{
+    ViewData["Title"] = "Cart Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Giỏ hàng</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    @if (Model.Count > 0) {
+                      double total = 0;
+                      int stt = 1;
+  
+                      <div class="table-responsive card mt-2">
+                          <table class="table table-hover">
+                            <tr>
+                              <th>#</th>
+                              <th>Sản phẩm</th>
+                              <th>Giá</th>
+                              <th>Thành tiền</th>
+                              <th></th>
+                            </tr>
+                            <!-- Print Package Start -->
+                            @foreach (var cartitem in Model)
+                            {
+                                var thanhtien =  cartitem.Package!.Price;
+                                total += thanhtien;
+
+                                <tr>
+                                   <td>@(stt++)</td>
+                                   <td>
+                                       <label style="width: auto">@cartitem.Package.Name</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@Convert.ToDouble(cartitem.Package.Price).ToString("#,##0") đồng</label>
+                                   </td>
+                                   @* <td>
+                                       <label style="width: auto">
+                                           <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
+                                       </label>
+                                   </td> *@
+                                   <td>
+                                       <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
+                                   </td>
+                                   <td>
+                                      <label style="width: auto">
+                                          <button class="btn btn-success updatecartitem" 
+                                            data-productid="@cartitem.Package.Id">Cập nhật</button>
+                                          <a asp-route="removecart" asp-route-productid="@cartitem.Package.Id"
+                                            class="btn btn-danger">Xóa</a>
+                                      </label>
+                                   </td>
+                                </tr>
+                            }
+                            <!-- Print Package End -->
+
+                            <!-- Print Service Start -->
+                            @foreach (var cartitem in Model)
+                            {
+                                var thanhtien =  cartitem.Service!.Price;
+                                total += thanhtien;
+
+                                <tr>
+                                   <td>@(stt++)</td>
+                                   <td>
+                                       <label style="width: auto">@cartitem.Service.Name</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@Convert.ToDouble(cartitem.Service.Price).ToString("#,##0") đồng</label>
+                                   </td>
+                                   @* <td>
+                                       <label style="width: auto">
+                                           <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Service.Id}")" type="number" min="1"/>
+                                       </label>
+                                   </td> *@
+                                   <td>
+                                       <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
+                                   </td>
+                                   <td>
+                                      <label style="width: auto">
+                                          <button class="btn btn-success updatecartitem" 
+                                            data-productid="@cartitem.Service.Id">Cập nhật</button>
+                                          <a asp-route="removecart" asp-route-productid="@cartitem.Service.Id"
+                                            class="btn btn-danger">Xóa</a>
+                                      </label>
+                                   </td>
+                                </tr>
+                            }
+                            <!-- Print Service End -->
+
+
+                              <tr>
+                                  <td colspan="5" style="text-align: right">Tổng tiền</td>
+                                  <td>@Convert.ToDouble(total).ToString("#,##0") đồng</td>
+                                  <td></td>
+                              </tr>
+                          </table>
+                      </div>
+                      @if (Context.Session.GetString("username") != null)
+                      {
+                         <form asp-action="AddOrder" asp-controller="Cart" method="post">
+                              <div class="col-md-4">
+                                  <input type="hidden" name="TongTien" value="@total" />
+                                  <div class="mb-3">
+                                      <label class="form-label">Họ tên</label>
+                                      <input type="text" class="form-control" name="TenKH" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
+                                  </div>
+
+                                  <div class="mb-3">
+                                      <label class="form-label">Số điện thoại</label>
+                                      <input type="tel" class="form-control" name="SDT" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
+                                  </div>
+                                  
+
+                                  <div class="mb-3">
+                                      <label class="form-label">Email</label>
+                                      <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
+                                  </div>
+
+                                  <div class="mb-3">
+                                      <label class="form-label">Địa chỉ giao</label>
+                                      <input type="text" class="form-control" name="DiaChiGiao" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
+                                  </div>
+                                  <div class="mb-3">
+                                      <label class="form-label">Ghi chú</label>
+                                      <input type="text" class="form-control" name="note" placeholder="Ghi chú" value="" />
+                                    </div>
+                                </div>
+                              @* <button type="submit" class="btn btn-success">Gửi đơn hàng</button> *@
+                              <a href="/Cart/Payment" class="btn btn-success">Thanh Toán</a>
+                              <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                            </form>
+
+                        }
+                        else
+                        {
+                            <a href="/Account/Login" class="btn btn-success">Đăng nhập để thanh toán</a>
+                            <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                        }
+
+
+                          @section Scripts {
+                            <script>
+                              $(document).ready(function () {
+                                  $(".updatecartitem").click(function (event) {
+                                      event.preventDefault();
+                                      var productid = $(this).attr("data-productid");
+                                      var quantity = $("#quantity-" + productid).val();
+                                      $.ajax({
+                                          type: "POST",
+                                          url:"@Url.RouteUrl("updatecart")",
+                                          data: {
+                                              productid: productid,
+                                              quantity:quantity
+                                          },
+                                          success: function (result) {
+                                              window.location.href = "@Url.RouteUrl("cart")";
+                                          }
+                                      });
+                                  });
+                              });
+                            </script>
+                          }
+
+                    }
+                    else {
+                      <p class="alert alert-danger">Giỏ hàng trống</p>
+                      <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
