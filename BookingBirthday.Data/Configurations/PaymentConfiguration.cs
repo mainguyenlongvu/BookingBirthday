@@ -23,7 +23,7 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.Types).IsRequired();
+            builder.Property(x => x.PaymentMethod).IsRequired();
             builder.HasIndex(x => x.BookingId).IsUnique();
 
             // 1:1 relationship with Booking

@@ -23,11 +23,6 @@ namespace BookingBirthday.Data.Configurations
                 .WithMany(b => b.BookingPackage)
                 .HasForeignKey(bp => bp.BookingId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-
-            builder.HasOne(bp => bp.Package)
-                .WithMany(p => p.BookingServices)
-                .HasForeignKey(bp => bp.PackageId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }
