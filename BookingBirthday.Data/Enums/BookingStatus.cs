@@ -10,6 +10,7 @@ namespace BookingBirthday.Data.Enums
     {
         Accepted,
         Declined,
-        Processing
+        Processing,
+        Paid
     }
 }

@@ -28,4 +28,9 @@
     <ProjectReference Include="..\Bookingbirthday.Data\BookingBirthday.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\imgService\" />
+    <Folder Include="wwwroot\imgPackage\" />
+  </ItemGroup>
+
 </Project>

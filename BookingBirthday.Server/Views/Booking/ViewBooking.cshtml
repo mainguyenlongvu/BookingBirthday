@@ -1,0 +1,102 @@
+﻿@model List<BookingBirthday.Data.Entities.Booking>
+
+@{
+    ViewData["Title"] = "View Orders Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Đơn hàng đã đặt</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    @if (Model.Count > 0) {
+                      int stt = 1;
+  
+                      <div class="table-responsive card mt-2">
+                          <table class="table table-hover">
+                            <tr>
+                              <th>#</th>
+                              <th>Mã đơn hàng</th>
+                              <th>Số điện thoại</th>
+                              <th>Địa chỉ</th>
+                              <th>Ngày đặt hàng</th>
+                              <th>Tổng tiền</th>
+                              <th>Trạng thái</th>
+                              <th></th>
+                            </tr>
+                            @foreach (var item in Model)
+                            {
+
+                                <tr>
+                                   <td>@(stt++)</td>
+                                   <td>
+                                       <label style="width: auto">@item.Id</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@item.Phone</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@item.Address</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@item.Date_order</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
+                                   </td>
+                                        <td>
+                                            <label style="width: auto">@item.Note</label>
+                                        </td>
+                                   <td>
+                                      <label style="width: auto">@item.BookingStatus</label>
+                                   </td>
+                                   <td>
+                                            <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
+                                            @if (@item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Processing)
+                                            {
+                                                <a class="btn btn-warning" onclick="huyDon(@item.Id)">Hủy đơn</a>
+                                            }
+                                   </td>
+                                </tr>
+                            }
+                          </table>
+                      </div>
+
+                    }
+                    else {
+                      <p class="alert alert-danger">Danh sách đơn hàng trống</p>
+                      <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Chi tiết đơn hàng</h5>
+            </div>
+            <div class="modal-body">
+                <!-- Nội dung chi tiết đơn hàng -->
+                <h4>Tên sản phẩm</h4>
+                <p>Mô tả sản phẩm</p>
+                <p>Giá sản phẩm:</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

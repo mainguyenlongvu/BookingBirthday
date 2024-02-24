@@ -14,6 +14,7 @@ namespace BookingBirthday.Data.Entities
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Note { get; set; }
+        public string? Address { get; set; }
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 

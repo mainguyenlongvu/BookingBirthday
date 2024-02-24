@@ -18,15 +18,9 @@
                         <a class="text-body" href="@("/Service/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem sản phẩm</a>
                     </small>
                     <small class="w-50 text-center py-2">
-                        @if(item.Id != null)
-                        {
-                            <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
-                        }
-                        else
-                        {
-
-                            <a class="text-body"><i class="fa fa-shopping-bag text-primary me-2"></i>Hết hàng</a>
-                        }
+                        
+                           <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                       
                     </small>
                 </div>
             </div>

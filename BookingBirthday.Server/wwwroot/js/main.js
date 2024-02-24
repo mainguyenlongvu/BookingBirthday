@@ -87,7 +87,7 @@ function FillterByCategory(category_id) {
 
 }
 function detailOrder(orderId) {
-    $.getJSON("/Order/ViewOrder?orderId=" + orderId, function (data) {
+    $.getJSON("/Order/ViewBooking?Id=" + orderId, function (data) {
         var html = '';
         var n = 1;
         if (data != null) {
@@ -105,10 +105,10 @@ function detailOrder(orderId) {
                 console.log(value)
                 html += '<tr>'
                 html += '<td><label style="width: auto">' + n + '</label></td>'
-                html += '<td><label style="width: auto">' + value.order_id + '</label></td>'
-                html += '<td><label style="width: auto">' + value.product_name + '</label></td>'
-                html += '<td><label style="width: auto">' + value.quantity + '</label></td>'
-                html += '<td><label style="width: auto">' + value.price + '</label></td>'
+                html += '<td><label style="width: auto">' + value.Id + '</label></td>'
+                html += '<td><label style="width: auto">' + value.Name + '</label></td>'
+                //html += '<td><label style="width: auto">' + value.quantity + '</label></td>'
+                html += '<td><label style="width: auto">' + value.Total + '</label></td>'
                 html += '</tr>'
                 n += 1;
             })
@@ -130,7 +130,7 @@ function detailOrder(orderId) {
 function changeStatusOrder(order_id) {
     if (confirm("Bạn muốn thay đổi trạng thái đơn hàng?")) {
         $.ajax({
-            url: "/OwnerOrder/Edit",
+            url: "/HostBooking/Edit",
             type: "POST",
             data: {
                 orderId: order_id,
@@ -148,7 +148,7 @@ function changeStatusOrder(order_id) {
 function xoaProduct(product_id) {
     if (confirm("Bạn muốn xóa sản phẩm?")) {
         $.ajax({
-            url: "/OwnerOrder/Delete",
+            url: "/HostBooking/Delete",
             type: "POST",
             data: {
                 productId: product_id
@@ -162,6 +162,25 @@ function xoaProduct(product_id) {
         });
     }
 }
+
+function xoaService(service_id) {
+    if (confirm("Bạn muốn xóa sản phẩm?")) {
+        $.ajax({
+            url: "/HostBooking/Delete",
+            type: "POST",
+            data: {
+                productId: service_id
+            },
+            success: function (response) {
+                window.location.reload() = true;
+            },
+            error: function (xhr, status, error) {
+                window.location.reload() = true;
+            }
+        });
+    }
+}
+
 function xoaUser(user_id) {
     if (confirm("Bạn muốn xóa người dùng?")) {
         $.ajax({
@@ -182,7 +201,7 @@ function xoaUser(user_id) {
 function xoaRequest(category_request_id) {
     if (confirm("Bạn muốn xóa yêu cầu thêm mới danh mục?")) {
         $.ajax({
-            url: "/OwnerRequest/Delete",
+            url: "/HostRequest/Delete",
             type: "POST",
             data: {
                 category_request_id: category_request_id
@@ -234,7 +253,7 @@ function openUpdate(id) {
 function huyDon(order_id) {
     if (confirm("Bạn muốn hủy đơn hàng?")) {
         $.ajax({
-            url: "/Order/HuyDon",
+            url: "/Booking/HuyDon",
             type: "POST",
             data: {
                 orderId: order_id
@@ -293,7 +312,7 @@ function changeSelectRequest(type) {
                 html += '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">'
                 html += '<div class="modal-dialog modal-dialog-centered" role="document">'
                 html += '<div class="modal-content">'
-                html += '<form method="post" action="/OwnerRequest/Edit">'
+                html += '<form method="post" action="/HostRequest/Edit">'
                 html += '<div class="modal-header">'
                 html += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>'
                 html += '</div>'
