@@ -16,15 +16,12 @@ namespace BookingBirthday.Data.Entities
         // Foreign key properties
         public int BookingId { get; set; }
         public int PackageId { get; set; }
-        public int ServiceId { get; set; }
 
         // Navigation properties
         public Booking Booking { get; set; }
         public Package Package { get; set; }
-        public Service Service { get; set; }
 
         // Collection navigation properties
-        public ICollection<CartService> CartServices { get; set; } = new List<CartService>(); // Initialize collection in constructor
         public ICollection<CartPackage> CartPackages { get; set; } = new List<CartPackage>(); // Renamed to follow naming convention
     }
 }

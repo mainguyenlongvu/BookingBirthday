@@ -44,7 +44,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var product = _dbContext.Packages.Include(x => x.Service).Where(x => x.Id == productId).FirstOrDefault();
+            var product = _dbContext.Packages.Where(x => x.Id == productId).FirstOrDefault();
             if (product != null)
             {
                 var p = new PackageModel();
@@ -53,8 +53,6 @@ namespace BookingBirthday.Server.Controllers
                 p.Name = product.Name;
                 p.Venue = product.Venue;
                 p.PromotionId = product.PromotionId;
-                p.ServiceId = product.ServiceId;
-                p.Service_Name = product.Service!.Name;
                 p.Price = product.Price;
                 p.image_url = product.image_url;
                 return View(p);

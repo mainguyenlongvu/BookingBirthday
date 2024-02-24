@@ -14,6 +14,7 @@ namespace BookingBirthday.Data.Entities
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Note { get; set; }
+      
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
@@ -28,7 +29,6 @@ namespace BookingBirthday.Data.Entities
 
 
         public List<Cart>? cart { get; set; }
-        public IList<BookingPackage> BookingPackage { get; set; }
-        public IList<BookingService> BookingServices { get; set; }
+        public ICollection<BookingPackage> BookingPackages { get; set; }
     }
 }

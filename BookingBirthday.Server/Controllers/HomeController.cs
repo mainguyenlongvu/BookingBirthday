@@ -34,7 +34,7 @@ namespace BookingBirthday.Server.Controllers
                         .OrderByDescending(x => x.created_at)
                         .ToList();
                 }
-                else if (role == "Store Owner")
+                else if (role == "Host")
                 {
                     var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     category_request = _dbContext.Category_Requests
@@ -51,7 +51,7 @@ namespace BookingBirthday.Server.Controllers
             }
 
 
-            var products = from a in _dbContext.Packages.Include(x => x.Service)
+            var products = from a in _dbContext.Packages
                            select new { a };
             if (products != null)
             {
@@ -61,8 +61,6 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     PromotionId = x.a.PromotionId,
-                    ServiceId = x.a.ServiceId,
-                    Service_Name = x.a.Service!.Name,
                     Price = x.a.Price,
                     Venue = x.a.Venue,
                     image_url = x.a.image_url
@@ -75,12 +73,9 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult FilterProducts(int ServiceId)
         {
             // Logic filter danh sách sản phẩm theo category
-            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Service)
+            var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
-            if (ServiceId != 0)
-            {
-                filteredProducts = filteredProducts.Where(x => x.a.ServiceId == ServiceId);
-            }
+           
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -89,9 +84,7 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     Venue = x.a.Venue,
-                    ServiceId = x.a.ServiceId,
                     PromotionId = x.a.PromotionId,
-                    Service_Name = x.a.Service!.Name,
                     Price = x.a.Price,
                     image_url = x.a.image_url
                 }).ToList();
@@ -101,7 +94,7 @@ namespace BookingBirthday.Server.Controllers
         }
         public IActionResult Search(string keyword)
         {
-            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Service)
+            var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
 
             filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword));
@@ -113,9 +106,7 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     Venue = x.a.Venue,
-                    ServiceId = x.a.ServiceId,
                     PromotionId = x.a.PromotionId,
-                    Service_Name = x.a.Service!.Name,
                     Price = x.a.Price,
                     image_url = x.a.image_url
                 }).ToList();

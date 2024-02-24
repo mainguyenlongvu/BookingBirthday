@@ -1,3 +1,0 @@
-﻿Menu 3 Món | 1000000 | Khai Vị, Món Chính, Tráng Miệng
-Menu 4 Món | 1500000 | Khai Vị, 2 Món Chính, Tráng Miệng
-Menu 5 Món | 2000000 | 2 Khai Vị, 2 Món Chính, Tráng Miệng

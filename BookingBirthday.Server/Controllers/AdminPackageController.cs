@@ -36,8 +36,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var products = from a in _dbContext.Packages.Include(x => x.Service)
-                           select new { a };
+            var products = from a in _dbContext.Packages   select new { a };
             if (products != null)
             {
                 var lstProducts = products.OrderByDescending(x => x.a.Id).Select(x => new PackageModel()
@@ -46,8 +45,6 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     PromotionId = x.a.PromotionId,
-                    ServiceId = x.a.ServiceId,
-                    Service_Name = x.a.Service!.Name,
                     Price = x.a.Price,
                     Venue = x.a.Venue,
                     image_url = x.a.image_url
@@ -73,7 +70,6 @@ namespace BookingBirthday.Server.Controllers
                 p.Name = productData.Name;
                 p.Detail = productData.Detail;
                 p.PromotionId = productData.PromotionId;
-                p.ServiceId = productData.ServiceId;
                 p.Price = productData.Price;
                 p.Venue = productData.Venue;
                 p.image_url = UploadedFile(productData.file!);
@@ -106,7 +102,6 @@ namespace BookingBirthday.Server.Controllers
                 pa.Name = productData.Name;
                 pa.Detail = productData.Detail;
                 pa.PromotionId = productData.PromotionId;
-                pa.ServiceId = productData.ServiceId;
                 pa.Price = productData.Price;
                 pa.Venue = productData.Venue;
                 if (productData.file != null)

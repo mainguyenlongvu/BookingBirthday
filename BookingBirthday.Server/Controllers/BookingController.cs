@@ -16,7 +16,7 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult ViewOrders()
+        public IActionResult ViewBooking()
         {
             var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.Id == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
             return View(orders);
@@ -37,7 +37,7 @@ namespace BookingBirthday.Server.Controllers
                         .OrderByDescending(x => x.created_at)
                         .ToList();
                 }
-                else if (role == "Store Owner")
+                else if (role == "Host")
                 {
                     var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     category_request = _dbContext.Category_Requests

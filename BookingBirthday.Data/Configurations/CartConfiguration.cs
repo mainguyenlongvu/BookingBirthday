@@ -29,7 +29,6 @@ namespace BookingBirthday.Data.Configurations
                 // Indexes
                 builder.HasIndex(x => x.BookingId);
                 builder.HasIndex(x => x.PackageId);
-                builder.HasIndex(x => x.ServiceId);
 
                 // Relationships
                 builder.HasOne(x => x.Booking)
@@ -42,10 +41,6 @@ namespace BookingBirthday.Data.Configurations
                     .HasForeignKey(x => x.PackageId)
                     .OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
 
-            builder.HasOne(x => x.Service)
-                    .WithMany(s => s.Cart)
-                    .HasForeignKey(x => x.ServiceId)
-                    .OnDelete(DeleteBehavior.NoAction);
             }
         }
     }

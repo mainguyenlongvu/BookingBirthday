@@ -27,7 +27,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.Property(x => x.Note).IsRequired();
+            builder.Property(x => x.Note);
             builder.HasIndex(b => b.UserId);
             builder.HasIndex(x => x.PaymentId).IsUnique();
 

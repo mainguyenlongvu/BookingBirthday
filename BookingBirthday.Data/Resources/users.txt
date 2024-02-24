@@ -1,3 +1,3 @@
-﻿admin | admin123 | admin@gmail.com | 0 |
-abc | 123456 | example123@gmail.com | 1 |
-toan | 123456 | demo5678@gmail.com | 2 |
+﻿admin | admin123 | admin@gmail.com | Admin |
+abc | 123456 | example123@gmail.com | Guest |
+toan | 123456 | demo5678@gmail.com | Host |
