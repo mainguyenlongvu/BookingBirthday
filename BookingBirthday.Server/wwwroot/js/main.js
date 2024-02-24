@@ -87,7 +87,7 @@ function FillterByCategory(category_id) {
 
 }
 function detailOrder(orderId) {
-    $.getJSON("/Order/ViewBooking?Id=" + orderId, function (data) {
+    $.getJSON("/Booking/ViewBooking?Id=" + orderId, function (data) {
         var html = '';
         var n = 1;
         if (data != null) {
@@ -152,24 +152,6 @@ function xoaProduct(product_id) {
             type: "POST",
             data: {
                 productId: product_id
-            },
-            success: function (response) {
-                window.location.reload() = true;
-            },
-            error: function (xhr, status, error) {
-                window.location.reload() = true;
-            }
-        });
-    }
-}
-
-function xoaService(service_id) {
-    if (confirm("Bạn muốn xóa sản phẩm?")) {
-        $.ajax({
-            url: "/HostBooking/Delete",
-            type: "POST",
-            data: {
-                productId: service_id
             },
             success: function (response) {
                 window.location.reload() = true;

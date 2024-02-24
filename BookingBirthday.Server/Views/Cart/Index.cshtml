@@ -65,41 +65,6 @@
                             }
                             <!-- Print Package End -->
 
-                            <!-- Print Service Start -->
-                            @foreach (var cartitem in Model)
-                            {
-                                var thanhtien =  cartitem.Service!.Price;
-                                total += thanhtien;
-
-                                <tr>
-                                   <td>@(stt++)</td>
-                                   <td>
-                                       <label style="width: auto">@cartitem.Service.Name</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(cartitem.Service.Price).ToString("#,##0") đồng</label>
-                                   </td>
-                                   @* <td>
-                                       <label style="width: auto">
-                                           <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Service.Id}")" type="number" min="1"/>
-                                       </label>
-                                   </td> *@
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
-                                   </td>
-                                   <td>
-                                      <label style="width: auto">
-                                          <button class="btn btn-success updatecartitem" 
-                                            data-productid="@cartitem.Service.Id">Cập nhật</button>
-                                          <a asp-route="removecart" asp-route-productid="@cartitem.Service.Id"
-                                            class="btn btn-danger">Xóa</a>
-                                      </label>
-                                   </td>
-                                </tr>
-                            }
-                            <!-- Print Service End -->
-
-
                               <tr>
                                   <td colspan="5" style="text-align: right">Tổng tiền</td>
                                   <td>@Convert.ToDouble(total).ToString("#,##0") đồng</td>

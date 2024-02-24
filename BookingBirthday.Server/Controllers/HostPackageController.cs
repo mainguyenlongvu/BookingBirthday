@@ -8,13 +8,13 @@ using System;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class HostProductController1 : HostBaseController
+    public class HostPackageController : HostBaseController
     {
         private readonly BookingDbContext _dbContext;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly string _imageContentFolder;
 
-        public HostProductController1(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
+        public HostPackageController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
         {
             _dbContext = dbContext;
             this.webHostEnvironment = webHostEnvironment;
@@ -37,7 +37,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var products = from a in _dbContext.Packages.Include(x => x.Service)
+            var products = from a in _dbContext.Packages
                            where a.Id == user_id
                            select new { a };
             if (products != null)
@@ -48,8 +48,6 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     Venue = x.a.Venue,
-                    ServiceId = x.a.ServiceId,
-                    Service_Name = x.a.Service!.Name,
                     Price = x.a.Price,
                     PromotionId = x.a.PromotionId,
                     image_url = x.a.image_url
@@ -76,7 +74,6 @@ namespace BookingBirthday.Server.Controllers
                 p.Id = user_id;
                 p.Name = productData.Name;
                 p.Detail = productData.Detail;
-                p.ServiceId = productData.ServiceId;
                 p.Price = productData.Price;
                 p.PromotionId = productData.PromotionId;
                 p.Venue = productData.Venue;
@@ -108,7 +105,6 @@ namespace BookingBirthday.Server.Controllers
             {
                 p.Name = productData.Name;
                 p.Detail = productData.Detail;
-                p.ServiceId = productData.ServiceId;
                 p.Price = productData.Price;
                 p.PromotionId = productData.PromotionId;
                 p.Venue = productData.Venue;

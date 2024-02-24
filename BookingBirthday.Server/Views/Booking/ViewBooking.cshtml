@@ -44,9 +44,20 @@
                                    <td>
                                        <label style="width: auto">@item.Phone</label>
                                    </td>
-                                   <td>
-                                       <label style="width: auto">@item.Address</label>
-                                   </td>
+                                        <td>
+                                            @{
+                                                string address = "";
+                                                if (item.BookingPackages != null && item.BookingPackages.Any())
+                                                {
+                                                    var package = item.BookingPackages.FirstOrDefault();
+                                                    if (package != null && package.Package != null)
+                                                    {
+                                                        address = package.Package.Venue;
+                                                    }
+                                                }
+                                            }
+                                            <label style="width: auto">@address</label>
+                                        </td>
                                    <td>
                                        <label style="width: auto">@item.Date_order</label>
                                    </td>

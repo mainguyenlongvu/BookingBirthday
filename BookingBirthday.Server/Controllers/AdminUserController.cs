@@ -55,7 +55,7 @@ namespace BookingBirthday.Server.Controllers
                 }
                 var user = new Data.Entities.User();
                 user.Username = userData.Username;
-                user.Role=Data.Enums.Role.Guest;
+                user.Role= "Guest";
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
                 user.Email = userData.Email;
                 user.Address = userData.Address;
@@ -113,7 +113,7 @@ namespace BookingBirthday.Server.Controllers
                         return RedirectToAction("Index");
                     }
                 }
-                user.Role = (Data.Enums.Role)userData.Role;
+                user.Role = userData.Role;
                 if (userData.Password != null)
                 {
                     user.Password = CreateMD5.MD5Hash(userData.Password!);

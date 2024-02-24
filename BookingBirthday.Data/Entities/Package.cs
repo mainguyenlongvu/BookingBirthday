@@ -22,13 +22,10 @@ namespace BookingBirthday.Data.Entities
         //UserId
         public int UserId { get; set; }
         public User User { get; set; }
-        public int? ServiceId { get; set; }
-        public Service? Service { get; set; }
 
         public List<Cart>? Cart { get; set; }
-        public IList<CartPackage> CartServices { get; set; }
-        public IList<PackageService> PackageService { get; set; }
-        public IList<BookingPackage> BookingServices { get; set; }
+        public IList<CartPackage> CartPackages { get; set; }
+        public IList<BookingPackage> BookingPackages { get; set; }
 
     }
 }

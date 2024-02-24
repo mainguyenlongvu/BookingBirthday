@@ -20,7 +20,7 @@ namespace BookingBirthday.Data.Entities
         public string? Phone { get; set; }
         public string? Address { get; set; }
         public string? Image_url { get; set; }
-        public Role Role { get; set; }
+        public string?  Role { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
 

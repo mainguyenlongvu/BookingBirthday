@@ -41,17 +41,17 @@ namespace BookingBirthday.Server.Controllers
             if (user != null)
             {
                 HttpContext.Session.SetString("username", user.Username!);
-                HttpContext.Session.SetString("role", user.Role!.ToString());
+                HttpContext.Session.SetString("role", user.Role!);
                 HttpContext.Session.SetString("user_id", user.Id.ToString()!);
                 HttpContext.Session.SetString("name", user.Name!);
                 HttpContext.Session.SetString("email", user.Email!);
                 HttpContext.Session.SetString("phone", user.Phone!);
                 HttpContext.Session.SetString("address", user.Address!);
-                if (user.Role.ToString() == "Admin")
+                if (user.Role == "Admin")
                 {
                     TempData["Message"] = "Welcome Admin";
                 }
-                else if (user.Role.ToString() == "Host")
+                else if (user.Role == "Host")
                 {
                     TempData["Message"] = "Welcome Host";
                 }
@@ -91,10 +91,10 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
                 var user = new User();
-                user.Username = userData.Username;
-                user.Role = Role.Guest;
+                user.Username = userData.Username!;
+                user.Role = "Guest";
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
-                user.Email = userData.Email;
+                user.Email = userData.Email!;
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;
@@ -135,83 +135,65 @@ namespace BookingBirthday.Server.Controllers
                 var user = _context.Users.FirstOrDefault(x => x.Id == user_id);
                 if (user == null)
                 {
-                    return RedirectToAction("Login", "Users");
+                    return RedirectToAction("Login", "Account");
                 }
                 return View(user);
             }
-            return RedirectToAction("Login", "Users");
+            return RedirectToAction("Login", "Account");
         }
         [HttpPost]
         public IActionResult UpdateProfile(RegisterModel userData)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (HttpContext.Session.GetString("user_id") != null)
+                try
                 {
-
-                    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-                    var email = HttpContext.Session.GetString("email");
-
-                    if (email != userData.Email)
-                    {
-                        var usr = _context.Users.Where(x => x.Email == userData.Email);
-                        if (usr.Count() > 0)
-                        {
-                            TempData["Message"] = "Tài khoản đã tồn tại";
-                            TempData["Success"] = false;
-                            return RedirectToAction("Profile", "Users");
-                        }
-                    }
-                    var user = _context.Users.FirstOrDefault(x => x.Id == user_id);
+                    var userId = int.Parse(HttpContext.Session.GetString("user_id") ?? "0");
+                    var user = _context.Users.FirstOrDefault(x => x.Id == userId);
                     if (user == null)
                     {
-                        return RedirectToAction("Login", "Users");
+                        return RedirectToAction("Login", "Account");
                     }
-                    else if (userData.Password != userData.ConfirmPassword)
+
+                    // Update user properties
+                    user.Name = userData.Name;
+                    user.Email = userData.Email;
+                    user.Address = userData.Address;
+                    user.Phone = userData.Phone;
+
+                    // Update password if provided and valid
+                    if (!string.IsNullOrEmpty(userData.Password) && userData.Password == userData.ConfirmPassword)
                     {
-                        TempData["Message"] = "Mật khẩu xác nhận không đúng";
-                        TempData["Success"] = false;
-                        return RedirectToAction("Index");
+                        user.Password = CreateMD5.MD5Hash(userData.Password);
                     }
-                    else if (userData.Password != null)
-                    {
-                        if (user.Password!.Length >= 8)
-                        {
-                            user.Password = CreateMD5.MD5Hash(userData.Password!);
-                        }
-                        else
-                        {
-                            TempData["Message"] = "Mật khẩu phải ít nhất 8 kí tự";
-                            TempData["Success"] = false;
-                            return RedirectToAction("Index");
-                        }
-                    }
-                    user.Email = userData.Email;
-                    user.Email = userData.Email;
-                    user.Email = userData.Email;
-                    user.Email = userData.Email;
+
+                    // Update profile picture if provided
                     if (userData.File != null)
                     {
-                        if (user.Image_url != "/imageProfile/" && user.Image_url != null)
-                        {
-                            var n = user.Image_url!.Remove(0, 12);
-                            DeleteImage(n);
-                        }
+                        // Handle profile picture upload
                         user.Image_url = UploadedFile(userData.File);
                     }
+
                     _context.SaveChanges();
+
                     TempData["Message"] = "Cập nhật thông tin thành công";
                     TempData["Success"] = true;
-                    return RedirectToAction("Profile", "Users");
+                    return RedirectToAction("Profile", "Account");
                 }
-
-                return RedirectToAction("Login", "Users");
+                catch (Exception e)
+                {
+                    TempData["Message"] = "Lỗi cập nhật thông tin tài khoản";
+                    TempData["Success"] = false;
+                    // Log the exception or handle it appropriately
+                    return RedirectToAction("Profile", "Account");
+                }
             }
-            catch (Exception e)
+            else
             {
-                TempData["Message"] = "Lỗi cập nhật thông tin tài khoản";
+                // If model validation fails, return to the profile edit page with error messages
+                TempData["Message"] = "Vui lòng điền đúng thông tin";
                 TempData["Success"] = false;
-                return RedirectToAction("Index");
+                return RedirectToAction("Profile", "Account");
             }
         }
 
@@ -239,140 +221,5 @@ namespace BookingBirthday.Server.Controllers
                 Task.Run(() => System.IO.File.Delete(filePath));
             }
         }
-
-        //// GET: Users
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Users.ToListAsync());
-        //}
-
-        //// GET: Users/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var user = await _context.Users
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(user);
-        //}
-
-        //// GET: Users/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
-
-        //// POST: Users/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Username,Password,Email,Role")] User user)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(user);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(user);
-        //}
-
-        //// GET: Users/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var user = await _context.Users.FindAsync(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(user);
-        //}
-
-        //// POST: Users/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Password,Email,Role")] User user)
-        //{
-        //    if (id != user.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(user);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!UserExists(user.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(user);
-        //}
-
-        //// GET: Users/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var user = await _context.Users
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(user);
-        //}
-
-        //// POST: Users/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var user = await _context.Users.FindAsync(id);
-        //    if (user != null)
-        //    {
-        //        _context.Users.Remove(user);
-        //    }
-
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool UserExists(int id)
-        //{
-        //    return _context.Users.Any(e => e.Id == id);
-        //}
     }
 }

@@ -17,19 +17,13 @@ namespace BookingBirthday.Data
 {
     public static class SeedData
     {
-        private static readonly string GUEST_FILE_PATH = "Resources/guests.txt";
-        private static readonly string HOST_FILE_PATH = "Resources/hosts.txt";
         private static readonly string PACKAGE_FILE_PATH = "Resources/packages.txt";
         private static readonly string CART_FILE_PATH = "Resources/carts.txt";
         private static readonly string BOOKING_FILE_PATH = "Resources/bookings.txt";
-        private static readonly string SERVICE_FILE_PATH = "Resources/services.txt";
         private static readonly string PROMOTION_FILE_PATH = "Resources/promotions.txt";
         private static readonly string PAYMENT_FILE_PATH = "Resources/payments.txt";
-        private static readonly string PACKAGE_SERVICE_FILE_PATH = "Resources/package-service.txt";
-        private static readonly string CART_SERVICE_FILE_PATH = "Resources/cart-service.txt";
         private static readonly string CART_PACKAGE_FILE_PATH = "Resources/cart-package.txt";
         private static readonly string BOOKING_PACKAGE_FILE_PATH = "Resources/booking-package.txt";
-        private static readonly string BOOKING_SERVICE_FILE_PATH = "Resources/booking-service.txt";
         private static readonly string USER_FILE_PATH = "Resources/users.txt";
 
         public static void Initialize(ModelBuilder modelBuilder)
@@ -37,14 +31,10 @@ namespace BookingBirthday.Data
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
             InitializeBooking(modelBuilder);
-            InitializeService(modelBuilder);
             InitializePromotion(modelBuilder);
             InitializePayment(modelBuilder);
-            InitializePackageService(modelBuilder);
-            InitializeCartService(modelBuilder);
             InitializeCartPackage(modelBuilder);
             InitializeBookingPackage(modelBuilder);
-            InitializeBookingService(modelBuilder);
             InitializeUser(modelBuilder);
         }
 
@@ -139,31 +129,6 @@ namespace BookingBirthday.Data
             }
         }
 
-        public static void InitializeService(ModelBuilder modelBuilder)
-        {
-            var service = new List<Service>();
-
-            if (File.Exists(SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(SERVICE_FILE_PATH);
-                int serviceId = 1;
-                string? serviceLine;
-
-                while ((serviceLine = sr.ReadLine()) != null)
-                {
-                    string[]? serviceData = serviceLine!.Split('|');
-
-                    service.Add(new Service
-                    {
-                        Id = serviceId++,
-                        Name = serviceData[0].Trim(),
-                        Price = double.Parse(serviceData[1].Trim()),
-                        Detail = serviceData[2].Trim(),
-                    });
-                }
-                modelBuilder.Entity<Service>().HasData(service);
-            }
-        }
 
         public static void InitializePromotion(ModelBuilder modelBuilder)
         {
@@ -232,52 +197,7 @@ namespace BookingBirthday.Data
             }
         }
 
-        public static void InitializePackageService(ModelBuilder modelBuilder)
-        {
-            var PackageService = new List<PackageService>();
 
-            if (File.Exists(PACKAGE_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(PACKAGE_SERVICE_FILE_PATH);
-
-                string? PackageServiceLine;
-
-                while ((PackageServiceLine = sr.ReadLine()) != null)
-                {
-                    string[] PackageServiceData = PackageServiceLine!.Split("|");
-
-                    PackageService.Add(new PackageService
-                    {
-                        PackageId = int.Parse(PackageServiceData[0].Trim()),
-                        ServiceId = int.Parse(PackageServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<PackageService>().HasData(PackageService);
-            }
-        }
-
-        public static void InitializeCartService(ModelBuilder modelBuilder)
-        {
-            var cartService = new List<CartService>();
-
-            if (File.Exists(CART_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(CART_SERVICE_FILE_PATH);
-                string? cartServiceLine;
-
-                while ((cartServiceLine = sr.ReadLine()) != null)
-                {
-                    string[]? cartServiceData = cartServiceLine!.Split('|');
-
-                    cartService.Add(new CartService
-                    {
-                        CartId = int.Parse(cartServiceData[0].Trim()),
-                        ServiceId = int.Parse(cartServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<CartService>().HasData(cartService);
-            }
-        }
 
         public static void InitializeCartPackage(ModelBuilder modelBuilder)
         {
@@ -302,29 +222,6 @@ namespace BookingBirthday.Data
             }
         }
 
-        public static void InitializeBookingService(ModelBuilder modelBuilder)
-        {
-            var bookingService = new List<BookingService>();
-
-            if (File.Exists(BOOKING_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(BOOKING_SERVICE_FILE_PATH);
-
-                string? bookingServiceLine;
-
-                while ((bookingServiceLine = sr.ReadLine()) != null)
-                {
-                    string[]? bookingServiceData = bookingServiceLine!.Split('|');
-
-                    bookingService.Add(new BookingService
-                    {
-                        BookingId = int.Parse(bookingServiceData[0].Trim()),
-                        ServiceId = int.Parse(bookingServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<BookingService>().HasData(bookingService);
-            }
-        }
 
         public static void InitializeBookingPackage(ModelBuilder modelBuilder)
         {
@@ -364,15 +261,6 @@ namespace BookingBirthday.Data
                 {
                     string[]? userData = userLine!.Split('|');
 
-                    Role role = Role.Admin;
-                    if (int.Parse(userData[3].Trim()) == 1)
-                    {
-                        role = Role.Guest;
-                    }
-                    else if (int.Parse(userData[3].Trim()) == 2)
-                    {
-                        role = Role.Host;
-                    }
 
                     users.Add(new User
                     {
@@ -380,7 +268,7 @@ namespace BookingBirthday.Data
                         Username = userData[0].Trim(),
                         Password = userData[1].Trim(),
                         Email = userData[2].Trim(),
-                        Role = role
+                        Role = userData[3].Trim()
                     });
                 }
 
