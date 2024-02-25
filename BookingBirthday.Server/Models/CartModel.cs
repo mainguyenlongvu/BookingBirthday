@@ -11,9 +11,7 @@ namespace BookingBirthday.Server.Models
         //GuestId
         public int BookingId { get; set; }
         public int PackageId { get; set; }
-        public int ServiceId { get; set; }
         public Double? Price { get; set; }
         public Package? Package { get; set; }
-        public Service? Service { get; set; }
     }
 }

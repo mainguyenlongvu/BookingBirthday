@@ -1,7 +1,7 @@
-﻿@model List<BookingBirthday.Data.Entities.User>
+﻿@model List<BookingBirthday.Server.Models.PackageModel>
 
 @{
-    ViewData["Title"] = "QL_NguoiDung Page";
+    ViewData["Title"] = "QL_SanPham Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @await Html.PartialAsync("response")
@@ -11,7 +11,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Quản lí người dùng</h1>
+                    <h1 class="display-5 mb-3">Quản lí sản phẩm</h1>
                 </div>
             </div>
         </div>
@@ -27,12 +27,11 @@
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên người dùng</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
+                                    <th>Tên sản phẩm</th>
                                     <th>Địa chỉ</th>
-                                    <th>Quyền</th>
+                                    <th>Mô tả</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Giá</th>
                                     <th></th>
                                 </tr>
                                 @foreach (var item in Model)
@@ -44,59 +43,62 @@
                                             <label style="width: auto">@item.Name</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Username</label>
+                                            <label style="width: auto">@item.Venue</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Email</label>
+                                            <label style="width: auto">@item.Detail</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Phone</label>
+                                            <img style="width: 30%" src="@item.image_url" />
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Address</label>
+                                            <label style="width: auto">@item.Price</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Role</label>
+                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0") đồng</label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-primary" onclick="xoaUser(@item.Id)">Xóa</a>
+                                            <a class="btn btn-primary" onclick="xoaProduct(@item.Id)">Xóa</a>
                                             <a class="btn btn-success" onclick="openUpdate(@item.Id)">Sửa</a>
+
+                                            <!-- Modal -->
                                             <div class="modal fade" id="@("update"+item.Id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
-                                                        <form method="post" asp-action="Edit" asp-controller="AdminUser">
+                                                        <form method="post" asp-action="Edit" asp-controller="AdminPackage" enctype="multipart/form-data">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
-                                                                    <label>Tên người dùng </label>
-                                                                    <input type="hidden" value="@item.Id" name="user_id" />
-                                                                    <input type="text" class="form-control" name="name" value="@item.Name" required placeholder="Nhập tên người dùng">
+                                                                    <label>Tên sản phẩm</label>
+                                                                    <input type="hidden" value="@item.Id" name="product_id" />
+                                                                    <input type="text" class="form-control" name="product_name" value="@item.Name" required placeholder="Nhập tên sản phẩm">
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Tên đăng nhập</label>
-                                                                    <input class="form-control" name="author" value="@item.Username" placeholder="Nhập tên đăng nhập" required />
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Email</label>
-                                                                    <input class="form-control" name="email" value="@item.Email" placeholder="Nhập email" type="email" required />
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label>Số điện thoại</label>
-                                                                    <input class="form-control" name="phone" value="@item.Phone" placeholder="Nhập số điện thoại" required type="tel" />
+                                                                    <label>Dịch vụ</label>
+                                                                    <select class="form-control" name="category_id" required>
+                                                                        @foreach (var item1 in ViewBag.Categories)
+                                                                        {
+                                                                            <option value="@item1.category_id" selected="@(item.ServiceId == @item1.category_id)">@item1.name</option>
+                                                                        }
+                                                                    </select>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Địa chỉ</label>
-                                                                    <input class="form-control" name="address" value="@item.Address" placeholder="Nhập địa chỉ" />
+                                                                    <input class="form-control" name="author" value="@item.Venue" placeholder="Nhập địa chỉ" required />
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label>Quyền</label>
-                                                                    <select name="role" class="form-control">
-                                                                        <option selected="@(item.Role == "Guest")">Guest</option>
-                                                                        <option selected="@(item.Role == "Host")">Host</option>
-                                                                        <option selected="@(item.Role  == "Admin")">Admin</option>
-                                                                    </select>
+                                                                    <label>Mô tả</label>
+                                                                    <input class="form-control" name="product_description" value="@item.Detail" placeholder="Nhập mô tả" required />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Giá</label>
+                                                                    <input class="form-control" name="price" value="@item.Price" placeholder="Nhập giá" required type="number" min="0" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Hình ảnh</label>
+                                                                    <input class="form-control" name="file" type="file" />
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -116,7 +118,7 @@
                     }
                     else
                     {
-                        <p class="alert alert-danger">Danh sách người dùng trống</p>
+                        <p class="alert alert-danger">Danh sách sản phẩm trống</p>
                     }
                 </div>
             </div>
@@ -127,46 +129,43 @@
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form method="post" asp-action="Create" asp-controller="AdminUser">
+            <form method="post" asp-action="Create" asp-controller="AdminPackage" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Thêm mới người dùng</h5>
+                    <h5 class="modal-title" id="productModalLabel">Thêm mới sản phẩm</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên người dùng</label>
-                        <input type="text" class="form-control" name="name" required placeholder="Nhập tên người dùng">
+                        <label>Tên sản phẩm</label>
+                        <input type="text" class="form-control" name="product_name" required placeholder="Nhập tên sản phẩm">
                     </div>
                     <div class="form-group">
-                        <label>Tên đăng nhập</label>
-                        <input class="form-control" name="username" placeholder="Nhập tên đăng nhập" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Mật khẩu</label>
-                        <input class="form-control" type="password" name="password" placeholder="Nhập mật khẩu" required />
-                    </div>
-                     <div class="form-group">
-                        <label>Xác nhận mật khẩu</label>
-                        <input class="form-control" type="password" name="confirmPassword" placeholder="Nhập xác nhận mật khẩu" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input class="form-control" name="email" placeholder="Nhập email" required type="email" />
-                    </div>
-                    <div class="form-group">
-                        <label>Số điện thoại</label>
-                        <input class="form-control" name="phone" placeholder="Nhập số điện thoại" required type="tel" />
-                    </div>
-                    <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input class="form-control" name="address" required />
-                    </div>
-                    <div class="form-group">
-                        <label>Quyền</label>
-                        <select name="role" class="form-control">
-                            <option>Guest</option>
-                            <option>Host</option>
-                            <option>Admin</option>
+                        <label>Danh mục</label>
+                        <select class="form-control" name="category_id" required>
+                            @foreach(var item in ViewBag.Categories)
+                            {
+                                <option value="@item.category_id">@item.name</option>
+                            }
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tác gỉa</label>
+                        <input class="form-control" name="author" placeholder="Nhập tên địa chỉ" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mô tả</label>
+                        <input class="form-control" name="product_description" placeholder="Nhập mô tả" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <input class="form-control" name="quantity" placeholder="Nhập số lượng" required type="number" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Giá</label>
+                        <input class="form-control" name="price" placeholder="Nhập giá" required type="number" min="0" />
+                    </div>
+                    <div class="form-group">
+                        <label>Hình ảnh</label>
+                        <input class="form-control" name="file" type="file" required />
                     </div>
                 </div>
                 <div class="modal-footer">

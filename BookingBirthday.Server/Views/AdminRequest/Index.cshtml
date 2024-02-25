@@ -1,0 +1,119 @@
+﻿@model List<BookingBirthday.Data.Entities.Category_requests>
+
+@{
+    ViewData["Title"] = "QL_YeuCau Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Yêu cầu thêm mới danh mục</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    @if (Model.Count > 0)
+                    {
+                        int stt = 1;
+                        <div class="col-md-4">
+                            <select id="selectRequest" class="form-control" onchange="changeSelectRequest('AdminRequest')">
+                                <option value="2">Tất cả</option>
+                                <option value="0">Chờ duyệt</option>
+                                <option value="1">Đã duyệt</option>
+                                <option value="-1">Từ chối</option>
+                            </select>
+                        </div>
+                        <div class="table-responsive card mt-2">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên danh mục</th>
+                                        <th>Ngày yêu cầu</th>
+                                        <th>Ghi chú</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyRequest">
+                                    @foreach (var item in Model)
+                                    {
+
+                                        <tr>
+                                            <td>@(stt++)</td>
+                                            <td>
+                                                <label style="width: auto">@item.category_name</label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">@item.created_at</label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">@item.rejection_reason</label>
+                                            </td>
+                                            <td>
+                                                @if (item.is_approved == -1)
+                                                {
+                                                    <label style="width: auto">Yêu cầu bị từ chối</label>
+                                                }
+                                                else if (item.is_approved == 1)
+                                                {
+                                                    <label style="width: auto">Yêu cầu được duyệt</label>
+                                                }
+                                                else
+                                                {
+                                                    <label style="width: auto">Yêu cầu chờ duyệt</label>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.is_approved == 0)
+                                                {
+                                                    <a class="btn btn-primary" onclick="Duyet(@item.category_request_id)">Duyệt</a>
+                                                    <a class="btn btn-success" onclick="TuChoi(@item.category_request_id)">Từ chối</a>
+                                                }
+
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="@("update"+item.category_request_id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <form method="post" asp-action="Edit" asp-controller="AdminRequest">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="form-group">
+                                                                        <label>Tên sản phẩm</label>
+                                                                        <input type="hidden" value="@item.category_request_id" name="category_request_id" />
+                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập tên sản phẩm">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" onclick="closeUpdate(@item.category_request_id)" class="btn btn-secondary">Đóng</button>
+                                                                    <button type="submit" class="btn btn-success">Sửa</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Danh sách yêu cầu thêm mới danh mục trống</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  

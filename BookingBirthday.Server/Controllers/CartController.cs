@@ -67,7 +67,7 @@ namespace BookingBirthday.Server.Controllers
                         .OrderByDescending(x => x.created_at)
                         .ToList();
                 }
-                else if (role == "Store Owner")
+                else if (role == "Host")
                 {
 
                     var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);

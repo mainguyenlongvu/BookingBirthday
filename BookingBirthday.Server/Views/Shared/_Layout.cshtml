@@ -48,7 +48,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    @await Html.PartialAsync("_CartPartial")
+                    @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
+                    {
+                        @await Html.PartialAsync("_CartPartial")
+                    }
 
                     @if (Context.Session.GetString("role") == "Admin")
                     {
@@ -70,7 +73,7 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản lí cửa hàng</a>
                                 <div class="dropdown-menu m-0">
-                                    <a href="/HostProduct" class="dropdown-item">Quản lí sản phẩm</a>
+                                    <a href="/HostPackage" class="dropdown-item">Quản lí sản phẩm</a>
                                     <a href="/HostBooking" class="dropdown-item">Quản lí đơn hàng</a>
                                     <a href="/HostRequest" class="dropdown-item">Yêu cầu</a>
                                 </div>
@@ -91,7 +94,7 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tài khoản</a>
                                 <div class="dropdown-menu m-0">
                                     <a href="/Account/Profile" class="dropdown-item">Thông tin tài khoản</a>
-                                    <a href="/Booking/ViewOrders" class="dropdown-item">Đơn hàng</a>
+                                <a href="/Booking/ViewBooking" class="dropdown-item">Đơn hàng</a>
                                     <a href="/Account/Logout" class="dropdown-item">Đăng xuất</a>
                                 </div>
                             </div>

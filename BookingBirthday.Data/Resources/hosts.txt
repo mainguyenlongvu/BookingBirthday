@@ -1,5 +1,0 @@
-﻿Võ Quốc Anh | 0 | 12/08/1982 | demo5678@gmail.com | 890 Đường Nguyễn Công Trứ, Phường 6, Quận 1, Thành phố Hồ Chí Minh | 0926789012 |
-Hoàng Văn Quân | 0 | 30/01/1998 | username901@gmail.com | 321 Đường Lý Thường Kiệt, Phường 7, Quận Tân Bình, Thành phố Hồ Chí Minh | 0947890123 |
-Nguyễn Minh Thư | 1 | 17/06/1974 | sample23@gmail.com | 654 Đường Trần Phú, Phường 8, Quận Gò Vấp, Thành phố Hồ Chí Minh | 0888901234 |
-Bùi Hoàng Tuấn | 0 | 08/09/1992 | emailtest456@gmail.com | 987 Đường Võ Văn Kiệt, Phường 9, Quận 2, Thành phố Hồ Chí Minh | 0899012345 |
-Đỗ Hoài Lan | 1 | 25/04/1987 | user7890@gmail.com | 210 Đường Nguyễn Đình Chính, Phường 10, Quận Tân Phú, Thành phố Hồ Chí Minh | 0981122334 |
