@@ -118,7 +118,7 @@ namespace BookingBirthday.Data
                     booking.Add(new Booking
                     {
                         Id = bookingId++,
-                        DateOrder = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                        Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         BookingStatus = bookingStatus,
                         Total = double.Parse(bookingData[2].Trim()),
                         UserId = int.Parse(bookingData[3].Trim()),
@@ -187,7 +187,6 @@ namespace BookingBirthday.Data
                     payment.Add(new Payment
                     {
                         Id = paymentId++,
-                        Amount = double.Parse(paymentData[0].Trim()),
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         PaymentMethod = paymentMethod,
                         BookingId = int.Parse(paymentData[3].Trim())

@@ -109,7 +109,6 @@ public class VnPayLibrary
             }
         }
 
-        var amount = vnPay.
         var bookingId = Convert.ToInt64(vnPay.GetResponseData("vnp_TxnRef"));
         var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
         var vnpResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
@@ -135,7 +134,6 @@ public class VnPayLibrary
             PaymentId = vnPayTranId.ToString(),
             Token = vnpSecureHash,
             VnPayResponseCode = vnpResponseCode
-            Amount = 
         };
     }
 

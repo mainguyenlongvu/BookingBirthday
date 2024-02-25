@@ -176,7 +176,7 @@ namespace BookingBirthday.Server.Controllers
                     request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
                     donHang.Id = request.Id;
-                    donHang.DateOrder = DateTime.Now;
+                    donHang.Date_order = DateTime.Now;
                     donHang.BookingStatus= Data.Enums.BookingStatus.Processing;
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
