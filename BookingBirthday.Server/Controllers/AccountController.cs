@@ -49,15 +49,15 @@ namespace BookingBirthday.Server.Controllers
                 HttpContext.Session.SetString("address", user.Address!);
                 if (user.Role == "Admin")
                 {
-                    TempData["Message"] = "Welcome Admin";
+                    TempData["Message"] = "Chào mừng quản trị viên";
                 }
                 else if (user.Role == "Host")
                 {
-                    TempData["Message"] = "Welcome Host";
+                    TempData["Message"] = "Chào mừng chủ tiệc";
                 }
                 else
                 {
-                    TempData["Message"] = "Welcome Guest";
+                    TempData["Message"] = "Chào mừng khách hàng";
                 }
                 TempData["Success"] = true;
                 return RedirectToAction("Index", "Home");

@@ -16,7 +16,7 @@
                 {
                     var item = notification[i];
                     var itemClass = "";
-                    var text = "Yêu cầu thêm mới danh mục " + item.category_name;
+                    var text = "Yêu cầu  mới" + item.category_name;
 
                     if (item.is_approved == 1)
                     {
@@ -41,7 +41,7 @@
                             itemClass = "notification-item-seen";
                         }
                     }
-                    var url = (item.is_approved == 1 || item.is_approved == -1) ? "/HostRequest/Seen?category_request_id=" + item.category_request_id : "/AdminRequest";
+                    var url = (item.is_approved == 1 || item.is_approved == -1) ? "/GuestRequest/Seen?category_request_id=" + item.category_request_id : "/HostRequest";
 
                     <div class="dropdown-item @itemClass">
                         <a style="color: black" href="@url">@text</a>

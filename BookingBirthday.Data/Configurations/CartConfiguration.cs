@@ -36,7 +36,7 @@ namespace BookingBirthday.Data.Configurations
                     .HasForeignKey(x => x.BookingId)
                     .OnDelete(DeleteBehavior.NoAction);
                     
-            builder.HasOne(x => x.Package)
+                builder.HasOne(x => x.Package)
                     .WithMany(p => p.Cart)
                     .HasForeignKey(x => x.PackageId)
                     .OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION

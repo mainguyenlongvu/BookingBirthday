@@ -145,6 +145,9 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("host_name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("is_approved")
                         .HasColumnType("int");
 
@@ -326,7 +329,9 @@ namespace BookingBirthday.Data.Migrations
 
                     b.HasIndex("Address");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.HasIndex("Phone");
 

@@ -18,6 +18,7 @@ namespace BookingBirthday.Data.Migrations
                     category_request_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     requester_id = table.Column<int>(type: "int", nullable: false),
                     is_approved = table.Column<int>(type: "int", nullable: false),
                     is_viewed_by_admin = table.Column<bool>(type: "bit", nullable: false),
@@ -289,7 +290,9 @@ namespace BookingBirthday.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_Name",
                 table: "User",
-                column: "Name");
+                column: "Name",
+                unique: true,
+                filter: "[Name] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Phone",

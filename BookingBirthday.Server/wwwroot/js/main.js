@@ -183,7 +183,7 @@ function xoaUser(user_id) {
 function xoaRequest(category_request_id) {
     if (confirm("Bạn muốn xóa yêu cầu thêm mới danh mục?")) {
         $.ajax({
-            url: "/HostRequest/Delete",
+            url: "/GuestRequest/Delete",
             type: "POST",
             data: {
                 category_request_id: category_request_id
@@ -282,7 +282,7 @@ function changeSelectRequest(type) {
                 html += '</td>'
                 html += '<td>'
                 if (value.is_approved == 0) {
-                    if (type == "AdminRequest") {
+                    if (type == "HostRequest") {
                         html += '<a class="btn btn-primary" onclick="Duyet(' + item.category_request_id + ')">Duyệt</a>'
                         html += '<a class="btn btn-success" onclick="TuChoi(' + item.category_request_id + ')">Từ chối</a>'
                     } else {
@@ -294,7 +294,7 @@ function changeSelectRequest(type) {
                 html += '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">'
                 html += '<div class="modal-dialog modal-dialog-centered" role="document">'
                 html += '<div class="modal-content">'
-                html += '<form method="post" action="/HostRequest/Edit">'
+                html += '<form method="post" action="/GuestRequest/Edit">'
                 html += '<div class="modal-header">'
                 html += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>'
                 html += '</div>'
@@ -302,7 +302,8 @@ function changeSelectRequest(type) {
                 html += '<div class="form-group">'
                 html += '<label>Tên sản phẩm</label>'
                 html += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />'
-                html += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập tên sản phẩm">'
+                html += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">'
+                /*html += '<input type="text" class="form-control" name="host_name" value="' + value.host_name + '" required placeholder="Nhập tên chủ tiệc">'*/
                 html += '</div>'
                 html += '</div>'
                 html += '<div class="modal-footer">'
@@ -327,7 +328,7 @@ function changeSelectRequest(type) {
 function Duyet(category_request_id) {
     if (confirm("Bạn muốn duyệt yêu cầu thêm mới danh mục?")) {
         $.ajax({
-            url: "/AdminRequest/Approved",
+            url: "/HostRequest/Approved",
             type: "POST",
             data: {
                 category_request_id: category_request_id,
@@ -350,7 +351,7 @@ function TuChoi(category_request_id) {
     }
 
     $.ajax({
-        url: "/AdminRequest/Approved",
+        url: "/HostRequest/Approved",
         type: "POST",
         data: {
             category_request_id: category_request_id,

@@ -51,6 +51,12 @@
                     @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
                     {
                         @await Html.PartialAsync("_CartPartial")
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch vụ</a>
+                            <div class="dropdown-menu m-0">
+                                 <a href="/GuestRequest" class="dropdown-item">Yêu cầu</a> 
+                            </div>
+                        </div>
                     }
 
                     @if (Context.Session.GetString("role") == "Admin")
@@ -63,7 +69,7 @@
                                 <a href="/AdminOrder" class="dropdown-item">Quản lí đơn hàng</a>*@
                                     <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
                                 @*@ <a href="/AdminCategory" class="dropdown-item">Quản lí danh mục</a>*@
-                                    <a href="/AdminRequest" class="dropdown-item">Quản lí yêu cầu</a>
+                                    @* <a href="/AdminRequest" class="dropdown-item">Quản lí yêu cầu</a> *@
                                 </div>
                             </div>
                     }
@@ -75,7 +81,7 @@
                                 <div class="dropdown-menu m-0">
                                     <a href="/HostPackage" class="dropdown-item">Quản lí sản phẩm</a>
                                     <a href="/HostBooking" class="dropdown-item">Quản lí đơn hàng</a>
-                                    <a href="/HostRequest" class="dropdown-item">Yêu cầu</a>
+                                <a href="/HostRequest" class="dropdown-item">Quản lí yêu cầu</a>
                                 </div>
                             </div>
                     }

@@ -23,7 +23,6 @@ namespace BookingBirthday.Data.Entities
         public string?  Role { get; set; }
 
         public ICollection<Booking> Bookings { get; set; }
-
         public ICollection<Promotion> Promotions { get; set; }
     }
 }

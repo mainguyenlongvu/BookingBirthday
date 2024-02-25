@@ -18,7 +18,6 @@
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 <div class="row g-4">
-                    <a class="btn btn-primary" onclick="openAdd()">Thêm mới</a>
                     @if (Model.Count > 0)
                     {
                         int stt = 1;
@@ -74,23 +73,23 @@
                                             <td>
                                                 @if (item.is_approved == 0)
                                                 {
-                                                    <a class="btn btn-primary" onclick="xoaRequest(@item.category_request_id)">Xóa</a>
-                                                    <a class="btn btn-success" onclick="openUpdate(@item.category_request_id)">Sửa</a>
+                                                    <a class="btn btn-primary" onclick="Duyet(@item.category_request_id)">Duyệt</a>
+                                                    <a class="btn btn-success" onclick="TuChoi(@item.category_request_id)">Từ chối</a>
                                                 }
 
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="@("update"+item.category_request_id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
-                                                            <form method="post" asp-action="Edit" asp-controller="HostRequest">
+                                                            <form method="post" asp-action="Edit" asp-controller="AdRequest">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa danh mục</h5>
+                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
                                                                         <label>Tên sản phẩm</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
-                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập tên danh mục">
+                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập tên sản phẩm">
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -117,26 +116,4 @@
             </div>
         </div>
     </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form method="post" asp-action="Create" asp-controller="HostRequest" enctype="multipart/form-data">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Yêu cầu thêm mới danh mục</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Tên danh mục</label>
-                        <input type="text" class="form-control" name="category_name" required placeholder="Nhập tên danh mục">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="closeAdd()" class="btn btn-secondary">Đóng</button>
-                    <button type="submit" class="btn btn-success">Thêm</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+</div>  
