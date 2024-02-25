@@ -21,7 +21,6 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Date).IsRequired();
             builder.Property(x => x.PaymentMethod).IsRequired();
             builder.HasIndex(x => x.BookingId).IsUnique();

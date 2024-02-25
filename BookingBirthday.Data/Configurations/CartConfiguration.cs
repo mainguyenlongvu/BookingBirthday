@@ -32,7 +32,7 @@ namespace BookingBirthday.Data.Configurations
 
                 // Relationships
                 builder.HasOne(x => x.Booking)
-                    .WithMany(b => b.Cart)
+                    .WithMany(b => b.cart)
                     .HasForeignKey(x => x.BookingId)
                     .OnDelete(DeleteBehavior.NoAction);
                     

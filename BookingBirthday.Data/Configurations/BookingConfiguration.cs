@@ -22,7 +22,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.DateOrder).IsRequired();
+            builder.Property(x => x.Date_order).IsRequired();
             builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();

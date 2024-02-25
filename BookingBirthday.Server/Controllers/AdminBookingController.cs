@@ -31,7 +31,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var orders = _dbContext.Bookings.OrderByDescending(x => x.DateOrder).ToList();
+            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).ToList();
             return View(orders);
         }
     }
