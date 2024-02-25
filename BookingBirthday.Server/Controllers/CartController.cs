@@ -6,8 +6,10 @@ using Newtonsoft.Json;
 using static NuGet.Packaging.PackagingConstants;
 using System;
 using BookingBirthday.Data.EF;
-using BookingBirthday.Application.Payment.Models;
-using BookingBirthday.Application.Payment.Services;
+using BookingBirthday.Server.Services;
+using BookingBirthday.Data.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BookingBirthday.Server.Controllers
@@ -174,7 +176,7 @@ namespace BookingBirthday.Server.Controllers
                     request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
                     donHang.Id = request.Id;
-                    donHang.Date_order = DateTime.Now;
+                    donHang.DateOrder = DateTime.Now;
                     donHang.BookingStatus= Data.Enums.BookingStatus.Processing;
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
@@ -239,11 +241,48 @@ namespace BookingBirthday.Server.Controllers
             return Redirect(url);
         }
 
-        public IActionResult PaymentCallback()
+		[Authorize]
+		public IActionResult PaymentSuccess()
+		{
+			return View();
+		}
+
+		[Authorize]
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
-            return Json(response);
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+			// Create a new Payment object using the response and additional information
+			var payment = new Payment
+			{
+				Date = DateTime.Now,
+				PaymentMethod = Enum.Parse<PaymentMethod>(response.PaymentMethod),
+				Success = response.Success,
+				Token = response.Token,
+				VnPayResponseCode = response.VnPayResponseCode,
+				OrderDescription = response.OrderDescription,
+				BookingId = int.Parse(response.BookingId),
+			};
+
+			// Add the payment to your database context and save changes
+			_appContext.Payments.Add(payment);
+            _appContext.SaveChanges();
+
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+            return RedirectToAction("PaymentSuccess");
         }
+
     }
 }

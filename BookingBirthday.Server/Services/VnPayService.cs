@@ -1,10 +1,8 @@
-﻿
-
-using BookingBirthday.Application.Payment.Models;
+﻿using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace BookingBirthday.Application.Payment.Services
+namespace BookingBirthday.Server.Services
 {
     public class VnPayService : IVnPayService
     {
@@ -30,8 +28,7 @@ namespace BookingBirthday.Application.Payment.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.OrderDescription} {model.Amount}");
-            pay.AddRequestData("vnp_OrderType", model.OrderType);
+            pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.Description} {model.Amount}");
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);
 

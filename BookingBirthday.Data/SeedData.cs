@@ -118,7 +118,7 @@ namespace BookingBirthday.Data
                     booking.Add(new Booking
                     {
                         Id = bookingId++,
-                        Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                        DateOrder = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         BookingStatus = bookingStatus,
                         Total = double.Parse(bookingData[2].Trim()),
                         UserId = int.Parse(bookingData[3].Trim()),
@@ -174,14 +174,14 @@ namespace BookingBirthday.Data
                 {
                     string[] paymentData = paymentLine!.Split("|");
 
-                    Types types = Types.Banking;
+                    PaymentMethod paymentMethod = PaymentMethod.VnPay;
                     if (int.Parse(paymentData[2].Trim()) == 1)
                     {
-                        types = Types.ByCast;
+                        paymentMethod = PaymentMethod.ByCast;
                     }
                     else if (int.Parse(paymentData[2].Trim()) == 2)
                     {
-                        types = Types.Installment;
+                        paymentMethod = PaymentMethod.Installment;
                     }
 
                     payment.Add(new Payment
@@ -189,7 +189,7 @@ namespace BookingBirthday.Data
                         Id = paymentId++,
                         Amount = double.Parse(paymentData[0].Trim()),
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Types = types,
+                        PaymentMethod = paymentMethod,
                         BookingId = int.Parse(paymentData[3].Trim())
                     });
                 }

@@ -42,14 +42,14 @@ namespace BookingBirthday.Server.Controllers
                         on b.Id equals c.Id
             where c.Id == user_id
                         select new { a };
-            var orders = await query.OrderByDescending(x => x.a.Date_order).Select(x => new Booking
+            var orders = await query.OrderByDescending(x => x.a.DateOrder).Select(x => new Booking
             {
                 Id = x.a.Id,
                 UserId = x.a.UserId,
                 Phone = x.a.Phone,
                 Email = x.a.Email,
                 Note = x.a.Note,
-                Date_order = x.a.Date_order,
+                DateOrder = x.a.DateOrder,
                 Total = x.a.Total,
                 BookingStatus = x.a.BookingStatus,
 

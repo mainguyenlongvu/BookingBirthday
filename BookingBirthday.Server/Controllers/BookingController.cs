@@ -18,7 +18,7 @@ namespace BookingBirthday.Server.Controllers
         }
         public IActionResult ViewBooking()
         {
-            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.Id == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
+            var orders = _dbContext.Bookings.OrderByDescending(x => x.DateOrder).Where(x => x.Id == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
             return View(orders);
         }
         public IActionResult ViewOrder(int orderId)
