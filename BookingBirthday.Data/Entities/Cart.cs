@@ -14,7 +14,7 @@ namespace BookingBirthday.Data.Entities
         public string PackageName { get; set; } // Renamed Package_Name to follow naming convention
 
         // Foreign key properties
-        public int BookingId { get; set; }
+        public long BookingId { get; set; }
         public int PackageId { get; set; }
 
         // Navigation properties

@@ -19,7 +19,7 @@ namespace BookingBirthday.Data.Configurations
 
             // Primary Key
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id).UseIdentityColumn();
+            builder.Property(x => x.Id).ValueGeneratedNever();
 
             // Other properties
             builder.Property(x => x.Date_order).IsRequired();

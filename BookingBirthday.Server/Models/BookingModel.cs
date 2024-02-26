@@ -5,7 +5,7 @@ namespace BookingBirthday.Server.Models
 {
     public class BookingModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public DateTime Date { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }

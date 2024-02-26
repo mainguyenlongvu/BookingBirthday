@@ -98,7 +98,6 @@ namespace BookingBirthday.Data
             if (File.Exists(BOOKING_FILE_PATH))
             {
                 using StreamReader sr = new(BOOKING_FILE_PATH);
-                int bookingId = 1;
                 string? bookingLine;
 
                 while ((bookingLine = sr.ReadLine()) != null)
@@ -117,7 +116,6 @@ namespace BookingBirthday.Data
 
                     booking.Add(new Booking
                     {
-                        Id = bookingId++,
                         Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         BookingStatus = bookingStatus,
                         Total = double.Parse(bookingData[2].Trim()),
@@ -189,14 +187,16 @@ namespace BookingBirthday.Data
                         Id = paymentId++,
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         PaymentMethod = paymentMethod,
-                        BookingId = int.Parse(paymentData[3].Trim())
+						Success = bool.Parse(paymentData[3].Trim()),
+						Token = paymentData[4].Trim(),
+						VnPayResponseCode = paymentData[5].Trim(),
+						OrderDescription = paymentData[6].Trim(),
+						BookingId = long.Parse(paymentData[7].Trim())
                     });
                 }
                 modelBuilder.Entity<Payment>().HasData(payment);
             }
         }
-
-
 
         public static void InitializeCartPackage(ModelBuilder modelBuilder)
         {
@@ -237,7 +237,7 @@ namespace BookingBirthday.Data
 
                     bookingPackage.Add(new BookingPackage
                     {
-                        BookingId = int.Parse(bookingPackageData[0].Trim()),
+                        BookingId = long.Parse(bookingPackageData[0].Trim()),
                         PackageId = int.Parse(bookingPackageData[1].Trim())
                     });
                 }

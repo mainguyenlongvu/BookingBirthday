@@ -173,7 +173,7 @@ namespace BookingBirthday.Server.Controllers
                 try
                 {
                     request.CartModels = GetCartItems();
-                    request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                    request.Id = long.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
                     donHang.Id = request.Id;
                     donHang.Date_order = DateTime.Now;
@@ -190,7 +190,7 @@ namespace BookingBirthday.Server.Controllers
                         foreach (var item in request.CartModels)
                         {
                             var chiTietDonHang = new Cart();
-                            chiTietDonHang.Id = donHang.Id;
+                            chiTietDonHang.Id = (int)donHang.Id;
                             chiTietDonHang.PackageId = item.Package!.Id;
                             chiTietDonHang.Price = item.Package!.Price;
                             await _appContext.AddAsync(chiTietDonHang);
@@ -241,19 +241,19 @@ namespace BookingBirthday.Server.Controllers
             return Redirect(url);
         }
 
-		[Authorize]
+		//[Authorize]
 		public IActionResult PaymentSuccess()
 		{
 			return View();
 		}
 
-		[Authorize]
+		//[Authorize]
         public IActionResult PaymentFail()
         {
             return View();
         }
 
-        [Authorize]
+        //[Authorize]
         public IActionResult PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
@@ -273,7 +273,8 @@ namespace BookingBirthday.Server.Controllers
 				Token = response.Token,
 				VnPayResponseCode = response.VnPayResponseCode,
 				OrderDescription = response.OrderDescription,
-				BookingId = int.Parse(response.BookingId),
+				BookingId = long.Parse(response.BookingId),
+                Amount = response.Amount,
 			};
 
 			// Add the payment to your database context and save changes
