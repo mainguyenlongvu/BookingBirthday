@@ -45,7 +45,7 @@ namespace BookingBirthday.Data.Migrations
                     VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
-                    BookingId = table.Column<long>(type: "bigint", nullable: false)
+                    BookingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,7 +78,8 @@ namespace BookingBirthday.Data.Migrations
                 name: "Booking",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Date_order = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -163,7 +164,7 @@ namespace BookingBirthday.Data.Migrations
                 name: "BookingPackage",
                 columns: table => new
                 {
-                    BookingId = table.Column<long>(type: "bigint", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
                     PackageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -190,7 +191,7 @@ namespace BookingBirthday.Data.Migrations
                     Total = table.Column<double>(type: "float", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: true),
                     PackageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookingId = table.Column<long>(type: "bigint", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
                     PackageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
