@@ -273,7 +273,6 @@ namespace BookingBirthday.Server.Controllers
 				Token = response.Token,
 				VnPayResponseCode = response.VnPayResponseCode,
 				OrderDescription = response.OrderDescription,
-				BookingId = int.Parse(response.BookingId),
                 Amount = response.Amount,
 			};
 
