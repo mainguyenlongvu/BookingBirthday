@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240224145733_initial")]
+    [Migration("20240226095304_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -27,11 +27,8 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("BookingStatus")
                         .ValueGeneratedOnAdd()
@@ -73,8 +70,8 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.BookingPackage", b =>
                 {
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<long>("BookingId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -94,8 +91,8 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<long>("BookingId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -229,14 +226,29 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
+                    b.Property<long>("BookingId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Types")
+                    b.Property<string>("OrderDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VnPayResponseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

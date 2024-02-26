@@ -16,9 +16,10 @@ namespace BookingBirthday.Data.Entities
         public string Token { get; set; }
         public string VnPayResponseCode { get; set; }
 		public string OrderDescription { get; set; }
+        public double Amount { get; set; }
 
 		//BookingId
-		public int BookingId { get; set; }
+		public long BookingId { get; set; }
         public Booking Booking { get; set; }
     }
 }

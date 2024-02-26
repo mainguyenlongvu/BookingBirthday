@@ -9,7 +9,7 @@ namespace BookingBirthday.Data.Entities
 {
     public class Booking
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public DateTime Date_order { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }

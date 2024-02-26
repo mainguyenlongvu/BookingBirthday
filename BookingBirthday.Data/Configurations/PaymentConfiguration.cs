@@ -23,7 +23,12 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Date).IsRequired();
             builder.Property(x => x.PaymentMethod).IsRequired();
-            builder.HasIndex(x => x.BookingId).IsUnique();
+			builder.Property(x => x.Success).IsRequired();
+			builder.Property(x => x.Token).IsRequired();
+			builder.Property(x => x.VnPayResponseCode).IsRequired();
+			builder.Property(x => x.OrderDescription).IsRequired();
+            builder.Property(x => x.Amount).IsRequired();
+			builder.HasIndex(x => x.BookingId).IsUnique();
 
             // 1:1 relationship with Booking
             builder.HasOne(x => x.Booking)
