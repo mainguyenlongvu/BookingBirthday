@@ -19,7 +19,7 @@ namespace BookingBirthday.Data.Entities
         public double Amount { get; set; }
 
 		//BookingId
-		public long BookingId { get; set; }
+		public int BookingId { get; set; }
         public Booking Booking { get; set; }
     }
 }

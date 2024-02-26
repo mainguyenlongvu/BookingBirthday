@@ -9,7 +9,7 @@ namespace BookingBirthday.Server.Models
         public string? Package_Name { get; set; }
 
         //GuestId
-        public long BookingId { get; set; }
+        public int BookingId { get; set; }
         public int PackageId { get; set; }
         public Double? Price { get; set; }
         public Package? Package { get; set; }

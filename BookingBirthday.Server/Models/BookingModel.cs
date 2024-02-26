@@ -5,7 +5,7 @@ namespace BookingBirthday.Server.Models
 {
     public class BookingModel
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public DateTime Date { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
@@ -13,11 +13,8 @@ namespace BookingBirthday.Server.Models
         public BookingStatus BookingStatus { get; set; }
         public double Total { get; set; }
 
-        //GuestId
-        public int GuestId { get; set; }
-
-        //HostId
-        public int HostId { get; set; }
+        //UserId
+        public int UserId { get; set; }
 
         //PaymentId
         public int PaymentId { get; set; }

@@ -173,7 +173,7 @@ namespace BookingBirthday.Server.Controllers
                 try
                 {
                     request.CartModels = GetCartItems();
-                    request.Id = long.Parse(HttpContext.Session.GetString("user_id")!);
+                    request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
                     donHang.Id = request.Id;
                     donHang.Date_order = DateTime.Now;
@@ -273,7 +273,7 @@ namespace BookingBirthday.Server.Controllers
 				Token = response.Token,
 				VnPayResponseCode = response.VnPayResponseCode,
 				OrderDescription = response.OrderDescription,
-				BookingId = long.Parse(response.BookingId),
+				BookingId = int.Parse(response.BookingId),
                 Amount = response.Amount,
 			};
 

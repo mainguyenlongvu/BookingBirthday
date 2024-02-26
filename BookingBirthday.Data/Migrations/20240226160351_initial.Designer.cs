@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240226095304_initial")]
+    [Migration("20240226160351_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -27,8 +27,11 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
                 {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BookingStatus")
                         .ValueGeneratedOnAdd()
@@ -70,8 +73,8 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.BookingPackage", b =>
                 {
-                    b.Property<long>("BookingId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -91,8 +94,8 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("BookingId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
@@ -226,8 +229,8 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<long>("BookingId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");

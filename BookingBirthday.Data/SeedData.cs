@@ -191,7 +191,7 @@ namespace BookingBirthday.Data
 						Token = paymentData[4].Trim(),
 						VnPayResponseCode = paymentData[5].Trim(),
 						OrderDescription = paymentData[6].Trim(),
-						BookingId = long.Parse(paymentData[7].Trim())
+						BookingId = int.Parse(paymentData[7].Trim())
                     });
                 }
                 modelBuilder.Entity<Payment>().HasData(payment);
@@ -237,7 +237,7 @@ namespace BookingBirthday.Data
 
                     bookingPackage.Add(new BookingPackage
                     {
-                        BookingId = long.Parse(bookingPackageData[0].Trim()),
+                        BookingId = int.Parse(bookingPackageData[0].Trim()),
                         PackageId = int.Parse(bookingPackageData[1].Trim())
                     });
                 }

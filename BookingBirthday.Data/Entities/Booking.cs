@@ -9,7 +9,7 @@ namespace BookingBirthday.Data.Entities
 {
     public class Booking
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
         public DateTime Date_order { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
@@ -25,8 +25,6 @@ namespace BookingBirthday.Data.Entities
         //PaymentId
         public int PaymentId { get; set; }
         public Payment Payment { get; set; }
-
-
 
         public List<Cart>? cart { get; set; }
         public ICollection<BookingPackage> BookingPackages { get; set; }
