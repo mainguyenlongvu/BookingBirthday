@@ -11,7 +11,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Yêu cầu thêm mới danh mục</h1>
+                    <h1 class="display-5 mb-3">Yêu cầu mới</h1>
                 </div>
             </div>
         </div>
@@ -44,7 +44,6 @@
                                 <tbody id="bodyRequest">
                                     @foreach (var item in Model)
                                     {
-
                                         <tr>
                                             <td>@(stt++)</td>
                                             <td>
@@ -81,13 +80,13 @@
                                                 <div class="modal fade" id="@("update"+item.category_request_id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
-                                                            <form method="post" asp-action="Edit" asp-controller="AdRequest">
+                                                            <form method="post" asp-action="Edit" asp-controller="HostRequest">
                                                                 <div class="modal-header">
                                                                     <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
-                                                                        <label>Tên sản phẩm</label>
+                                                                        <label>Tên Gói</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
                                                                         <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập tên sản phẩm">
                                                                     </div>

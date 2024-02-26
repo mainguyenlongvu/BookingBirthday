@@ -107,7 +107,6 @@ function detailOrder(orderId) {
                 html += '<td><label style="width: auto">' + n + '</label></td>'
                 html += '<td><label style="width: auto">' + value.Id + '</label></td>'
                 html += '<td><label style="width: auto">' + value.Name + '</label></td>'
-                //html += '<td><label style="width: auto">' + value.quantity + '</label></td>'
                 html += '<td><label style="width: auto">' + value.Total + '</label></td>'
                 html += '</tr>'
                 n += 1;
@@ -296,7 +295,7 @@ function changeSelectRequest(type) {
                 html += '<div class="modal-content">'
                 html += '<form method="post" action="/GuestRequest/Edit">'
                 html += '<div class="modal-header">'
-                html += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>'
+                html += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>'
                 html += '</div>'
                 html += '<div class="modal-body">'
                 html += '<div class="form-group">'
@@ -320,13 +319,13 @@ function changeSelectRequest(type) {
             });
         }
         else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu thêm mới danh mục trống</p>';
+            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
     });
 }
 function Duyet(category_request_id) {
-    if (confirm("Bạn muốn duyệt yêu cầu thêm mới danh mục?")) {
+    if (confirm("Bạn muốn duyệt yêu cầu mới?")) {
         $.ajax({
             url: "/HostRequest/Approved",
             type: "POST",

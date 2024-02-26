@@ -2,13 +2,12 @@
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
 
-
 @{
     var session = HttpContextAccessor.HttpContext!.Session;
-    string jsonNotfication = session.GetString("notification")!;
-    if (jsonNotfication != null)
+    string jsonNotification = session.GetString("notification")!;
+    if (jsonNotification != null)
     {
-        var notification = JsonConvert.DeserializeObject<List<BookingBirthday.Data.Entities.Category_requests>>(jsonNotfication);
+        var notification = JsonConvert.DeserializeObject<List<BookingBirthday.Data.Entities.Category_requests>>(jsonNotification);
         <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Thông báo mới(@notification!.Count)</a>
             <div class="dropdown-menu m-0">
@@ -16,12 +15,12 @@
                 {
                     var item = notification[i];
                     var itemClass = "";
-                    var text = "Yêu cầu  mới" + item.category_name;
+                    var text = "Yêu cầu mới " + item.category_name;
 
                     if (item.is_approved == 1)
                     {
                         text += " đã được duyệt";
-                        if(item.is_viewed_by_owner == false)
+                        if (item.is_viewed_by_owner == false)
                         {
                             itemClass = "notification-item-seen";
                         }
@@ -29,7 +28,7 @@
                     else if (item.is_approved == -1)
                     {
                         text += " đã bị từ chối";
-                        if (item.is_viewed_by_owner == false    )
+                        if (item.is_viewed_by_owner == false)
                         {
                             itemClass = "notification-item-seen";
                         }
@@ -47,11 +46,8 @@
                         <a style="color: black" href="@url">@text</a>
                     </div>
                 }
-
-
             </div>
         </div>
-
     }
     else
     {

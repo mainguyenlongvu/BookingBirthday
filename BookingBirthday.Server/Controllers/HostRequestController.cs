@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -18,13 +19,14 @@ namespace BookingBirthday.Server.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var host_name = HttpContext.Session.GetString("name")!;
             var session = HttpContext.Session;
-            List<Category_requests> category_request = null!;
+            List<Category_requests> category_request;
 
-            category_request = _dbContext.Category_Requests
-                    .Where(x => x.is_approved == 0 && x.is_deleted_by_admin == false)
+            category_request = await _dbContext.Category_Requests
+                    .Where(x => x.is_approved == 0 && x.is_deleted_by_admin == false && x.host_name == host_name)
                     .OrderByDescending(x => x.created_at)
-                    .ToList();
+                    .ToListAsync();
 
             if (category_request != null)
             {
@@ -33,11 +35,12 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var all_category_request = await _dbContext.Category_Requests
+                    .Where(x => x.host_name == host_name)
                     .OrderByDescending(x => x.created_at)
                     .ToListAsync();
             return View(all_category_request);
         }
-        
+
         public IActionResult Seen(int category_request_id)
         {
             var host_name = HttpContext.Session.GetString("name")!;
@@ -52,15 +55,15 @@ namespace BookingBirthday.Server.Controllers
             {
                 p.is_viewed_by_admin = true;
                 _dbContext.SaveChanges();
-                return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                TempData["Message"] = "Lỗi";
+                TempData["Message"] = "Lỗi khi cập nhật trạng thái yêu cầu";
                 TempData["Success"] = false;
-                return RedirectToAction("Index");
             }
+            return RedirectToAction("Index");
         }
+
         [HttpPost]
         public IActionResult IsDelete(int category_request_id)
         {
@@ -76,33 +79,36 @@ namespace BookingBirthday.Server.Controllers
             {
                 p.is_deleted_by_owner = true;
                 _dbContext.SaveChanges();
-                return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (DbUpdateException ex)
             {
-                TempData["Message"] = "Lỗi";
+                TempData["Message"] = "Lỗi khi cập nhật trạng thái yêu cầu";
                 TempData["Success"] = false;
-                return RedirectToAction("Index");
             }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult getRequest(int is_approved)
         {
             var host_name = HttpContext.Session.GetString("name")!;
-            IQueryable<Category_requests> query = _dbContext.Category_Requests.Where(x => x.host_name == host_name);
-        
-        if (is_approved != 2)
-        {
-            query = query.Where(x => x.is_approved == is_approved);
-        }
-
-        var data = query
-            .OrderByDescending(x => x.created_at)
-            .ToList();
-
-        return Json(data);
+            if (is_approved != 2)
+            {
+                var query = _dbContext.Category_Requests
+                    .Where(x => x.is_approved == is_approved && x.host_name == host_name)
+                    .OrderByDescending(x => x.created_at)
+                    .ToList();
+                return Json(query);
+            }
+            else
+            {
+                var query = _dbContext.Category_Requests
+                    .Where(x => x.host_name == host_name)
+                    .OrderByDescending(x => x.created_at)
+                    .ToList();
+                return Json(query);
             }
         }
     }
+}
 

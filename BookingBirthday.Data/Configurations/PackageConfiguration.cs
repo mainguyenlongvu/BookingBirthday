@@ -29,7 +29,7 @@ namespace BookingBirthday.Data.Configurations
 
             // 1:M relationship with Promotion
             builder.HasOne<Promotion>(x => x.Promotion)
-                .WithMany(x => x.Services)
+                .WithMany(x => x.Package)
                 .HasForeignKey(x => x.PromotionId);
         }
     }

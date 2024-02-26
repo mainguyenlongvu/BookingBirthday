@@ -29,11 +29,10 @@ namespace BookingBirthday.Server.Controllers
                     .OrderByDescending(x => x.created_at)
                     .ToListAsync();
 
-            if (category_request != null)
-            {
+            
                 var jsonNotification = JsonConvert.SerializeObject(category_request);
                 session.SetString("notification", jsonNotification);
-            }
+            
             var all_category_request = await _dbContext.Category_Requests
                     .Where(x => x.requester_id == user_id)
                     .OrderByDescending(x => x.created_at)
@@ -75,7 +74,7 @@ namespace BookingBirthday.Server.Controllers
                 {
                     _dbContext.Category_Requests.Add(p);
                     _dbContext.SaveChanges();
-                    TempData["Message"] = "Gửi yêu cầu thêm mới danh mục thành công";
+                    TempData["Message"] = "Gửi yêu cầu mới thành công";
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
                 }

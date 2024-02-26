@@ -19,7 +19,7 @@ namespace BookingBirthday.Data.Entities
 
         // Navigation properties
         public Booking Booking { get; set; }
-        public Package Package { get; set; }
+        public Package? Package { get; set; }
 
         // Collection navigation properties
         public ICollection<CartPackage> CartPackages { get; set; } = new List<CartPackage>(); // Renamed to follow naming convention

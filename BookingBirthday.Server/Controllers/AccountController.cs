@@ -144,56 +144,74 @@ namespace BookingBirthday.Server.Controllers
         [HttpPost]
         public IActionResult UpdateProfile(RegisterModel userData)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (HttpContext.Session.GetString("user_id") != null)
                 {
-                    var userId = int.Parse(HttpContext.Session.GetString("user_id") ?? "0");
-                    var user = _context.Users.FirstOrDefault(x => x.Id == userId);
+
+                    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                    var email = HttpContext.Session.GetString("email");
+
+                    if (email != userData.Email)
+                    {
+                        var usr = _context.Users.Where(x => x.Email == userData.Email);
+                        if (usr.Count() > 0)
+                        {
+                            TempData["Message"] = "Tài khoản đã tồn tại";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        }
+                    }
+                    var user = _context.Users.FirstOrDefault(x => x.Id == user_id);
                     if (user == null)
                     {
                         return RedirectToAction("Login", "Account");
                     }
-
-                    // Update user properties
-                    user.Name = userData.Name;
+                    else if (userData.Password != userData.ConfirmPassword)
+                    {
+                        TempData["Message"] = "Mật khẩu xác nhận không đúng";
+                        TempData["Success"] = false;
+                        return RedirectToAction("Index");
+                    }
+                    else if (userData.Password != null)
+                    {
+                        if (user.Password!.Length >= 8)
+                        {
+                            user.Password = CreateMD5.MD5Hash(userData.Password!);
+                        }
+                        else
+                        {
+                            TempData["Message"] = "Mật khẩu phải ít nhất 8 kí tự";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Index");
+                        }
+                    }
                     user.Email = userData.Email;
                     user.Address = userData.Address;
                     user.Phone = userData.Phone;
-
-                    // Update password if provided and valid
-                    if (!string.IsNullOrEmpty(userData.Password) && userData.Password == userData.ConfirmPassword)
-                    {
-                        user.Password = CreateMD5.MD5Hash(userData.Password);
-                    }
-
-                    // Update profile picture if provided
+                    user.Name = userData.Name;
                     if (userData.File != null)
                     {
-                        // Handle profile picture upload
+                        if (user.Image_url != "/imgProfile/" && user.Image_url != null)
+                        {
+                            var n = user.Image_url!.Remove(0, 12);
+                            DeleteImage(n);
+                        }
                         user.Image_url = UploadedFile(userData.File);
                     }
-
                     _context.SaveChanges();
-
                     TempData["Message"] = "Cập nhật thông tin thành công";
                     TempData["Success"] = true;
                     return RedirectToAction("Profile", "Account");
                 }
-                catch (Exception e)
-                {
-                    TempData["Message"] = "Lỗi cập nhật thông tin tài khoản";
-                    TempData["Success"] = false;
-                    // Log the exception or handle it appropriately
-                    return RedirectToAction("Profile", "Account");
-                }
+
+                return RedirectToAction("Login", "Account");
             }
-            else
+            catch (Exception e)
             {
-                // If model validation fails, return to the profile edit page with error messages
-                TempData["Message"] = "Vui lòng điền đúng thông tin";
+                TempData["Message"] = "Lỗi cập nhật thông tin tài khoản";
                 TempData["Success"] = false;
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("Index");
             }
         }
 
