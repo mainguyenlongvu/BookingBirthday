@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Enums
 {
-    public enum Types
+    public enum PaymentMethod
     {
-        Banking,
+        VnPay,
         ByCast,
         Installment
     }

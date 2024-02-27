@@ -10,13 +10,16 @@ namespace BookingBirthday.Data.Entities
     public class Payment
     {
         public int Id { get; set; }
-        public double Amount { get; set; }
         public DateTime Date { get; set; }
-        public Types Types { get; set; }
+        public PaymentMethod PaymentMethod { get; set; }
+        public bool Success { get; set; }
+        public string Token { get; set; }
+        public string VnPayResponseCode { get; set; }
+		public string OrderDescription { get; set; }
+        public double Amount { get; set; }
 
-
-        //BookingId
-        public int BookingId { get; set; }
+		//BookingId
+		public int BookingId { get; set; }
         public Booking Booking { get; set; }
     }
 }
