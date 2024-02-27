@@ -81,10 +81,10 @@ namespace BookingBirthday.Data.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BookingStatus = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "Processing"),
                     Total = table.Column<double>(type: "float", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                    PaymentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,8 +93,7 @@ namespace BookingBirthday.Data.Migrations
                         name: "FK_Booking_Payment_PaymentId",
                         column: x => x.PaymentId,
                         principalTable: "Payment",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Booking_User_UserId",
                         column: x => x.UserId,
@@ -161,12 +160,15 @@ namespace BookingBirthday.Data.Migrations
                 name: "BookingPackage",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BookingId = table.Column<int>(type: "int", nullable: false),
-                    PackageId = table.Column<int>(type: "int", nullable: false)
+                    PackageId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookingPackage", x => new { x.BookingId, x.PackageId });
+                    table.PrimaryKey("PK_BookingPackage", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BookingPackage_Booking_BookingId",
                         column: x => x.BookingId,
@@ -200,8 +202,8 @@ namespace BookingBirthday.Data.Migrations
                         principalTable: "Booking",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Cart_Package_PackageId",
-                        column: x => x.PackageId,
+                        name: "FK_Cart_Package_BookingId",
+                        column: x => x.BookingId,
                         principalTable: "Package",
                         principalColumn: "Id");
                 });
@@ -234,12 +236,18 @@ namespace BookingBirthday.Data.Migrations
                 name: "IX_Booking_PaymentId",
                 table: "Booking",
                 column: "PaymentId",
-                unique: true);
+                unique: true,
+                filter: "[PaymentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_UserId",
                 table: "Booking",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookingPackage_BookingId",
+                table: "BookingPackage",
+                column: "BookingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BookingPackage_PackageId",

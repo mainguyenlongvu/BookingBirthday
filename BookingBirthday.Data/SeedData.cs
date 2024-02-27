@@ -105,24 +105,24 @@ namespace BookingBirthday.Data
                 {
                     string[]? bookingData = bookingLine!.Split('|');
 
-                    BookingStatus bookingStatus = BookingStatus.Accepted;
-                    if (int.Parse(bookingData[1].Trim()) == 2)
-                    {
-                        bookingStatus = BookingStatus.Declined;
-                    }
-                    else if (int.Parse(bookingData[1].Trim()) == 3)
-                    {
-                        bookingStatus = BookingStatus.Processing;
-                    }
+                    //string bookingStatus = "Accepted";
+                    //if (int.Parse(bookingData[1].Trim()) == 2)
+                    //{
+                    //    bookingStatus = BookingStatus.Declined;
+                    //}
+                    //else if (int.Parse(bookingData[1].Trim()) == 3)
+                    //{
+                    //    bookingStatus = BookingStatus.Processing;
+                    //}
 
                     booking.Add(new Booking
                     {
                         Id = bookingId++,
                         Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        BookingStatus = bookingStatus,
-                        Total = double.Parse(bookingData[2].Trim()),
-                        UserId = int.Parse(bookingData[3].Trim()),
-                        PaymentId = int.Parse(bookingData[4].Trim()),
+                        BookingStatus = bookingData[2].Trim(),
+                        Total = double.Parse(bookingData[3].Trim()),
+                        UserId = int.Parse(bookingData[4].Trim()),
+                        PaymentId = int.Parse(bookingData[5].Trim()),
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);

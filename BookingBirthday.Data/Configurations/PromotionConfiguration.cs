@@ -26,7 +26,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.ToDate).IsRequired();
             builder.Property(x => x.DiscountPercent).IsRequired();
             builder.Property(x => x.Status).IsRequired();
-
+            builder.HasIndex(x => x.UserId);
             // 1:M relationship with Host
             builder.HasOne<User>(x => x.User)
                 .WithMany(x => x.Promotions)

@@ -86,18 +86,17 @@ function FillterByCategory(category_id) {
     });
 
 }
-function detailOrder(orderId) {
-    $.getJSON("/Booking/ViewBooking?Id=" + orderId, function (data) {
+function detailOrder(Id) {
+    $.getJSON("/Booking/ViewBooking?Id=" + Id, function (data) {
         var html = '';
         var n = 1;
-        if (data != null) {
+        if (data != null && data.length > 0) {
             html += '<div class="table-responsive card mt-2">'
             html += '<table class="table table-hover">'
             html += '<tr>'
             html += '<th>#</th>'
             html += '<th>Mã đơn hàng</th>'
             html += '<th>Tên sản phẩm</th>'
-            html += '<th>Số lượng</th>'
             html += '<th>Đơn giá</th>'
             html += '</tr>'
             $.each(data, function (key, value) {
@@ -105,26 +104,23 @@ function detailOrder(orderId) {
                 console.log(value)
                 html += '<tr>'
                 html += '<td><label style="width: auto">' + n + '</label></td>'
-                html += '<td><label style="width: auto">' + value.Id + '</label></td>'
-                html += '<td><label style="width: auto">' + value.Name + '</label></td>'
-                html += '<td><label style="width: auto">' + value.Total + '</label></td>'
+                html += '<td><label style="width: auto">' + (value.booking_id || '') + '</label></td>'
+                html += '<td><label style="width: auto">' + (value.package_name || '') + '</label></td>'
+                html += '<td><label style="width: auto">' + (value.price || '') + '</label></td>'
                 html += '</tr>'
                 n += 1;
             })
             html += '</table>'
             html += '</div>'
-        }
-        else {
+        } else {
             html += "Không có dữ liệu chi tiết đơn hàng"
         }
         $(".modal-body").html(html);
         $('#orderModal').modal('show');
     })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            // Xử lý khi có lỗi xảy ra
             console.error("Lỗi: " + textStatus, errorThrown);
         });
-
 }
 function changeStatusOrder(order_id) {
     if (confirm("Bạn muốn thay đổi trạng thái đơn hàng?")) {
@@ -132,7 +128,7 @@ function changeStatusOrder(order_id) {
             url: "/HostBooking/Edit",
             type: "POST",
             data: {
-                orderId: order_id,
+                Id: order_id,
                 status: $("#status" + order_id).val()
             },
             success: function (response) {
@@ -144,13 +140,13 @@ function changeStatusOrder(order_id) {
         });
     }
 }
-function xoaProduct(product_id) {
+function xoaProduct(Id) {
     if (confirm("Bạn muốn xóa sản phẩm?")) {
         $.ajax({
-            url: "/HostBooking/Delete",
+            url: "/HostPackage/Delete",
             type: "POST",
             data: {
-                productId: product_id
+                productId: Id
             },
             success: function (response) {
                 window.location.reload() = true;

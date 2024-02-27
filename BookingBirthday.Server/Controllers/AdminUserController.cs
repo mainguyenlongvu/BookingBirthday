@@ -54,10 +54,10 @@ namespace BookingBirthday.Server.Controllers
                     return RedirectToAction("Index");
                 }
                 var user = new Data.Entities.User();
-                user.Username = userData.Username;
-                user.Role= "Guest";
+                user.Username = userData.Username!;
+                user.Role= userData.Role;
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
-                user.Email = userData.Email;
+                user.Email = userData.Email!;
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;
@@ -118,7 +118,7 @@ namespace BookingBirthday.Server.Controllers
                 {
                     user.Password = CreateMD5.MD5Hash(userData.Password!);
                 }
-                user.Email = userData.Email;
+                user.Email = userData.Email!;
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;

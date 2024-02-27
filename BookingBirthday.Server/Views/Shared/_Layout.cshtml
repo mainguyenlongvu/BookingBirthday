@@ -71,7 +71,7 @@
                                 <div class="dropdown-menu m-0">
                                 @*<a href="/AdminProduct" class="dropdown-item">Quản lí sản phẩm</a>
                                 <a href="/AdminOrder" class="dropdown-item">Quản lí đơn hàng</a>*@
-                                    <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
+                                <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
                                     @* <a href="/AdminRequest" class="dropdown-item">Quản lí yêu cầu</a> *@
                                 </div>
                             </div>
@@ -103,7 +103,10 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tài khoản</a>
                                 <div class="dropdown-menu m-0">
                                     <a href="/Account/Profile" class="dropdown-item">Thông tin tài khoản</a>
-                                <a href="/Booking/ViewBooking" class="dropdown-item">Đơn hàng</a>
+                                @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
+                                {
+                                    <a href="/Booking/ViewBookings" class="dropdown-item">Đơn hàng</a>
+                                }
                                     <a href="/Account/Logout" class="dropdown-item">Đăng xuất</a>
                                 </div>
                             </div>

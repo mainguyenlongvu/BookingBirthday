@@ -8,6 +8,7 @@ using System;
 using BookingBirthday.Data.EF;
 using BookingBirthday.Application.Payment.Models;
 using BookingBirthday.Application.Payment.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BookingBirthday.Server.Controllers
@@ -41,7 +42,7 @@ namespace BookingBirthday.Server.Controllers
             session.Remove(CARTKEY);
         }
 
-        void SaveCartSession(List<CartModel> ls)
+        void SaveCartSession(List<Models.CartModel> ls)
         {
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
@@ -108,46 +109,13 @@ namespace BookingBirthday.Server.Controllers
             }
             else
             {
-                cart.Add(new CartModel() {  Package = product });
+                cart.Add(new Models.CartModel() {  Package = product });
             }
 
             SaveCartSession(cart);
             return RedirectToAction(nameof(Index));
         }
-        //[Route("/updatecart", Name = "updatecart")]
-        //[HttpPost]
-        //public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
-        //{
-        //    var cart = GetCartItems();
-        //    var cartitem = cart.Find(p => p.Package!.Id == productid);
-        //    if (cartitem != null)
-        //    {
-        //        var product = _appContext.Services
-        //        .Where(p => p.product_id == productid)
-        //        .FirstOrDefault();
-        //        if (product != null)
-        //        {
-        //            if (product.quantity >= quantity)
-        //            {
-        //                cartitem.Quantity = quantity;
-        //            }
-        //            else
-        //            {
-        //                TempData["Message"] = "Sản phẩm không đủ số lượng";
-        //                TempData["Success"] = false;
-        //                return Ok();
-        //            }
-        //        }
-        //        else
-        //        {
-        //            TempData["Message"] = "Sản phẩm không tồn tại";
-        //            TempData["Success"] = false;
-        //            return Ok();
-        //        }
-        //    }
-        //    SaveCartSession(cart);
-        //    return Ok();
-        //}
+        
         [Route("/removecart/{productid:int}", Name = "removecart")]
         public IActionResult RemoveCart([FromRoute] int productid)
         {
@@ -165,21 +133,30 @@ namespace BookingBirthday.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(BookingModel request)
         {
+            //var maxBookingId = _appContext.Bookings.Select(x => x.Id).DefaultIfEmpty().Max();
+            //var nextBookingId = maxBookingId + 1;
+
+            //var maxBookingPackageId = _appContext.BookingPackages.Select(x => x.Id).DefaultIfEmpty().Max();
+            //var nextBookingPackageId = maxBookingPackageId + 1;
+
+
             if (HttpContext.Session.GetString("user_id") != null)
             {
 
                 try
                 {
                     request.CartModels = GetCartItems();
-                    request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                    request.UserId = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
-                    donHang.Id = request.Id;
+                    donHang.UserId = request.UserId;
                     donHang.Date_order = DateTime.Now;
-                    donHang.BookingStatus= Data.Enums.BookingStatus.Processing;
+                    donHang.BookingStatus= "Processing";
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;
                     donHang.Total = request.Total;
+                    donHang.PaymentId = null;
+
                     await _appContext.AddAsync(donHang);
                     await _appContext.SaveChangesAsync();
 
@@ -187,24 +164,15 @@ namespace BookingBirthday.Server.Controllers
                     {
                         foreach (var item in request.CartModels)
                         {
-                            var chiTietDonHang = new Cart();
-                            chiTietDonHang.Id = donHang.Id;
+                            var chiTietDonHang = new BookingPackage();
+                            chiTietDonHang.BookingId = donHang.Id;
                             chiTietDonHang.PackageId = item.Package!.Id;
                             chiTietDonHang.Price = item.Package!.Price;
                             await _appContext.AddAsync(chiTietDonHang);
                             await _appContext.SaveChangesAsync();
 
-                            var product = _appContext.Packages
-                                .Where(p => p.Id == item.Package!.Id)
-                                .FirstOrDefault();
-                            if (product != null)
-                            {
-                                TempData["Message"] = "Sản phẩm đã được thêm";
-                                TempData["Success"] = false;
-                                await _appContext.SaveChangesAsync();
-                            }
                         }
-
+                                
                         TempData["Message"] = "Đặt hàng thành công";
                         TempData["Success"] = true;
                         ClearCart();
@@ -217,7 +185,7 @@ namespace BookingBirthday.Server.Controllers
                     }
                     return RedirectToAction("", "Cart");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     TempData["Message"] = "Lỗi";
                     TempData["Success"] = false;

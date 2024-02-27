@@ -92,7 +92,76 @@ public class HostPackageController : HostBaseController
         }
     }
 
-    // Các phương thức khác giữ nguyên
+    [HttpPost]
+    public IActionResult Edit(PackageModel productData)
+    {
+        var p = _dbContext.Packages.SingleOrDefault(x => x.Id == productData.Id);
+        if (p == null)
+        {
+            TempData["Message"] = "Sản phẩm không tồn tại";
+            TempData["Success"] = false;
+            return RedirectToAction("Index");
+        }
+        try
+        {
+            p.Name = productData.Name;
+            p.Detail = productData.Detail;
+            p.Price = productData.Price;
+            p.Venue = productData.Venue;
+            if (productData.file != null)
+            {
+                if (p.image_url != "/imgPackage/" && p.image_url != null)
+                {
+                    var n = p.image_url!.Remove(0, 12);
+                    DeleteImage(n);
+                }
+                p.image_url = UploadedFile(productData.file!);
+            }
+            _dbContext.SaveChanges();
+            TempData["Message"] = "Chỉnh sửa thông tin sản phẩm thành công";
+            TempData["Success"] = true;
+            return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            TempData["Message"] = "Lỗi";
+            TempData["Success"] = false;
+            return RedirectToAction("Index");
+        }
+    }
+    [HttpPost]
+    public IActionResult Delete(int productId)
+    {
+        try
+        {
+            var product = _dbContext.Packages.Find(productId);
+            if (product != null)
+            {
+                if (product.image_url != "/imgPackage/" && product.image_url != null)
+                {
+                    var n = product.image_url!.Remove(0, 12);
+                    DeleteImage(n);
+                }
+
+                _dbContext.Packages.Remove(product);
+                _dbContext.SaveChanges();
+                TempData["Message"] = "Xóa sản phẩm thành công";
+                TempData["Success"] = true;
+            }
+            else
+            {
+                TempData["Message"] = "Xóa sản phẩm không thành công";
+                TempData["Success"] = false;
+            }
+            return RedirectToAction("Index");
+        }
+        catch (Exception ex)
+        {
+            TempData["Message"] = "Đã xảy ra lỗi khi xóa sản phẩm: " + ex.Message;
+            TempData["Success"] = false;
+            return RedirectToAction("Index");
+        }
+    }
 
     private string UploadedFile(IFormFile file)
     {
