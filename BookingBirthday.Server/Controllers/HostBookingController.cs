@@ -36,11 +36,13 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var query = from a in _dbContext.Bookings
-                        join b in _dbContext.Carts
-                        on a.Id equals b.Id
+                        join b in _dbContext.BookingPackages
+                        on a.Id equals b.BookingId
                         join c in _dbContext.Packages
-                        on b.Id equals c.Id
-            where c.Id == user_id
+                        on b.PackageId equals c.Id
+                        //join d in _dbContext.Users
+                        //on c.UserId equals d.Id
+                        where c.UserId == user_id
                         select new { a };
             var orders = await query.OrderByDescending(x => x.a.Date_order).Select(x => new Booking
             {
@@ -57,16 +59,16 @@ namespace BookingBirthday.Server.Controllers
             return View(orders);
         }
         [HttpPost]
-        public IActionResult Edit(int orderId, int status)
+        public IActionResult Edit(int Id, string status)
         {
             try
             {
                 var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
-                var order = _dbContext.Bookings.Find(orderId);
+                var order = _dbContext.Bookings.Find(Id);
                 if (order != null)
                 {
-                    order.BookingStatus = (Data.Enums.BookingStatus)status;
+                    order.BookingStatus = status;
                     _dbContext.SaveChanges();
                     TempData["Message"] = "Cập nhật trạng thái đơn hàng thành công";
                     TempData["Success"] = true;

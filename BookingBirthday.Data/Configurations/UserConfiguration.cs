@@ -21,7 +21,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.HasIndex(x => x.Name);
+            builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Gender).HasDefaultValue(Gender.Male);
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Username).IsRequired();

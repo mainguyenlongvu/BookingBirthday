@@ -31,7 +31,6 @@
                               <th>Ngày đặt hàng</th>
                               <th>Tổng tiền</th>
                               <th>Trạng thái</th>
-                              <th></th>
                             </tr>
                             @foreach (var item in Model)
                             {
@@ -72,7 +71,7 @@
                                    </td>
                                    <td>
                                             <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
-                                            @if (@item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Processing)
+                                            @if (@item.BookingStatus == "Processing")
                                             {
                                                 <a class="btn btn-warning" onclick="huyDon(@item.Id)">Hủy đơn</a>
                                             }

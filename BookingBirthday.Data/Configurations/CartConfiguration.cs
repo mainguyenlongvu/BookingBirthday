@@ -23,25 +23,25 @@ namespace BookingBirthday.Data.Configurations
 
                 // Other properties
                 builder.Property(x => x.Total).IsRequired();
-                builder.Property(x => x.Price); // Assuming Price can be null
-                builder.Property(x => x.PackageName); // Renamed to follow naming convention
+                builder.Property(x => x.Price); 
 
                 // Indexes
                 builder.HasIndex(x => x.BookingId);
                 builder.HasIndex(x => x.PackageId);
 
-                // Relationships
-                builder.HasOne(x => x.Booking)
-                    .WithMany(b => b.cart)
-                    .HasForeignKey(x => x.BookingId)
-                    .OnDelete(DeleteBehavior.NoAction);
-                    
-            builder.HasOne(x => x.Package)
-                    .WithMany(p => p.Cart)
-                    .HasForeignKey(x => x.PackageId)
-                    .OnDelete(DeleteBehavior.NoAction); // Specify ON DELETE NO ACTION
+            // Relationships
+            builder.HasOne(x => x.Booking)
+                .WithMany(b => b.Cart)
+                .HasForeignKey(x => x.BookingId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            }
+            builder.HasOne(x => x.Package)
+                .WithMany(b => b.Carts)
+                .HasForeignKey(x => x.BookingId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+        }
         }
     }
 

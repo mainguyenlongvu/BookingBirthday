@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Enums;
+using BookingBirthday.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace BookingBirthday.Data.Entities
         public string? Email { get; set; }
         public string? Note { get; set; }
       
-        public BookingStatus BookingStatus { get; set; }
+        public String? BookingStatus { get; set; }
         public double Total { get; set; }
 
         //UserId
@@ -23,10 +23,12 @@ namespace BookingBirthday.Data.Entities
         public User? User { get; set; }
 
         //PaymentId
-        public int PaymentId { get; set; }
-        public Payment Payment { get; set; }
+        public int? PaymentId { get; set; }
+        public Payment? Payment { get; set; }
 
-        public List<Cart>? cart { get; set; }
-        public ICollection<BookingPackage> BookingPackages { get; set; }
+
+
+        public List<Cart>? Cart { get; set; }
+        public List<BookingPackage>? BookingPackages { get; set; }
     }
 }

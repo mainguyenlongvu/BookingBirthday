@@ -55,8 +55,8 @@
                                    </td>
                                    <td>
                                       <label style="width: auto">
-                                          <button class="btn btn-success updatecartitem" 
-                                            data-productid="@cartitem.Package.Id">Cập nhật</button>
+                                          @* <button class="btn btn-success updatecartitem" 
+                                            data-productid="@cartitem.Package.Id">Cập nhật</button> *@
                                           <a asp-route="removecart" asp-route-productid="@cartitem.Package.Id"
                                             class="btn btn-danger">Xóa</a>
                                       </label>
@@ -76,15 +76,15 @@
                       {
                          <form asp-action="AddOrder" asp-controller="Cart" method="post">
                               <div class="col-md-4">
-                                  <input type="hidden" name="TongTien" value="@total" />
+                                  <input type="hidden" name="Total" value="@total" />
                                   <div class="mb-3">
                                       <label class="form-label">Họ tên</label>
-                                      <input type="text" class="form-control" name="TenKH" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
+                                      <input type="text" class="form-control" name="Name" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
                                   </div>
 
                                   <div class="mb-3">
                                       <label class="form-label">Số điện thoại</label>
-                                      <input type="tel" class="form-control" name="SDT" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
+                                      <input type="tel" class="form-control" name="Phone" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
                                   </div>
                                   
 
@@ -94,16 +94,17 @@
                                   </div>
 
                                   <div class="mb-3">
-                                      <label class="form-label">Địa chỉ giao</label>
-                                      <input type="text" class="form-control" name="DiaChiGiao" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
+                                      <label class="form-label">Địa chỉ</label>
+                                      <input type="text" class="form-control" name="Venue" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
                                   </div>
                                   <div class="mb-3">
                                       <label class="form-label">Ghi chú</label>
-                                      <input type="text" class="form-control" name="note" placeholder="Ghi chú" value="" />
+                                      <input type="text" class="form-control" name="Note" placeholder="Ghi chú" value="" />
                                     </div>
                                 </div>
-                              @* <button type="submit" class="btn btn-success">Gửi đơn hàng</button> *@
-                              <a href="/Cart/Payment" class="btn btn-success">Thanh Toán</a>
+
+                              <button type="submit" class="btn btn-success">Thanh toán trực tiếp</button>
+                              <a href="/Cart/Payment" class="btn btn-success">Thanh Toán Banking</a>
                               <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                             </form>
 
@@ -121,13 +122,11 @@
                                   $(".updatecartitem").click(function (event) {
                                       event.preventDefault();
                                       var productid = $(this).attr("data-productid");
-                                      var quantity = $("#quantity-" + productid).val();
                                       $.ajax({
                                           type: "POST",
                                           url:"@Url.RouteUrl("updatecart")",
                                           data: {
                                               productid: productid,
-                                              quantity:quantity
                                           },
                                           success: function (result) {
                                               window.location.href = "@Url.RouteUrl("cart")";

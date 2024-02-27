@@ -49,7 +49,7 @@
                                         </td>
                                         <td>
                                             <label style="width: auto">
-                                                <a href="@("/OwnerOrder/ProfileCustomer?email="+ item.Email)">@item.Email</a>
+                                                <a href="@("/HostBooking/ProfileCustomer?Email="+ item.Email)">@item.Email</a>
                                             </label>
                                         </td>
                                         <td>
@@ -70,17 +70,20 @@
                                             <label style="width: auto">@item.Date_order</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@Convert.ToDecimal(item.Total).ToString("#,##0") đồng</label>
+                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
                                         </td>
                                         <td>
                                             <select name="status" id="@("status"+item.Id)" class="form-control" onchange="changeStatusOrder(@item.Id)">
-                                                <option value="Chờ xử lý" selected="@(item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Processing)">Chờ xử lý</option>
-                                                <option value="Đã xác nhận" selected="@(item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Accepted)">Đã xác nhận</option>
-                                                <option value="Đã thanh toán" selected="@(item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Paid)">Đã thanh toán</option>
-                                                <option value="Hủy đơn" selected="@(item.BookingStatus == BookingBirthday.Data.Enums.BookingStatus.Declined)">Hủy đơn</option>
+                                                <option value="Processing" selected="@(item.BookingStatus == "Processing" )">Chờ xử lý</option>
+
+                                                <option value="Accepted" selected="@(item.BookingStatus == "Accepted")">Đã xác nhận</option>
+
+                                                <option value="Paid" selected="@(item.BookingStatus =="Paid")">Đã thanh toán</option>
+
+                                                <option value="Declined" selected="@(item.BookingStatus == "Declined")">Hủy đơn</option>
                                             </select>
                                         </td>
                                         <td>
