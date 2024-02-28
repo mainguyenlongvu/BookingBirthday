@@ -8,7 +8,7 @@ using System;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class BookingController : BaseController
+    public class BookingController : GuestBaseController
     {
         private readonly BookingDbContext _dbContext;
 
@@ -16,59 +16,62 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult ViewBooking()
+        public IActionResult ViewBookings()
         {
+
+            //Ràng điều kiện ở đây
             var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.Id == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
             return View(orders);
         }
-        public IActionResult ViewOrder(int orderId)
+        public IActionResult ViewBooking(int Id)
         {
             var session = HttpContext.Session;
-            var role = HttpContext.Session.GetString("role");
+            //var role = HttpContext.Session.GetString("role");
             List<Category_requests> category_request = null!;
+            var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+            //if (role != null)
+            //{
 
-            if (role != null)
-            {
+            //if (role == "Admin")
+            //{
+            //    category_request = _dbContext.Category_Requests
+            //        .Where(x => x.is_approved == 0 && x.is_deleted_by_admin == false)
+            //        .OrderByDescending(x => x.created_at)
+            //        .ToList();
+            //}
+            //else if (role == "Host")
+            //{
+            //    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+            //    category_request = _dbContext.Category_Requests
+            //        .Where(x => x.is_deleted_by_owner == false && x.requester_id == user_id && (x.is_approved == -1 || x.is_approved == 1))
+            //        .OrderByDescending(x => x.created_at)
+            //        .ToList();
+            //}
 
-                if (role == "Admin")
-                {
-                    category_request = _dbContext.Category_Requests
-                        .Where(x => x.is_approved == 0 && x.is_deleted_by_admin == false)
-                        .OrderByDescending(x => x.created_at)
-                        .ToList();
-                }
-                else if (role == "Host")
-                {
-                    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-                    category_request = _dbContext.Category_Requests
-                        .Where(x => x.is_deleted_by_owner == false && x.requester_id == user_id && (x.is_approved == -1 || x.is_approved == 1))
-                        .OrderByDescending(x => x.created_at)
-                        .ToList();
-                }
-
-                if (category_request != null)
+            if (category_request != null)
                 {
                     var jsonNotification = JsonConvert.SerializeObject(category_request);
                     session.SetString("notification", jsonNotification);
                 }
-            }
+            //}
 
 
-            var query = from a in _dbContext.Carts.Include(x => x.Package)
-                        where a.BookingId == orderId
+            var query = from a in _dbContext.BookingPackages
+                        join b in _dbContext.Bookings
+                        on a.BookingId equals b.Id
+                        where b.UserId == user_id && a.BookingId == Id
                         select new { a };
             if (query != null)
             {
-                var data = query.Select(x => new CartModel()
+                var data = query.Select(x => new BookingPackageModel()
                 {
-                    Id = x.a.Id,
-                    BookingId = orderId,
-                    PackageId = x.a.PackageId,
-                    Package_Name = x.a.Package!.Name,
-                    Price = x.a.Price,
-                    Total = x.a.Total,
+                    Booking_Package_Id = x.a.Id,
+                    Booking_id = Id,
+                    Package_Id = x.a.PackageId,
+                    Package_name = x.a.Package!.Name,
+                    price = x.a.Price,
                 }).ToList();
-                return Json(data);
+                return Json (data);
             }
             return Json(null);
         }
@@ -79,14 +82,14 @@ namespace BookingBirthday.Server.Controllers
                 var data = await _dbContext.Bookings.SingleOrDefaultAsync(x => x.Id == orderId);
                 if (data != null)
                 {
-                    data.BookingStatus = Data.Enums.BookingStatus.Declined;
+                    data.BookingStatus = "Declined";
                     await _dbContext.SaveChangesAsync();
-                    var order_item = await _dbContext.Carts.Where(x => x.BookingId == orderId).ToListAsync();
+                    var order_item = await _dbContext.BookingPackages.Where(x => x.BookingId == orderId).ToListAsync();
                     if (order_item != null)
                     {
                         foreach (var item in order_item)
                         {
-                            var product = await _dbContext.Packages.SingleOrDefaultAsync(x => x.Id == item.Id);
+                            var product = await _dbContext.Packages.SingleOrDefaultAsync(x => x.Id == item.PackageId);
                             if (product != null)
                             {
                                 await _dbContext.SaveChangesAsync();

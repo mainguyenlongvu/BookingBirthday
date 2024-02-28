@@ -60,7 +60,6 @@ namespace BookingBirthday.Server.Controllers
                     Id = x.a.Id,
                     Name = x.a.Name,
                     Detail = x.a.Detail,
-                    PromotionId = x.a.PromotionId,
                     Price = x.a.Price,
                     Venue = x.a.Venue,
                     image_url = x.a.image_url

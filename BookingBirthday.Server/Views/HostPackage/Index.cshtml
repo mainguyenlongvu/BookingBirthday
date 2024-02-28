@@ -7,7 +7,7 @@
 @await Html.PartialAsync("response")
 @section Scripts {
     <script>
-        var productDescriptions = document.querySelectorAll(".productDescription");
+        var productDescriptions = document.querySelectorAll(".Detail");
         for (var i = 0; i < productDescriptions.length; i++) {
             var productDescription = productDescriptions[i];
             if (productDescription.textContent.length > 200) {
@@ -57,7 +57,7 @@
                                         </td>
                                         <td>
                                             <label style="width: auto">
-                                                <span class="productDescription">@Html.Raw(item.Detail)</span>
+                                                <span class="Detail">@Html.Raw(item.Detail)</span>
                                             </label>
                                         </td>
                                         <td>
@@ -74,28 +74,28 @@
                                             <div class="modal fade" id="@("update"+item.Id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
-                                                        <form method="post" asp-action="Edit" asp-controller="BookingPackage" enctype="multipart/form-data">
+                                                        <form method="post" asp-action="Edit" asp-controller="HostPackage" enctype="multipart/form-data">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
                                                                     <label>Tên sản phẩm</label>
-                                                                    <input type="hidden" value="@item.Id" name="product_id" />
-                                                                    <input type="text" class="form-control" name="product_name" value="@item.Name" required placeholder="Nhập tên sản phẩm">
+                                                                    <input type="hidden" value="@item.Id" name="Id" />
+                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên sản phẩm">
                                                                 </div>
                                                                 
                                                                 <div class="form-group">
                                                                     <label>Địa chỉ</label>
-                                                                    <textarea class="form-control" name="author" value="@item.Venue" placeholder="Nhập địa chỉ" required></textarea>
+                                                                    <textarea class="form-control" name="Venue" value="@item.Venue" placeholder="Nhập địa chỉ" required></textarea>
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Mô tả</label>
-                                                                    <input class="form-control" name="product_description" value="@item.Detail" placeholder="Nhập mô tả" required />
+                                                                    <input class="form-control" name="Detail" value="@item.Detail" placeholder="Nhập mô tả" required />
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Giá</label>
-                                                                    <input class="form-control" name="price" value="@item.Price" placeholder="Nhập giá" required type="number" min="0" />
+                                                                    <input class="form-control" name="Price" value="@item.Price" placeholder="Nhập giá" required type="number" min="0" />
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Hình ảnh</label>
@@ -126,30 +126,31 @@
         </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form method="post" asp-action="Create" asp-controller="BookingPackage" enctype="multipart/form-data">
+            <form method="post" asp-action="Create" asp-controller="HostPackage" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="productModalLabel">Thêm mới sản phẩm</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Tên sản phẩm</label>
-                        <input type="text" class="form-control" name="product_name" required placeholder="Nhập tên sản phẩm">
+                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên sản phẩm">
                     </div>
                     <div class="form-group">
                         <label>Địa chỉ</label>
-                        <input class="form-control" name="author" placeholder="Nhập địa chỉ" required />
+                        <input class="form-control" name="Venue" placeholder="Nhập địa chỉ" required />
                     </div>
                     <div class="form-group">
                         <label>Mô tả</label>
-                        <textarea class="form-control" name="product_description" placeholder="Nhập mô tả" required></textarea>
+                        <textarea class="form-control" name="Detail" placeholder="Nhập mô tả" required></textarea>
                     </div>
                     <div class="form-group">
                         <label>Giá</label>
-                        <input class="form-control" name="price" placeholder="Nhập giá" required type="number" min="0" />
+                        <input class="form-control" name="Price" placeholder="Nhập giá" required type="number" min="0" />
                     </div>
                     <div class="form-group">
                         <label>Hình ảnh</label>

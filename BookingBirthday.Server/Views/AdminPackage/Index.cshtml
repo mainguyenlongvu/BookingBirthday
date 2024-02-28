@@ -78,10 +78,6 @@
                                                                 <div class="form-group">
                                                                     <label>Dịch vụ</label>
                                                                     <select class="form-control" name="category_id" required>
-                                                                        @foreach (var item1 in ViewBag.Categories)
-                                                                        {
-                                                                            <option value="@item1.category_id" selected="@(item.ServiceId == @item1.category_id)">@item1.name</option>
-                                                                        }
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group">

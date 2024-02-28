@@ -18,7 +18,7 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
             this.webHostEnvironment = webHostEnvironment;
-            _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgProduct");
+            _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgPackage");
         }
         public IActionResult Index()
         {
@@ -106,7 +106,7 @@ namespace BookingBirthday.Server.Controllers
                 pa.Venue = productData.Venue;
                 if (productData.file != null)
                 {
-                    if (pa.image_url != "/imgProduct/" && pa.image_url != null)
+                    if (pa.image_url != "/imgPackage/" && pa.image_url != null)
                     {
                         var n = pa.image_url!.Remove(0, 10);
                         DeleteImage(n);
@@ -133,7 +133,7 @@ namespace BookingBirthday.Server.Controllers
                 var product = _dbContext.Packages.Find(productId);
                 if (product != null)
                 {
-                    if (product.image_url != "/imgProduct/" && product.image_url != null)
+                    if (product.image_url != "/imgPackage/" && product.image_url != null)
                     {
                         var n = product.image_url!.Remove(0, 12);
                         DeleteImage(n);
@@ -171,7 +171,7 @@ namespace BookingBirthday.Server.Controllers
                     file.CopyTo(fileStream);
                 }
             }
-            return "/imgProduct/" + uniqueFileName!;
+            return "/imgPackage/" + uniqueFileName!;
         }
         public void DeleteImage(string fileName)
         {
