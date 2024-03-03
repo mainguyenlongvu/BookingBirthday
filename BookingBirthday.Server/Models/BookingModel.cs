@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
 
 namespace BookingBirthday.Server.Models

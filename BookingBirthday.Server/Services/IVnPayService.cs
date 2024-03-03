@@ -1,7 +1,7 @@
-﻿using BookingBirthday.Application.Payment.Models;
+﻿using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace BookingBirthday.Application.Payment.Services;
+namespace BookingBirthday.Server.Services;
 public interface IVnPayService
 {
     string CreatePaymentUrl(PaymentInformationModel model, HttpContext context);

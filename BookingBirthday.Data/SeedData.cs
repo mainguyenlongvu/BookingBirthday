@@ -98,7 +98,6 @@ namespace BookingBirthday.Data
             if (File.Exists(BOOKING_FILE_PATH))
             {
                 using StreamReader sr = new(BOOKING_FILE_PATH);
-                int bookingId = 1;
                 string? bookingLine;
 
                 while ((bookingLine = sr.ReadLine()) != null)
@@ -117,7 +116,6 @@ namespace BookingBirthday.Data
 
                     booking.Add(new Booking
                     {
-                        Id = bookingId++,
                         Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         BookingStatus = bookingData[2].Trim(),
                         Total = double.Parse(bookingData[3].Trim()),
@@ -174,30 +172,31 @@ namespace BookingBirthday.Data
                 {
                     string[] paymentData = paymentLine!.Split("|");
 
-                    Types types = Types.Banking;
+                    PaymentMethod paymentMethod = PaymentMethod.VnPay;
                     if (int.Parse(paymentData[2].Trim()) == 1)
                     {
-                        types = Types.ByCast;
+                        paymentMethod = PaymentMethod.ByCast;
                     }
                     else if (int.Parse(paymentData[2].Trim()) == 2)
                     {
-                        types = Types.Installment;
+                        paymentMethod = PaymentMethod.Installment;
                     }
 
                     payment.Add(new Payment
                     {
                         Id = paymentId++,
-                        Amount = double.Parse(paymentData[0].Trim()),
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Types = types,
-                        BookingId = int.Parse(paymentData[3].Trim())
+                        PaymentMethod = paymentMethod,
+						Success = bool.Parse(paymentData[3].Trim()),
+						Token = paymentData[4].Trim(),
+						VnPayResponseCode = paymentData[5].Trim(),
+						OrderDescription = paymentData[6].Trim(),
+						BookingId = int.Parse(paymentData[7].Trim())
                     });
                 }
                 modelBuilder.Entity<Payment>().HasData(payment);
             }
         }
-
-
 
         public static void InitializeCartPackage(ModelBuilder modelBuilder)
         {

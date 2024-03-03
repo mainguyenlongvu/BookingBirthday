@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
