@@ -1,8 +1,12 @@
 ﻿@model List<BookingBirthday.Server.Models.PackageModel>
-
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Search Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = HttpContextAccessor.HttpContext!.Session;
+    var role = session.GetString("role");
 }
 
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -33,13 +37,15 @@
                                     </div>
                                     <div class="d-flex border-top">
                                         <small class="w-50 text-center border-end py-2">
-                                            <a class="text-body" href="@("/Booking/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>View detail</a>
+                                            <a class="text-body" href="@("/Booking/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem sản phẩm</a>
                                         </small>
                                         <small class="w-50 text-center py-2">
-                                           
-                                                <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                          
+                                        @if (role != "Admin" && role != "Host")
+                                        {
+                                                <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                                        }
                                         </small>
+
                                     </div>
                                 </div>
                             </div>

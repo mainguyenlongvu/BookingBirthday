@@ -4,8 +4,11 @@ using BookingBirthday.Data.Enums;
 namespace BookingBirthday.Server.Models
 {
     public class BookingModel
-    {
+    {   
+        public int Id { get; set; }
         public DateTime Date { get; set; }
+        public DateTime Date_start { get; set; }
+        public string? Address { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Note { get; set; }

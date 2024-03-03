@@ -130,11 +130,11 @@ public class HostPackageController : HostBaseController
         }
     }
     [HttpPost]
-    public IActionResult Delete(int productId)
+    public IActionResult Delete(int Id)
     {
         try
         {
-            var product = _dbContext.Packages.Find(productId);
+            var product = _dbContext.Packages.Find(Id);
             if (product != null)
             {
                 if (product.image_url != "/imgPackage/" && product.image_url != null)
@@ -142,7 +142,7 @@ public class HostPackageController : HostBaseController
                     var n = product.image_url!.Remove(0, 12);
                     DeleteImage(n);
                 }
-
+                Console.WriteLine(product);
                 _dbContext.Packages.Remove(product);
                 _dbContext.SaveChanges();
                 TempData["Message"] = "Xóa sản phẩm thành công";

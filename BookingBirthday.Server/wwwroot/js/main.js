@@ -146,7 +146,7 @@ function xoaProduct(Id) {
             url: "/HostPackage/Delete",
             type: "POST",
             data: {
-                productId: Id
+                Id: Id
             },
             success: function (response) {
                 window.location.reload() = true;
@@ -192,6 +192,25 @@ function xoaRequest(category_request_id) {
         });
     }
 }
+
+function xoaReport(category_request_id) {
+    if (confirm("Bạn muốn xóa yêu cầu thêm mới danh mục?")) {
+        $.ajax({
+            url: "/GuestReport/Delete",
+            type: "POST",
+            data: {
+                category_request_id: category_request_id
+            },
+            success: function (response) {
+                window.location.reload() = true;
+            },
+            error: function (xhr, status, error) {
+                window.location.reload() = true;
+            }
+        });
+    }
+}
+
 function xoaDanhMuc(category_id) {
     if (confirm("Bạn muốn xóa danh mục?")) {
         $.ajax({
@@ -347,6 +366,49 @@ function TuChoi(category_request_id) {
 
     $.ajax({
         url: "/HostRequest/Approved",
+        type: "POST",
+        data: {
+            category_request_id: category_request_id,
+            is_approved: -1,
+            rejection_reason: lyDo
+        },
+        success: function (response) {
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            window.location.reload();
+        }
+    });
+}
+
+
+function DuyetReport(category_request_id) {
+    if (confirm("Bạn muốn duyệt yêu cầu mới?")) {
+        $.ajax({
+            url: "/AdminReport/Approved",
+            type: "POST",
+            data: {
+                category_request_id: category_request_id,
+                is_approved: 1
+            },
+            success: function (response) {
+                window.location.reload() = true;
+            },
+            error: function (xhr, status, error) {
+                window.location.reload() = true;
+            }
+        });
+    }
+}
+function TuChoiReport(category_request_id) {
+    var lyDo = prompt("Nhập lý do từ chối:");
+
+    if (lyDo === null || lyDo.trim() === "") {
+        return;
+    }
+
+    $.ajax({
+        url: "/AdminReport/Approved",
         type: "POST",
         data: {
             category_request_id: category_request_id,
