@@ -3,12 +3,8 @@ using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
-using static NuGet.Packaging.PackagingConstants;
-using System;
 using BookingBirthday.Data.EF;
-using BookingBirthday.Application.Payment.Models;
-using BookingBirthday.Application.Payment.Services;
-using Microsoft.EntityFrameworkCore;
+using BookingBirthday.Server.Services;
 
 
 namespace BookingBirthday.Server.Controllers
