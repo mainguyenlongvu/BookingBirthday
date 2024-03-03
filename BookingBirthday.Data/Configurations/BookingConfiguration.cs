@@ -28,8 +28,9 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.Note);
+            builder.Property(x => x.PaymentId).IsRequired(false);
             builder.HasIndex(b => b.UserId);
-            builder.Property(x => x.PaymentId);
+            builder.HasIndex(x => x.PaymentId);
 
             // 1:M relationship with User
             builder.HasOne(b => b.User)

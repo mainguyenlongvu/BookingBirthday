@@ -18,94 +18,95 @@
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 <div class="row g-4">
-                    @if (Model.Count > 0) {
-                      double total = 0;
-                      int stt = 1;
-  
-                      <div class="table-responsive card mt-2">
-                          <table class="table table-hover">
-                            <tr>
-                              <th>#</th>
-                              <th>Sản phẩm</th>
-                              <th>Giá</th>
-                              <th>Thành tiền</th>
-                              <th></th>
-                            </tr>
-                            <!-- Print Package Start -->
-                            @foreach (var cartitem in Model)
-                            {
-                                var thanhtien =  cartitem.Package!.Price;
-                                total += thanhtien;
+                    @if (Model.Count > 0)
+                    {
+                        double total = 0;
+                        int stt = 1;
+
+                        <div class="table-responsive card mt-2">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Thành tiền</th>
+                                    <th></th>
+                                </tr>
+                                <!-- Print Package Start -->
+                                @foreach (var cartitem in Model)
+                                {
+                                    var thanhtien = cartitem.Package!.Price;
+                                    total += thanhtien;
+
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td>
+                                            <label style="width: auto">@cartitem.Package.Name</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(cartitem.Package.Price).ToString("#,##0") đồng</label>
+                                        </td>
+                                        @* <td>
+                                <label style="width: auto">
+                                <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
+                                </label>
+                                </td> *@
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">
+                                                @* <button class="btn btn-success updatecartitem"
+                                        data-productid="@cartitem.Package.Id">Cập nhật</button> *@
+                                                <a asp-route="removecart" asp-route-productid="@cartitem.Package.Id"
+                                                   class="btn btn-danger">Xóa</a>
+                                            </label>
+                                        </td>
+                                    </tr>
+                                }
+                                <!-- Print Package End -->
 
                                 <tr>
-                                   <td>@(stt++)</td>
-                                   <td>
-                                       <label style="width: auto">@cartitem.Package.Name</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(cartitem.Package.Price).ToString("#,##0") đồng</label>
-                                   </td>
-                                   @* <td>
-                                       <label style="width: auto">
-                                           <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
-                                       </label>
-                                   </td> *@
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
-                                   </td>
-                                   <td>
-                                      <label style="width: auto">
-                                          @* <button class="btn btn-success updatecartitem" 
-                                            data-productid="@cartitem.Package.Id">Cập nhật</button> *@
-                                          <a asp-route="removecart" asp-route-productid="@cartitem.Package.Id"
-                                            class="btn btn-danger">Xóa</a>
-                                      </label>
-                                   </td>
+                                    <td colspan="5" style="text-align: right">Tổng tiền</td>
+                                    <td>@Convert.ToDouble(total).ToString("#,##0") đồng</td>
+                                    <td></td>
                                 </tr>
-                            }
-                            <!-- Print Package End -->
+                            </table>
+                        </div>
+                        @if (Context.Session.GetString("username") != null)
+                        {
+                            <form asp-action="AddOrder" asp-controller="Cart" method="post">
+                                <div class="col-md-4">
+                                    <input type="hidden" name="Total" value="@total" />
+                                    <div class="mb-3">
+                                        <label class="form-label">Họ tên</label>
+                                        <input type="text" class="form-control" name="Name" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
+                                    </div>
 
-                              <tr>
-                                  <td colspan="5" style="text-align: right">Tổng tiền</td>
-                                  <td>@Convert.ToDouble(total).ToString("#,##0") đồng</td>
-                                  <td></td>
-                              </tr>
-                          </table>
-                      </div>
-                      @if (Context.Session.GetString("username") != null)
-                      {
-                         <form asp-action="AddOrder" asp-controller="Cart" method="post">
-                              <div class="col-md-4">
-                                  <input type="hidden" name="Total" value="@total" />
-                                  <div class="mb-3">
-                                      <label class="form-label">Họ tên</label>
-                                      <input type="text" class="form-control" name="Name" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
-                                  </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Số điện thoại</label>
+                                        <input type="tel" class="form-control" name="Phone" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
+                                    </div>
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Số điện thoại</label>
-                                      <input type="tel" class="form-control" name="Phone" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
-                                  </div>
-                                  
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Email</label>
-                                      <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
-                                  </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
+                                    </div>
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Địa chỉ</label>
-                                      <input type="text" class="form-control" name="Venue" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
-                                  </div>
-                                  <div class="mb-3">
-                                      <label class="form-label">Ghi chú</label>
-                                      <input type="text" class="form-control" name="Note" placeholder="Ghi chú" value="" />
+                                    <div class="mb-3">
+                                        <label class="form-label">Địa chỉ</label>
+                                        <input type="text" class="form-control" name="Venue" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Ghi chú</label>
+                                        <input type="text" class="form-control" name="Note" placeholder="Ghi chú" value="" />
                                     </div>
                                 </div>
 
-                              <button type="submit" class="btn btn-success">Thanh toán trực tiếp</button>
-                              <a href="/Cart/Payment" class="btn btn-success">Thanh Toán Banking</a>
-                              <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                                <button type="submit" class="btn btn-success" name="paymentMethod" value="cash">Thanh toán trực tiếp</button>
+                                <button type="submit" class="btn btn-success" name="paymentMethod" value="vnpay">Thanh toán VNPay</button>
+                                <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                             </form>
 
                         }
@@ -116,31 +117,32 @@
                         }
 
 
-                          @section Scripts {
-                            <script>
-                              $(document).ready(function () {
-                                  $(".updatecartitem").click(function (event) {
-                                      event.preventDefault();
-                                      var productid = $(this).attr("data-productid");
-                                      $.ajax({
-                                          type: "POST",
-                                          url:"@Url.RouteUrl("updatecart")",
-                                          data: {
-                                              productid: productid,
-                                          },
-                                          success: function (result) {
-                                              window.location.href = "@Url.RouteUrl("cart")";
-                                          }
-                                      });
-                                  });
-                              });
+                        @section Scripts {
+                        <script>
+                            $(document).ready(function () {
+                                $(".updatecartitem").click(function (event) {
+                                    event.preventDefault();
+                                    var productid = $(this).attr("data-productid");
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "@Url.RouteUrl("updatecart")",
+                                            data: {
+                                                productid: productid,
+                                            },
+                                            success: function (result) {
+                                                window.location.href = "@Url.RouteUrl("cart")";
+                                            }
+                                        });
+                                    });
+                                });
                             </script>
-                          }
+                        }
 
                     }
-                    else {
-                      <p class="alert alert-danger">Giỏ hàng trống</p>
-                      <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                    else
+                    {
+                        <p class="alert alert-danger">Giỏ hàng trống</p>
+                        <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                     }
                 </div>
             </div>

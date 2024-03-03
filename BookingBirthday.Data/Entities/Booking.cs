@@ -26,8 +26,6 @@ namespace BookingBirthday.Data.Entities
         public int? PaymentId { get; set; }
         public Payment? Payment { get; set; }
 
-
-
         public List<Cart>? Cart { get; set; }
         public List<BookingPackage>? BookingPackages { get; set; }
     }

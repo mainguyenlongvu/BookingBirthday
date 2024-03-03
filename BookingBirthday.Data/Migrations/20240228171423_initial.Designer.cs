@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240226174833_initial")]
+    [Migration("20240228171423_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -48,7 +48,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PaymentId")
+                    b.Property<int>("PaymentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
@@ -64,8 +64,7 @@ namespace BookingBirthday.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId")
-                        .IsUnique()
-                        .HasFilter("[PaymentId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -250,8 +249,23 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Types")
+                    b.Property<string>("OrderDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VnPayResponseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -357,7 +371,9 @@ namespace BookingBirthday.Data.Migrations
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Payment", "Payment")
                         .WithOne("Booking")
-                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId");
+                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.User", "User")
                         .WithMany("Bookings")

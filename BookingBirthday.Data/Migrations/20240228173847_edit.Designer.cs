@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240226160351_initial")]
-    partial class initial
+    [Migration("20240228173847_edit")]
+    partial class edit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,10 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookingStatus")
+                    b.Property<string>("BookingStatus")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("Processing");
 
                     b.Property<DateTime>("Date_order")
                         .HasColumnType("datetime2");
@@ -48,7 +48,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentId")
+                    b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
@@ -64,7 +64,8 @@ namespace BookingBirthday.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -73,13 +74,24 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.BookingPackage", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
-                    b.HasKey("BookingId", "PackageId");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
 
                     b.HasIndex("PackageId");
 
@@ -147,6 +159,9 @@ namespace BookingBirthday.Data.Migrations
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("host_name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("is_approved")
                         .HasColumnType("int");
@@ -344,7 +359,9 @@ namespace BookingBirthday.Data.Migrations
 
                     b.HasIndex("Address");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasFilter("[Name] IS NOT NULL");
 
                     b.HasIndex("Phone");
 
@@ -355,9 +372,7 @@ namespace BookingBirthday.Data.Migrations
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Payment", "Payment")
                         .WithOne("Booking")
-                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId");
 
                     b.HasOne("BookingBirthday.Data.Entities.User", "User")
                         .WithMany("Bookings")
@@ -375,11 +390,13 @@ namespace BookingBirthday.Data.Migrations
                     b.HasOne("BookingBirthday.Data.Entities.Booking", "Booking")
                         .WithMany("BookingPackages")
                         .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Package", "Package")
                         .WithMany("BookingPackages")
                         .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Booking");
@@ -390,14 +407,14 @@ namespace BookingBirthday.Data.Migrations
             modelBuilder.Entity("BookingBirthday.Data.Entities.Cart", b =>
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Booking", "Booking")
-                        .WithMany("cart")
+                        .WithMany("Cart")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.Package", "Package")
-                        .WithMany("Cart")
-                        .HasForeignKey("PackageId")
+                        .WithMany("Carts")
+                        .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -409,7 +426,7 @@ namespace BookingBirthday.Data.Migrations
             modelBuilder.Entity("BookingBirthday.Data.Entities.CartPackage", b =>
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Cart", "Cart")
-                        .WithMany("CartPackages")
+                        .WithMany()
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -428,7 +445,7 @@ namespace BookingBirthday.Data.Migrations
             modelBuilder.Entity("BookingBirthday.Data.Entities.Package", b =>
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Promotion", "Promotion")
-                        .WithMany("Services")
+                        .WithMany("Package")
                         .HasForeignKey("PromotionId");
 
                     b.HasOne("BookingBirthday.Data.Entities.User", "User")
@@ -457,21 +474,16 @@ namespace BookingBirthday.Data.Migrations
                 {
                     b.Navigation("BookingPackages");
 
-                    b.Navigation("cart");
-                });
-
-            modelBuilder.Entity("BookingBirthday.Data.Entities.Cart", b =>
-                {
-                    b.Navigation("CartPackages");
+                    b.Navigation("Cart");
                 });
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Package", b =>
                 {
                     b.Navigation("BookingPackages");
 
-                    b.Navigation("Cart");
-
                     b.Navigation("CartPackages");
+
+                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Payment", b =>
@@ -482,7 +494,7 @@ namespace BookingBirthday.Data.Migrations
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Promotion", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.User", b =>
