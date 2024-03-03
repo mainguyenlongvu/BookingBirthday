@@ -19,6 +19,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    report = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     requester_id = table.Column<int>(type: "int", nullable: false),
                     is_approved = table.Column<int>(type: "int", nullable: false),
                     is_viewed_by_admin = table.Column<bool>(type: "bit", nullable: false),
@@ -78,6 +79,8 @@ namespace BookingBirthday.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date_order = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date_start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),

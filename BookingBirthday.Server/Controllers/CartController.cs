@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class CartController : Controller
+    public class CartController : GuestBaseController
     {
         private readonly BookingDbContext _appContext;
         private readonly IVnPayService _vnPayService;
@@ -133,15 +133,18 @@ namespace BookingBirthday.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOrder(BookingModel request)
         {
-            //var maxBookingId = _appContext.Bookings.Select(x => x.Id).DefaultIfEmpty().Max();
-            //var nextBookingId = maxBookingId + 1;
-
-            //var maxBookingPackageId = _appContext.BookingPackages.Select(x => x.Id).DefaultIfEmpty().Max();
-            //var nextBookingPackageId = maxBookingPackageId + 1;
-
-
             if (HttpContext.Session.GetString("user_id") != null)
             {
+                //var Venue = _appContext.Packages.FirstOrDefault(x => x.Id == cartModel.Package!.Id);
+                var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                //var query = from a in _appContext.Bookings
+                //            join b in _appContext.BookingPackages
+                //            on a.Id equals b.BookingId
+                //            join c in _appContext.Packages
+                //            on b.PackageId equals c.Id
+
+                //            where c.Id == b.PackageId && a.Id == b.BookingId && c.Id == cartModel.Package!.Id
+                //            select c.Venue;
 
                 try
                 {
@@ -150,7 +153,40 @@ namespace BookingBirthday.Server.Controllers
                     var donHang = new Booking();
                     donHang.UserId = request.UserId;
                     donHang.Date_order = DateTime.Now;
-                    donHang.BookingStatus= "Processing";
+
+                    if(request.Date_start != null)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Không được để trống ngày bắt đầu tiệc";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+                    if (request.Date_start > DateTime.Now)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Thời gian bắt đầu sai";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+
+                    donHang.Date_start = request.Date_start;
+                    donHang.BookingStatus = "Processing";
+
+                    //Lấy địa chỉ từ kết quả truy vấn
+                    //var addressList =  query.FirstOrDefault();
+                    //var address = string.Join(", ", addressList);
+                    //donHang.Address = query.FirstOrDefault();
+
+                    donHang.Address = request.Address;
+
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;
@@ -170,9 +206,8 @@ namespace BookingBirthday.Server.Controllers
                             chiTietDonHang.Price = item.Package!.Price;
                             await _appContext.AddAsync(chiTietDonHang);
                             await _appContext.SaveChangesAsync();
-
                         }
-                                
+
                         TempData["Message"] = "Đặt hàng thành công";
                         TempData["Success"] = true;
                         ClearCart();
@@ -194,6 +229,8 @@ namespace BookingBirthday.Server.Controllers
             }
             return RedirectToAction("Login", "Account");
         }
+
+
 
         // POST: Cart/Payment
         public IActionResult Payment()

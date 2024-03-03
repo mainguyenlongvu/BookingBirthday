@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240226174833_initial")]
+    [Migration("20240303130715_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -33,12 +33,19 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BookingStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("Processing");
 
                     b.Property<DateTime>("Date_order")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date_start")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -179,6 +186,9 @@ namespace BookingBirthday.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("rejection_reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("report")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("requester_id")

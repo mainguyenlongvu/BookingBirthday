@@ -11,7 +11,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Quản lí Yêu cầu</h1>
+                    <h1 class="display-5 mb-3">Quản lí Tố cáo</h1>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
                     {
                         int stt = 1;
                         <div class="col-md-4">
-                            <select id="selectRequest" class="form-control" onchange="changeSelectRequest('HostRequest')">
+                            <select id="selectRequest" class="form-control" onchange="changeSelectRequest('AdminRequest')">
                                 <option value="2">Tất cả</option>
                                 <option value="0">Chờ duyệt</option>
                                 <option value="1">Đã duyệt</option>
@@ -34,8 +34,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tên danh mục</th>
-                                        <th>Ngày yêu cầu</th>
+                                        <th>Tố cáo</th>
+                                        <th>Người bị tố cáo</th>
+                                        <th>Ngày tố cáo</th>
                                         <th>Ghi chú</th>
                                         <th>Trạng thái</th>
                                         <th></th>
@@ -44,10 +45,14 @@
                                 <tbody id="bodyRequest">
                                     @foreach (var item in Model)
                                     {
+
                                         <tr>
                                             <td>@(stt++)</td>
                                             <td>
-                                                <label style="width: auto">@item.category_name</label>
+                                                <label style="width: auto">@item.report</label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">@item.host_name</label>
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.created_at</label>
@@ -72,23 +77,23 @@
                                             <td>
                                                 @if (item.is_approved == 0)
                                                 {
-                                                    <a class="btn btn-primary" onclick="Duyet(@item.category_request_id)">Duyệt</a>
-                                                    <a class="btn btn-success" onclick="TuChoi(@item.category_request_id)">Từ chối</a>
+                                                    <a class="btn btn-primary" onclick="DuyetReport(@item.category_request_id)">Duyệt</a>
+                                                    <a class="btn btn-success" onclick="TuChoiReport(@item.category_request_id)">Từ chối</a>
                                                 }
 
                                                 <!-- Modal -->
                                                 <div class="modal fade" id="@("update"+item.category_request_id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
-                                                            <form method="post" asp-action="Edit" asp-controller="HostRequest">
+                                                            <form method="post" asp-action="Edit" asp-controller="AdminReport">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
+                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa tố cáo</h5>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
-                                                                        <label>Tên Gói</label>
+                                                                        <label>Tố cáo</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
-                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập tên sản phẩm">
+                                                                        <input type="text" class="form-control" name="report" value="@item.report" required placeholder="Nhập nội dung">
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">

@@ -1,8 +1,10 @@
-﻿@model List<BookingBirthday.Data.Entities.Booking>
+﻿@using BookingBirthday.Data.EF
+@model List<BookingBirthday.Data.Entities.Booking>
 
 @{
     ViewData["Title"] = "View Orders Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<BookingBirthday.Server.Models.BookingPackageModel> BoookingPackage;
 }
 @await Html.PartialAsync("response")
 
@@ -24,12 +26,14 @@
                       <div class="table-responsive card mt-2">
                           <table class="table table-hover">
                             <tr>
-                              <th>#</th>
+                              <th>Thứ tự</th>
                               <th>Mã đơn hàng</th>
                               <th>Số điện thoại</th>
-                              <th>Địa chỉ</th>
+                              <th>Địa chỉ tổ chức</th>
                               <th>Ngày đặt hàng</th>
+                              <th>Thời gian tiệc diễn ra</th>
                               <th>Tổng tiền</th>
+                              <th>Ghi chú</th>
                               <th>Trạng thái</th>
                             </tr>
                             @foreach (var item in Model)
@@ -43,23 +47,15 @@
                                    <td>
                                        <label style="width: auto">@item.Phone</label>
                                    </td>
-                                        <td>
-                                            @{
-                                                string address = "";
-                                                if (item.BookingPackages != null && item.BookingPackages.Any())
-                                                {
-                                                    var package = item.BookingPackages.FirstOrDefault();
-                                                    if (package != null && package.Package != null)
-                                                    {
-                                                        address = package.Package.Venue;
-                                                    }
-                                                }
-                                            }
-                                            <label style="width: auto">@address</label>
-                                        </td>
+                                   <td>
+                                            <label style="width: auto">@item.Address</label>
+                                   </td>
                                    <td>
                                        <label style="width: auto">@item.Date_order</label>
                                    </td>
+                                        <td>
+                                            <label style="width: auto">@item.Date_start</label>
+                                        </td>
                                    <td>
                                        <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
                                    </td>
@@ -70,7 +66,7 @@
                                       <label style="width: auto">@item.BookingStatus</label>
                                    </td>
                                    <td>
-                                            <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
+                                            @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
                                             @if (@item.BookingStatus == "Processing")
                                             {
                                                 <a class="btn btn-warning" onclick="huyDon(@item.Id)">Hủy đơn</a>

@@ -98,9 +98,9 @@ namespace BookingBirthday.Server.Controllers
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;
-                if (userData.File != null)
+                if (userData.file != null)
                 {
-                    user.Image_url = UploadedFile(userData.File);
+                    user.Image_url = UploadedFile(userData.file);
                 }
                 else
                 {
@@ -190,14 +190,14 @@ namespace BookingBirthday.Server.Controllers
                     user.Address = userData.Address;
                     user.Phone = userData.Phone;
                     user.Name = userData.Name;
-                    if (userData.File != null)
+                    if (userData.file != null)
                     {
                         if (user.Image_url != "/imgProfile/" && user.Image_url != null)
                         {
                             var n = user.Image_url!.Remove(0, 12);
                             DeleteImage(n);
                         }
-                        user.Image_url = UploadedFile(userData.File);
+                        user.Image_url = UploadedFile(userData.file);
                     }
                     _context.SaveChanges();
                     TempData["Message"] = "Cập nhật thông tin thành công";
@@ -211,25 +211,22 @@ namespace BookingBirthday.Server.Controllers
             {
                 TempData["Message"] = "Lỗi cập nhật thông tin tài khoản";
                 TempData["Success"] = false;
-                return RedirectToAction("Index");
+                return RedirectToAction("Profile", "Account");
             }
         }
 
         private string UploadedFile(IFormFile file)
         {
-            string uniqueFileName = null!;
+            if (file == null || file.Length == 0)
+                return null; // Tránh truy cập vào thuộc tính FileName của null
 
-            if (file != null)
+            string uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            string filePath = Path.Combine(_imageContentFolder, uniqueFileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                string uploadsFolder = _imageContentFolder;
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(fileStream);
-                }
+                file.CopyTo(fileStream);
             }
-            return "/imgProfile/" + uniqueFileName!;
+            return "/imgProfile/" + uniqueFileName;
         }
         public void DeleteImage(string fileName)
         {
