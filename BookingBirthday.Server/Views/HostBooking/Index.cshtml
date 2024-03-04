@@ -29,8 +29,8 @@
                                     <th>Mã đơn hàng</th>
                                     <th>Số điện thoại</th>
                                     <th>Email</th>
-                                    <th>Địa chỉ</th>
                                     <th>Ngày đặt hàng</th>
+                                    <th>Thời gian bắt đầu tiệc</th>
                                     <th>Tổng tiền</th>
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
@@ -53,21 +53,10 @@
                                             </label>
                                         </td>
                                         <td>
-                                            @{
-                                                string address = "";
-                                                if (item.BookingPackages != null && item.BookingPackages.Any())
-                                                {
-                                                    var package = item.BookingPackages.FirstOrDefault();
-                                                    if (package != null && package.Package != null)
-                                                    {
-                                                        address = package.Package.Venue;
-                                                    }
-                                                }
-                                            }
-                                            <label style="width: auto">@address</label>
+                                            <label style="width: auto">@item.Date_order</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Date_order</label>
+                                            <label style="width: auto">@item.Date_start</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
@@ -86,9 +75,9 @@
                                                 <option value="Declined" selected="@(item.BookingStatus == "Declined")">Hủy đơn</option>
                                             </select>
                                         </td>
-                                        <td>
+                                       @*  <td>
                                             <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
-                                        </td>
+                                        </td> *@
                                     </tr>
                                 }
                             </table>

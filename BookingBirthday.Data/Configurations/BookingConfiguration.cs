@@ -23,7 +23,9 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Date_order).IsRequired();
+            builder.Property(x => x.Date_start).IsRequired();
             builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
+            builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();

@@ -8,11 +8,11 @@ using System;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class GuestRequestController : GuestBaseController
+    public class GuestReportController : GuestBaseController
     {
         private readonly BookingDbContext _dbContext;
 
-        public GuestRequestController(BookingDbContext dbContext)
+        public GuestReportController(BookingDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -37,7 +37,7 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var all_category_request = await _dbContext.Category_Requests
-                    .Where(x => x.requester_id == user_id && x.report == null)
+                    .Where(x => x.requester_id == user_id && x.category_name == null)
                     .OrderByDescending(x => x.created_at)
                     .ToListAsync();
             return View(all_category_request);
@@ -46,10 +46,10 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult Create(Category_requests request)
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-            var categoryRequest = _dbContext.Category_Requests.SingleOrDefault(x => x.category_name == request.category_name);
+            var categoryRequest = _dbContext.Category_Requests.SingleOrDefault(x => x.report == request.report);
             if (categoryRequest != null)
             {
-                TempData["Message"] = "Yêu cầu đã tồn tại";
+                TempData["Message"] = "Tố cáo đã tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
@@ -58,6 +58,7 @@ namespace BookingBirthday.Server.Controllers
                 var p = new Category_requests();
                 p.requester_id = user_id;
                 p.category_name = request.category_name;
+                p.report = request.report;
                 p.created_at = DateTime.Now;
                 p.is_approved = 0;
                 p.host_name = request.host_name;
@@ -71,13 +72,13 @@ namespace BookingBirthday.Server.Controllers
                 //rằng điều kiện có tên của Host vào đây
 
                 //
-                var userExists = _dbContext.Users.Any(x => x.Name == p.host_name);  
+                var userExists = _dbContext.Users.Any(x => x.Name == p.host_name);
 
                 if (userExists)
                 {
                     _dbContext.Category_Requests.Add(p);
                     _dbContext.SaveChanges();
-                    TempData["Message"] = "Gửi yêu cầu mới thành công";
+                    TempData["Message"] = "Gửi tố cáo mới thành công";
                     TempData["Success"] = true;
                     return RedirectToAction("Index");
                 }
@@ -87,7 +88,7 @@ namespace BookingBirthday.Server.Controllers
                     TempData["Success"] = false;
                     return RedirectToAction("Index");
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -102,16 +103,16 @@ namespace BookingBirthday.Server.Controllers
             var p = _dbContext.Category_Requests.SingleOrDefault(x => x.category_request_id == request.category_request_id);
             if (p == null)
             {
-                TempData["Message"] = "Yêu cầu thêm mới danh mục không tồn tại";
+                TempData["Message"] = "Tố cáo mới không tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
             try
             {
-                p.category_name = request.category_name;
+                p.report = request.report;
                 p.host_name = request.host_name;
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Chỉnh sửa yêu cầu thêm mới danh mục thành công";
+                TempData["Message"] = "Chỉnh sửa tố cáo mới thành công";
                 TempData["Success"] = true;
                 return RedirectToAction("Index");
             }
@@ -133,12 +134,12 @@ namespace BookingBirthday.Server.Controllers
 
                     _dbContext.Category_Requests.Remove(category_Requests);
                     _dbContext.SaveChanges();
-                    TempData["Message"] = "Xóa yêu cầu thêm mới danh mục thành công";
+                    TempData["Message"] = "Xóa tố cáo mới thành công";
                     TempData["Success"] = true;
                 }
                 else
                 {
-                    TempData["Message"] = "Xóa yêu cầu thêm mới danh mục không thành công";
+                    TempData["Message"] = "Xóa tố cáo mới không thành công";
                     TempData["Success"] = false;
                 }
                 return Ok();
@@ -156,7 +157,7 @@ namespace BookingBirthday.Server.Controllers
             var p = _dbContext.Category_Requests.SingleOrDefault(x => x.category_request_id == category_request_id);
             if (p == null)
             {
-                TempData["Message"] = "Yêu cầu thêm mới danh mục không tồn tại";
+                TempData["Message"] = "Tố cáo không tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
@@ -179,7 +180,7 @@ namespace BookingBirthday.Server.Controllers
             var p = _dbContext.Category_Requests.SingleOrDefault(x => x.category_request_id == category_request_id);
             if (p == null)
             {
-                TempData["Message"] = "Yêu cầu thêm mới danh mục không tồn tại";
+                TempData["Message"] = "Tố cáo không tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }

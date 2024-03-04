@@ -10,7 +10,7 @@ using BookingBirthday.Data.Enums;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class CartController : Controller
+    public class CartController : GuestBaseController
     {
         private readonly BookingDbContext _appContext;
         private readonly IVnPayService _vnPayService;
@@ -132,6 +132,7 @@ namespace BookingBirthday.Server.Controllers
         {
             if (HttpContext.Session.GetString("user_id") != null)
             {
+                var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
                 try
                 {
                     request.CartModels = GetCartItems();
@@ -139,7 +140,39 @@ namespace BookingBirthday.Server.Controllers
                     var donHang = new Booking();
                     donHang.UserId = request.UserId;
                     donHang.Date_order = DateTime.Now;
+
+                    if(request.Date_start != null)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Không được để trống ngày bắt đầu tiệc";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+                    if (request.Date_start > DateTime.Now)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Thời gian bắt đầu sai";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+                    donHang.Date_start = request.Date_start;
                     donHang.BookingStatus = "Processing";
+
+                    //Lấy địa chỉ từ kết quả truy vấn
+                    //var addressList =  query.FirstOrDefault();
+                    //var address = string.Join(", ", addressList);
+                    //donHang.Address = query.FirstOrDefault();
+
+                    donHang.Address = request.Address;
+                    
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;

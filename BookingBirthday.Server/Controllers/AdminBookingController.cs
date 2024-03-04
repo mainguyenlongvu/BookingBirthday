@@ -9,7 +9,6 @@ namespace BookingBirthday.Server.Controllers
     public class AdminBookingController : AdminBaseController
     {
         private readonly BookingDbContext _dbContext;
-
         public AdminBookingController(BookingDbContext dbContext)
         {
             _dbContext = dbContext;

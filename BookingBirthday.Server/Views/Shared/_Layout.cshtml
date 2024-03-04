@@ -52,33 +52,35 @@
 
                     @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
                     {
-                        @await Html.PartialAsync("_NotificationPartial")
+                        //@await Html.PartialAsync("_NotificationPartial")
 
                         @await Html.PartialAsync("_CartPartial")
 
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch vụ</a>
                             <div class="dropdown-menu m-0">
-                                 <a href="/GuestRequest" class="dropdown-item">Yêu cầu</a> 
+                                 <a href="/GuestRequest" class="dropdown-item">Yêu cầu</a>
+                                <a href="/GuestReport" class="dropdown-item">Tố cáo</a>
                             </div>
                         </div>
                     }
 
                     @if (Context.Session.GetString("role") == "Admin")
                     {
+                        //@await Html.PartialAsync("_NotificationReport")
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản lí</a>
                                 <div class="dropdown-menu m-0">
                                 @*<a href="/AdminProduct" class="dropdown-item">Quản lí sản phẩm</a>
                                 <a href="/AdminOrder" class="dropdown-item">Quản lí đơn hàng</a>*@
                                 <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
-                                    @* <a href="/AdminRequest" class="dropdown-item">Quản lí yêu cầu</a> *@
+                                <a href="/AdminReport" class="dropdown-item">Quản lí tố cáo</a>
                                 </div>
                             </div>
                     }
                     @if (Context.Session.GetString("role") == "Host")
                     {
-                        @await Html.PartialAsync("_NotificationPartial")
+                        //@await Html.PartialAsync("_NotificationPartial")
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản lí cửa hàng</a>
                                 <div class="dropdown-menu m-0">
