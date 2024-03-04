@@ -426,4 +426,4 @@ function TuChoiReport(category_request_id) {
 
 setTimeout(function () {
     $("#msgAlert").fadeOut("slow");
-}, 2000);
+}, 7000);

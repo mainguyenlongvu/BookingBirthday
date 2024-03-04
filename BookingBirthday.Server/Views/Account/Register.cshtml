@@ -8,7 +8,7 @@
     <div class="card" style="width: 300px;">
         <div class="card-body">
             <h2 class="text-center">Đăng ký</h2>
-            <form method="post" action="/Account/Register">
+            <form method="post" asp-action="Register" asp-controller="Account" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label">Tên người dùng</label>
                     <input type="text" class="form-control" id="Name" name="Name" required>
