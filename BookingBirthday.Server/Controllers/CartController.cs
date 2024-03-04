@@ -128,7 +128,7 @@ namespace BookingBirthday.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrder(BookingModel request, string paymentMethod)
+        public async Task<IActionResult> AddOrder(BookingModel request)
         {
             if (HttpContext.Session.GetString("user_id") != null)
             {
@@ -196,17 +196,8 @@ namespace BookingBirthday.Server.Controllers
 
                         // Save booking packages
                         await _appContext.SaveChangesAsync();
-
-                        if (paymentMethod == "vnpay")
-                        {
-                            ClearCart();
-                            return RedirectToAction("Payment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
-                        }
-                        else if (paymentMethod == "cash")
-                        {
-                            ClearCart();
-                            return RedirectToAction("Succ", "Cart");
-                        }
+                        ClearCart();
+                        return RedirectToAction("Payment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
                     }
                     else
                     {
@@ -231,7 +222,7 @@ namespace BookingBirthday.Server.Controllers
             var user = _appContext.Users.Find(userId);
 
             ViewData["BookingId"] = bookingId;
-            ViewData["Total"] = booking.Total;
+            ViewData["Total"] = (booking.Total/2);
             ViewData["Name"] = user.Name;
             return View();
         }
@@ -281,6 +272,7 @@ namespace BookingBirthday.Server.Controllers
             var booking = _appContext.Bookings.Find(int.Parse(response.BookingId));
 
             booking.PaymentId = payment.Id;
+           
             _appContext.SaveChanges();
 
             TempData["Message"] = $"Thanh toán VNPay thành công";

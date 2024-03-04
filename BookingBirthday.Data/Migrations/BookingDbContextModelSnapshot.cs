@@ -4,7 +4,6 @@ using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240228173847_edit")]
-    partial class edit
+    partial class BookingDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +30,19 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BookingStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("Processing");
 
                     b.Property<DateTime>("Date_order")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date_start")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -179,6 +183,9 @@ namespace BookingBirthday.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("rejection_reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("report")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("requester_id")
