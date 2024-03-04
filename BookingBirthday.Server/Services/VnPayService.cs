@@ -12,11 +12,11 @@ namespace BookingBirthday.Server.Services
 		{
 			_configuration = configuration;
 		}
-		public string CreatePaymentUrl(PaymentInformationModel model, HttpContext context)
+		public string CreatePaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
 		{
 			var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
 			var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
-			var tick = DateTime.Now.Ticks.ToString();
+			var tick = bookingId.ToString();
 			var pay = new VnPayLibrary();
 			var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
@@ -36,7 +36,8 @@ namespace BookingBirthday.Server.Services
 			var paymentUrl =
 				pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
 
-			return paymentUrl;
+
+            return paymentUrl;
 		}
 
 		public PaymentResponseModel PaymentExecute(IQueryCollection collections)
