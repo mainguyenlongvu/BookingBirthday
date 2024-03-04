@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240228171423_initial")]
+    [Migration("20240304042906_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -33,12 +33,19 @@ namespace BookingBirthday.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BookingStatus")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
                         .HasDefaultValue("Processing");
 
                     b.Property<DateTime>("Date_order")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date_start")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -48,7 +55,7 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaymentId")
+                    b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
@@ -64,7 +71,8 @@ namespace BookingBirthday.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PaymentId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -178,6 +186,9 @@ namespace BookingBirthday.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("rejection_reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("report")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("requester_id")
@@ -371,9 +382,7 @@ namespace BookingBirthday.Data.Migrations
                 {
                     b.HasOne("BookingBirthday.Data.Entities.Payment", "Payment")
                         .WithOne("Booking")
-                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BookingBirthday.Data.Entities.Booking", "PaymentId");
 
                     b.HasOne("BookingBirthday.Data.Entities.User", "User")
                         .WithMany("Bookings")

@@ -18,13 +18,13 @@ namespace BookingBirthday.Server.Controllers
     public class AccountController : Controller
     {
         private readonly BookingDbContext _context;
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _imageContentFolder;
 
         public AccountController(BookingDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
-            this.webHostEnvironment = webHostEnvironment;
+            _webHostEnvironment = webHostEnvironment;
             _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgProfile");
         }
 
