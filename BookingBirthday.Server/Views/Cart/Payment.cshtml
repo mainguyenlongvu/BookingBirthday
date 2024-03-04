@@ -9,6 +9,7 @@
 
 <div class="table-responsive">
     <form action="/Cart/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+        <input type="hidden" name="BookingId" value="@ViewData["BookingId"]">
         <div class="form-group">
             <label for="ordertype">Danh mục</label>
             <select name="OrderType" id="ordertype" class="form-control">
@@ -24,7 +25,8 @@
                    id="Name"
                    name="Name"
                    type="text"
-                   value="Code Mega">
+                   value="@ViewData["Name"]"
+                   readonly>
         </div>
         <br />
         <div class="form-group">
@@ -33,7 +35,8 @@
                    id="Amount"
                    name="Amount"
                    type="text"
-                   value="20000000">
+                   value="@ViewData["Total"]"
+                   readonly>
         </div>
         <br />
         <div class="form-group">
@@ -42,7 +45,7 @@
                       cols="20"
                       id="Description"
                       name="Description"
-                      rows="2">Thanh toán tại Code Mega</textarea>
+                      rows="2"></textarea>
         </div>
         <br />
         <button type="submit" class="btn btn-primary">Thanh toán (Checkout)</button>
