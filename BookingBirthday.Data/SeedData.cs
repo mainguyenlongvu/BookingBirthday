@@ -104,16 +104,6 @@ namespace BookingBirthday.Data
                 {
                     string[]? bookingData = bookingLine!.Split('|');
 
-                    //string bookingStatus = "Accepted";
-                    //if (int.Parse(bookingData[1].Trim()) == 2)
-                    //{
-                    //    bookingStatus = BookingStatus.Declined;
-                    //}
-                    //else if (int.Parse(bookingData[1].Trim()) == 3)
-                    //{
-                    //    bookingStatus = BookingStatus.Processing;
-                    //}
-
                     booking.Add(new Booking
                     {
                         Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
@@ -187,11 +177,11 @@ namespace BookingBirthday.Data
                         Id = paymentId++,
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         PaymentMethod = paymentMethod,
-						Success = bool.Parse(paymentData[3].Trim()),
-						Token = paymentData[4].Trim(),
-						VnPayResponseCode = paymentData[5].Trim(),
-						OrderDescription = paymentData[6].Trim(),
-						BookingId = int.Parse(paymentData[7].Trim())
+                        Success = bool.Parse(paymentData[3].Trim()),
+                        Token = paymentData[4].Trim(),
+                        VnPayResponseCode = paymentData[5].Trim(),
+                        OrderDescription = paymentData[6].Trim(),
+                        BookingId = int.Parse(paymentData[7].Trim())
                     });
                 }
                 modelBuilder.Entity<Payment>().HasData(payment);
@@ -252,7 +242,7 @@ namespace BookingBirthday.Data
             if (File.Exists(USER_FILE_PATH))
             {
                 using StreamReader sr = new(USER_FILE_PATH);
-                
+
                 int userId = 1;
                 string? userLine;
 
@@ -264,10 +254,16 @@ namespace BookingBirthday.Data
                     users.Add(new User
                     {
                         Id = userId++,
-                        Username = userData[0].Trim(),
-                        Password = userData[1].Trim(),
-                        Email = userData[2].Trim(),
-                        Role = userData[3].Trim()
+                        Name = userData[0],
+                        Gender = (Gender)Enum.Parse(typeof(Gender), userData[1]),
+                        DateOfBirth = DateTime.Parse(userData[2]),
+                        Username = userData[3],
+                        Password = userData[4],
+                        Email = userData[5],
+                        Phone = userData[6],
+                        Address = userData[7],
+                        Image_url = userData[8],
+                        Role = userData[9]
                     });
                 }
 
