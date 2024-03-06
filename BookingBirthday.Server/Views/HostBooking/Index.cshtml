@@ -31,8 +31,10 @@
                                     <th>Email</th>
                                     <th>Ngày đặt hàng</th>
                                     <th>Thời gian bắt đầu tiệc</th>
+                                    <th>Thời gian hủy tiệc</th>
                                     <th>Tổng tiền</th>
                                     <th>Ghi chú</th>
+                                    <th>Lý do hủy đơn của chủ tiệc</th>
                                     <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
@@ -59,22 +61,60 @@
                                             <label style="width: auto">@item.Date_start</label>
                                         </td>
                                         <td>
+                                            @if (item.Date_cancel != default(DateTime))
+                                            {
+                                                <label style="width: auto">@item.Date_cancel</label>
+                                            }
+                                        </td>
+                                        <td>
                                             <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
                                         </td>
                                         <td>
-                                            <select name="status" id="@("status"+item.Id)" class="form-control" onchange="changeStatusOrder(@item.Id)">
-                                                <option value="Processing" selected="@(item.BookingStatus == "Processing" )">Chờ xử lý</option>
-
-                                                <option value="Accepted" selected="@(item.BookingStatus == "Accepted")">Đã xác nhận</option>
-
-                                                <option value="Paid" selected="@(item.BookingStatus =="Paid")">Đã thanh toán</option>
-
-                                                <option value="Declined" selected="@(item.BookingStatus == "Declined")">Hủy đơn</option>
-                                            </select>
+                                            <label style="width: auto">@item.Reason</label>
                                         </td>
+                                        <td>
+                                            @if (@item.BookingStatus == "Declined"){
+                                                <label style="width: auto">Hủy đơn</label>
+                                            }
+                                            @if (@item.BookingStatus == "Paid")
+                                            {
+                                                <label style="width: auto">Đã thanh toán</label>
+                                            }
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <label style="width: auto">Chờ xử lý</label>
+                                            }
+                                            @if (@item.BookingStatus == "Accepted")
+                                            {
+                                                <label style="width: auto">Đã xác nhận</label>
+                                            }
+                                            @* {
+                                                <select name="status" id="@("status"+item.Id)" class="form-control" onchange="changeStatusOrder(@item.Id)">
+                                                    <option value="Processing" selected="@(item.BookingStatus == "Processing" )">Chờ xử lý</option>
+
+                                                    <option value="Accepted" selected="@(item.BookingStatus == "Accepted")">Đã xác nhận</option>
+
+                                                    <option value="Paid" selected="@(item.BookingStatus =="Paid")"></option>
+                                                </select>
+                                            } *@
+
+                                        </td>
+                                        <td>
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <a class="btn btn-primary" onclick="DuyetDon(@item.Id)">Đồng ý</a>
+                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
+                                            }
+                                            @if (@item.BookingStatus == "Accepted")
+                                            {
+                                                <a class="btn btn-primary" onclick="dathanhtoan(@item.Id)">Đã thanh toán</a>
+                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
+                                            }
+                                        </td>
+
                                        @*  <td>
                                             <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
                                         </td> *@

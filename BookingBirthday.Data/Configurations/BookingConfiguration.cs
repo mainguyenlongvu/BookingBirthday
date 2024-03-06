@@ -24,12 +24,14 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Date_order).IsRequired();
             builder.Property(x => x.Date_start).IsRequired();
+            builder.Property(x => x.Date_cancel);
             builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
             builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.Note);
+            builder.Property(x => x.Reason);
             builder.HasIndex(b => b.UserId);
             builder.Property(x => x.PaymentId);
 

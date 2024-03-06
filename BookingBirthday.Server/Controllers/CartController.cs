@@ -95,13 +95,16 @@ namespace BookingBirthday.Server.Controllers
             if (product == null)
                 return NotFound("Không có sản phẩm");
 
+
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.Package!.Id == productid);
-            if (cartitem != null)
+
+            //var cartitem = cart.Find(p => p.Package!.Id == productid);
+
+            if (cart.Count >=1)
             {
-                TempData["Message"] = "Sản phẩm đã được thêm";
+                TempData["Message"] = "Giỏ hàng đã có bữa tiệc";
                 TempData["Success"] = false;
-                return Ok();
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -174,6 +177,7 @@ namespace BookingBirthday.Server.Controllers
 
 
                     donHang.Date_start = request.Date_start;
+                    
                     donHang.BookingStatus = "Processing";
 
                     //Lấy địa chỉ từ kết quả truy vấn
@@ -204,14 +208,14 @@ namespace BookingBirthday.Server.Controllers
                             await _appContext.SaveChangesAsync();
                         }
 
-                        TempData["Message"] = "Đặt hàng thành công";
+                        TempData["Message"] = "Đặt thành công";
                         TempData["Success"] = true;
                         ClearCart();
                         return RedirectToAction("Succ", "Cart");
                     }
                     else
                     {
-                        TempData["Message"] = "Đặt hàng không thành công";
+                        TempData["Message"] = "Đặt không thành công";
                         TempData["Success"] = false;
                     }
                     return RedirectToAction("", "Cart");

@@ -149,7 +149,7 @@ namespace BookingBirthday.Data
                         FromDate = DateTime.ParseExact(promotionData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         ToDate = DateTime.ParseExact(promotionData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         DiscountPercent = double.Parse(promotionData[3].Trim()),
-                        Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
+                        //Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
                         //UserId = int.Parse(promotionData[5].Trim()),
                     });
                 }

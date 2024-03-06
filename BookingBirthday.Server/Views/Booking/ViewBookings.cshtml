@@ -32,8 +32,10 @@
                               <th>Địa chỉ tổ chức</th>
                               <th>Ngày đặt hàng</th>
                               <th>Thời gian tiệc diễn ra</th>
+                              <th>Thời gian hủy tiệc</th>
                               <th>Tổng tiền</th>
                               <th>Ghi chú</th>
+                              <th>Lý do hủy đơn của chủ tiệc</th>
                               <th>Trạng thái</th>
                             </tr>
                             @foreach (var item in Model)
@@ -53,23 +55,33 @@
                                    <td>
                                        <label style="width: auto">@item.Date_order</label>
                                    </td>
-                                        <td>
-                                            <label style="width: auto">@item.Date_start</label>
-                                        </td>
                                    <td>
+                                       <label style="width: auto">@item.Date_start</label>
+                                   </td>
+                                   <td>
+                                       @if (item.Date_cancel != default(DateTime))
+                                       {
+                                           <label style="width: auto">@item.Date_cancel</label>
+                                       }
+                                   </td>
+                                       
+                                        <td>
                                        <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
                                    </td>
-                                        <td>
-                                            <label style="width: auto">@item.Note</label>
-                                        </td>
+                                   <td>
+                                       <label style="width: auto">@item.Note</label>
+                                   </td>
+                                   <td>
+                                       <label style="width: auto">@item.Reason</label>
+                                   </td>
                                    <td>
                                       <label style="width: auto">@item.BookingStatus</label>
                                    </td>
                                    <td>
                                             @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
-                                            @if (@item.BookingStatus == "Processing")
+                                            @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
                                             {
-                                                <a class="btn btn-warning" onclick="huyDon(@item.Id)">Hủy đơn</a>
+                                                <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
                                             }
                                    </td>
                                 </tr>

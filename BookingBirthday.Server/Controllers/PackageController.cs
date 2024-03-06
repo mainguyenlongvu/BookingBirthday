@@ -52,6 +52,7 @@ namespace BookingBirthday.Server.Controllers
                 p.Name = product.Name;
                 p.Venue = product.Venue;
                 p.Detail = product.Detail;
+                p.Note = product.Note;
                 p.Price = product.Price;
                 p.image_url = product.image_url;
                 return View(p);
