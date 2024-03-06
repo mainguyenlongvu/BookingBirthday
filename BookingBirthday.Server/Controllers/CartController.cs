@@ -211,7 +211,7 @@ namespace BookingBirthday.Server.Controllers
                         TempData["Message"] = "Đặt thành công";
                         TempData["Success"] = true;
                         ClearCart();
-                        return RedirectToAction("Succ", "Cart");
+                        return RedirectToAction("DepositPayment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
                     }
                     else
                     {
@@ -230,13 +230,17 @@ namespace BookingBirthday.Server.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-
-
-        // POST: Cart/Payment
-        public IActionResult Payment()
+        public IActionResult DepositPayment(int bookingId, int userId)
         {
+            var booking = _appContext.Bookings.Find(bookingId);
+            var user = _appContext.Users.Find(userId);
+
+            ViewData["BookingId"] = bookingId;
+            ViewData["Total"] = (booking.Total / 2);
+            ViewData["Name"] = user.Name;
             return View();
         }
+
         public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
         {
             ViewData["BookingId"] = bookingId;
@@ -244,11 +248,48 @@ namespace BookingBirthday.Server.Controllers
             return Redirect(url);
         }
 
-        public IActionResult PaymentCallback()
+        public IActionResult PaymentSuccess()
+        {
+            return View();
+        }
+
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+
+        public IActionResult DepositPaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
-            return Json(response);
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+            var depositPayment = new DepositPayment
+            {
+                Date = DateTime.Now,
+                Success = response.Success,
+                Token = response.Token,
+                VnPayResponseCode = response.VnPayResponseCode,
+                OrderDescription = response.OrderDescription,
+                Amount = response.Amount,
+                BookingId = int.Parse(response.BookingId)
+            };
+
+            _appContext.DepositPayments.Add(depositPayment);
+            _appContext.SaveChanges();
+
+            var booking = _appContext.Bookings.Find(int.Parse(response.BookingId));
+
+            booking.DepositPaymentId = depositPayment.Id;
+
+            _appContext.SaveChanges();
+
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+            return RedirectToAction("Succ", "Cart");
         }
     }
 }
