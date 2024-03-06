@@ -7,6 +7,7 @@
         public Double Price { get; set; }
         public string? Venue { get; set; }
         public string? Detail { get; set; }
+        public string Note { get; set; }
         public string? image_url { get; set; }
         public IFormFile? file { get; set; }
 

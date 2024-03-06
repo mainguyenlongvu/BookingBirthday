@@ -1,4 +1,4 @@
-﻿(function ($) {
+(function ($) {
     "use strict";
 
     // Spinner
@@ -246,8 +246,8 @@ function closeModal() {
 function openUpdate(id) {
     $('#update' + id).modal('show');
 }
-function huyDon(order_id) {
-    if (confirm("Bạn muốn hủy đơn hàng?")) {
+function huydonhang(order_id) {
+    if (confirm("Nếu bạn hủy sau thời gian quy định sẽ mất cọc, Bạn có chắc muốn hủy đơn?")) {
         $.ajax({
             url: "/Booking/HuyDon",
             type: "POST",
@@ -263,6 +263,26 @@ function huyDon(order_id) {
         });
     }
 }
+
+function dathanhtoan(Id) {
+    if (confirm("Bạn muốn chuyển sang trạng thái 'đã thanh toán'?")) {
+        $.ajax({
+            url: "/HostBooking/dathanhtoan",
+            type: "POST",
+            data: {
+                Id: Id
+            },
+            success: function (response) {
+                window.location.reload() = true;
+            },
+            error: function (xhr, status, error) {
+                window.location.reload() = true;
+            }
+        });
+    }
+}
+
+
 function changeSelectRequest(type) {
     var selectElement = document.getElementById("selectRequest");
 
@@ -357,6 +377,7 @@ function Duyet(category_request_id) {
         });
     }
 }
+
 function TuChoi(category_request_id) {
     var lyDo = prompt("Nhập lý do từ chối:");
 
@@ -381,6 +402,46 @@ function TuChoi(category_request_id) {
     });
 }
 
+function DuyetDon(Id) {
+    if (confirm("Bạn muốn nhận đơn?")) {
+        $.ajax({
+            url: "/HostBooking/DuyetDon",
+            type: "POST",
+            data: {
+                Id: Id,
+            },
+            success: function (response) {
+                window.location.reload() = true;
+            },
+            error: function (xhr, status, error) {
+                window.location.reload() = true;
+            }
+        });
+    }
+}
+
+function TuChoiDon(Id) {
+    var lyDo = prompt("Nhập lý do từ chối:");
+
+    if (lyDo === null || lyDo.trim() === "") {
+        return;
+    }
+
+    $.ajax({
+        url: "/HostBooking/TuChoiDon",
+        type: "POST",
+        data: {
+            Id: Id,
+            Reason: lyDo
+        },
+        success: function (response) {
+            window.location.reload();
+        },
+        error: function (xhr, status, error) {
+            window.location.reload();
+        }
+    });
+}
 
 function DuyetReport(category_request_id) {
     if (confirm("Bạn muốn duyệt yêu cầu mới?")) {
@@ -426,4 +487,4 @@ function TuChoiReport(category_request_id) {
 
 setTimeout(function () {
     $("#msgAlert").fadeOut("slow");
-}, 7000);
+}, 10000);
