@@ -237,10 +237,10 @@ namespace BookingBirthday.Server.Controllers
         {
             return View();
         }
-        public IActionResult CreatePaymentUrl(PaymentInformationModel model)
+        public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
         {
-            var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
-
+            ViewData["BookingId"] = bookingId;
+            var url = _vnPayService.CreatePaymentUrl(bookingId, model, HttpContext);
             return Redirect(url);
         }
 
