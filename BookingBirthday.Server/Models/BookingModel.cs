@@ -16,8 +16,8 @@ namespace BookingBirthday.Server.Models
         public double Total { get; set; }
         //GuestId
         public int UserId { get; set; }
-        //PaymentId
-        public int PaymentId { get; set; }
+        //DepositPaymentId
+        public int DepositPaymentId { get; set; }
         public List<CartModel>? CartModels { get; set; }
     }
 }

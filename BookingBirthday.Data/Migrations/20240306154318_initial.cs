@@ -35,13 +35,12 @@ namespace BookingBirthday.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payment",
+                name: "DepositPayment",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     Success = table.Column<bool>(type: "bit", nullable: false),
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -51,7 +50,26 @@ namespace BookingBirthday.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Payment", x => x.Id);
+                    table.PrimaryKey("PK_DepositPayment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RemainingPayment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RemainingPayment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,15 +109,21 @@ namespace BookingBirthday.Data.Migrations
                     BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "Processing"),
                     Total = table.Column<double>(type: "float", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    PaymentId = table.Column<int>(type: "int", nullable: true)
+                    DepositPaymentId = table.Column<int>(type: "int", nullable: true),
+                    RemainingPaymentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Booking", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Booking_Payment_PaymentId",
-                        column: x => x.PaymentId,
-                        principalTable: "Payment",
+                        name: "FK_Booking_DepositPayment_DepositPaymentId",
+                        column: x => x.DepositPaymentId,
+                        principalTable: "DepositPayment",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Booking_RemainingPayment_RemainingPaymentId",
+                        column: x => x.RemainingPaymentId,
+                        principalTable: "RemainingPayment",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Booking_User_UserId",
@@ -240,11 +264,18 @@ namespace BookingBirthday.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_PaymentId",
+                name: "IX_Booking_DepositPaymentId",
                 table: "Booking",
-                column: "PaymentId",
+                column: "DepositPaymentId",
                 unique: true,
-                filter: "[PaymentId] IS NOT NULL");
+                filter: "[DepositPaymentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Booking_RemainingPaymentId",
+                table: "Booking",
+                column: "RemainingPaymentId",
+                unique: true,
+                filter: "[RemainingPaymentId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Booking_UserId",
@@ -277,6 +308,12 @@ namespace BookingBirthday.Data.Migrations
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DepositPayment_BookingId",
+                table: "DepositPayment",
+                column: "BookingId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Package_PromotionId",
                 table: "Package",
                 column: "PromotionId");
@@ -287,15 +324,15 @@ namespace BookingBirthday.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_BookingId",
-                table: "Payment",
-                column: "BookingId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Promotion_UserId",
                 table: "Promotion",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RemainingPayment_BookingId",
+                table: "RemainingPayment",
+                column: "BookingId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Address",
@@ -337,7 +374,10 @@ namespace BookingBirthday.Data.Migrations
                 name: "Package");
 
             migrationBuilder.DropTable(
-                name: "Payment");
+                name: "DepositPayment");
+
+            migrationBuilder.DropTable(
+                name: "RemainingPayment");
 
             migrationBuilder.DropTable(
                 name: "Promotion");

@@ -30,15 +30,16 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.Note);
-            builder.Property(x => x.PaymentId).IsRequired(false);
+            builder.Property(x => x.DepositPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.DepositPaymentId);
+            builder.Property(x => x.RemainingPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.RemainingPaymentId);
             builder.HasIndex(b => b.UserId);
-            builder.HasIndex(x => x.PaymentId);
 
             // 1:M relationship with User
             builder.HasOne(b => b.User)
                    .WithMany(u => u.Bookings)
                    .HasForeignKey(b => b.UserId);
-                    
         }
     }
 }

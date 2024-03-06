@@ -177,7 +177,7 @@ namespace BookingBirthday.Server.Controllers
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;
                     donHang.Total = request.Total;
-                    donHang.PaymentId = null;
+                    donHang.DepositPaymentId = null;
 
                     await _appContext.AddAsync(donHang);
                     await _appContext.SaveChangesAsync();
@@ -197,7 +197,7 @@ namespace BookingBirthday.Server.Controllers
                         // Save booking packages
                         await _appContext.SaveChangesAsync();
                         ClearCart();
-                        return RedirectToAction("Payment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
+                        return RedirectToAction("DepositPayment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
                     }
                     else
                     {
@@ -216,7 +216,7 @@ namespace BookingBirthday.Server.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        public IActionResult Payment(int bookingId, int userId)
+        public IActionResult DepositPayment(int bookingId, int userId)
         {
             var booking = _appContext.Bookings.Find(bookingId);
             var user = _appContext.Users.Find(userId);
@@ -244,7 +244,7 @@ namespace BookingBirthday.Server.Controllers
             return View();
         }
 
-        public IActionResult PaymentCallBack()
+        public IActionResult DepositPaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
@@ -254,10 +254,9 @@ namespace BookingBirthday.Server.Controllers
                 return RedirectToAction("PaymentFail");
             }
 
-            var payment = new Payment
+            var depositPayment = new DepositPayment
             {
                 Date = DateTime.Now,
-                PaymentMethod = Enum.Parse<PaymentMethod>(response.PaymentMethod),
                 Success = response.Success,
                 Token = response.Token,
                 VnPayResponseCode = response.VnPayResponseCode,
@@ -266,12 +265,12 @@ namespace BookingBirthday.Server.Controllers
                 BookingId = int.Parse(response.BookingId)
             };
 
-            _appContext.Payments.Add(payment);
+            _appContext.DepositPayments.Add(depositPayment);
             _appContext.SaveChanges();
 
             var booking = _appContext.Bookings.Find(int.Parse(response.BookingId));
 
-            booking.PaymentId = payment.Id;
+            booking.DepositPaymentId = depositPayment.Id;
            
             _appContext.SaveChanges();
 

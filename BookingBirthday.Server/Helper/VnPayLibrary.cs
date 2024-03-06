@@ -128,7 +128,6 @@ public class VnPayLibrary
         return new PaymentResponseModel()
         {
             Success = true,
-            PaymentMethod = "VnPay",
             OrderDescription = orderInfo,
             BookingId = bookingId.ToString(),
             PaymentId = vnPayTranId.ToString(),
