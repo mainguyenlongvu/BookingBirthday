@@ -1,29 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
 using BookingBirthday.Server.Models;
-using BookingBirthday.Application;
 using BookingBirthday.Server.Common;
-using BookingBirthday.Data.Enums;
 
 namespace BookingBirthday.Server.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly BookingDbContext _context;
+
+        private readonly BookingDbContext _dbContext;
+
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _imageContentFolder;
 
         public AccountController(BookingDbContext context, IWebHostEnvironment webHostEnvironment)
         {
-            _context = context;
+
+            _dbContext = context;
+
             _webHostEnvironment = webHostEnvironment;
             _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgProfile");
         }
@@ -37,11 +32,18 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult Login(LoginModel loginData)
         {
             var pwt = CreateMD5.MD5Hash(loginData.Password!);
-            var user = _context.Users.FirstOrDefault(x => x.Username == loginData.Username && x.Password == pwt);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Username == loginData.Username && x.Password == pwt);
+            if (user.Status == "InActive")
+            {
+                TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                TempData["Success"] = false;
+                return View(loginData);
+            }
             if (user != null)
             {
                 HttpContext.Session.SetString("username", user.Username!);
                 HttpContext.Session.SetString("role", user.Role!);
+                HttpContext.Session.SetString("status", user.Status!);
                 HttpContext.Session.SetString("user_id", user.Id.ToString()!);
                 HttpContext.Session.SetString("name", user.Name!);
                 HttpContext.Session.SetString("email", user.Email!);
@@ -83,7 +85,7 @@ namespace BookingBirthday.Server.Controllers
                     TempData["Success"] = false;
                     return View(userData);
                 }
-                var usr = _context.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
+                var usr = _dbContext.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
                 if (usr.Count() > 0)
                 {
                     TempData["Message"] = "Tài khoản đã tồn tại";
@@ -93,6 +95,7 @@ namespace BookingBirthday.Server.Controllers
                 var user = new User();
                 user.Username = userData.Username!;
                 user.Role = "Guest";
+                user.Status = "Active";
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
                 user.Email = userData.Email!;
                 user.Address = userData.Address;
@@ -106,8 +109,8 @@ namespace BookingBirthday.Server.Controllers
                 {
                     user.Image_url = "";
                 }
-                _context.Users.Add(user);
-                _context.SaveChanges();
+                _dbContext.Users.Add(user);
+                _dbContext.SaveChanges();
                 TempData["Message"] = "Đăng kí thành công";
                 TempData["Success"] = true;
                 return RedirectToAction("Login", "Account");
@@ -132,7 +135,7 @@ namespace BookingBirthday.Server.Controllers
             if (HttpContext.Session.GetString("user_id") != null)
             {
                 var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-                var user = _context.Users.FirstOrDefault(x => x.Id == user_id);
+                var user = _dbContext.Users.FirstOrDefault(x => x.Id == user_id);
                 if (user == null)
                 {
                     return RedirectToAction("Login", "Account");
@@ -154,7 +157,7 @@ namespace BookingBirthday.Server.Controllers
 
                     if (email != userData.Email)
                     {
-                        var usr = _context.Users.Where(x => x.Email == userData.Email);
+                        var usr = _dbContext.Users.Where(x => x.Email == userData.Email);
                         if (usr.Count() > 0)
                         {
                             TempData["Message"] = "Tài khoản đã tồn tại";
@@ -162,7 +165,7 @@ namespace BookingBirthday.Server.Controllers
                             return RedirectToAction("Profile", "Account");
                         }
                     }
-                    var user = _context.Users.FirstOrDefault(x => x.Id == user_id);
+                    var user = _dbContext.Users.FirstOrDefault(x => x.Id == user_id);
                     if (user == null)
                     {
                         return RedirectToAction("Login", "Account");
@@ -171,7 +174,7 @@ namespace BookingBirthday.Server.Controllers
                     {
                         TempData["Message"] = "Mật khẩu xác nhận không đúng";
                         TempData["Success"] = false;
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Profile", "Account");
                     }
                     else if (userData.Password != null)
                     {
@@ -183,7 +186,7 @@ namespace BookingBirthday.Server.Controllers
                         {
                             TempData["Message"] = "Mật khẩu phải ít nhất 8 kí tự";
                             TempData["Success"] = false;
-                            return RedirectToAction("Index");
+                            return RedirectToAction("Profile", "Account");
                         }
                     }
                     user.Email = userData.Email;
@@ -197,9 +200,9 @@ namespace BookingBirthday.Server.Controllers
                             var n = user.Image_url!.Remove(0, 12);
                             DeleteImage(n);
                         }
-                        user.Image_url = UploadedFile(userData.file);
+                        user.Image_url = UploadedFile(userData.file!);
                     }
-                    _context.SaveChanges();
+                    _dbContext.SaveChanges();
                     TempData["Message"] = "Cập nhật thông tin thành công";
                     TempData["Success"] = true;
                     return RedirectToAction("Profile", "Account");

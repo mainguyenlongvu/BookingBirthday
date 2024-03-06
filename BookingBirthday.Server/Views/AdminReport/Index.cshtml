@@ -11,7 +11,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Quản lí Tố cáo</h1>
+                    <h1 class="display-5 mb-3">Quản lí Khiếu nại</h1>
                 </div>
             </div>
         </div>
@@ -34,9 +34,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tố cáo</th>
-                                        <th>Người bị tố cáo</th>
-                                        <th>Ngày tố cáo</th>
+                                        <th>Khiếu nại</th>
+                                        <th>Người bị khiếu nại</th>
+                                        <th>Ngày khiếu nại</th>
                                         <th>Ghi chú</th>
                                         <th>Trạng thái</th>
                                         <th></th>
@@ -87,11 +87,11 @@
                                                         <div class="modal-content">
                                                             <form method="post" asp-action="Edit" asp-controller="AdminReport">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa tố cáo</h5>
+                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa Khiếu nại</h5>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
-                                                                        <label>Tố cáo</label>
+                                                                        <label>Khiếu nại</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
                                                                         <input type="text" class="form-control" name="report" value="@item.report" required placeholder="Nhập nội dung">
                                                                     </div>

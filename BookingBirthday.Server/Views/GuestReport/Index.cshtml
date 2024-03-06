@@ -11,7 +11,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Tố cáo</h1>
+                    <h1 class="display-5 mb-3">Khiếu nại</h1>
                 </div>
             </div>
         </div>
@@ -35,9 +35,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Tố cáo</th>
-                                        <th>Người bị tố cáo</th>
-                                        <th>Ngày tố cáo</th>
+                                        <th>Khiếu nại</th>
+                                        <th>Người bị khiếu nại</th>
+                                        <th>Ngày khiếu nại</th>
                                         <th>Ghi chú của quản trị viên</th>
                                         <th>Tên chủ tiệc</th>
                                         <th>Trạng thái</th>
@@ -92,14 +92,14 @@
                                                         <div class="modal-content">
                                                             <form method="post" asp-action="Edit" asp-controller="GuestReport">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa tố cáo</h5>
+                                                                    <h5 class="modal-title" id="productModalLabel">Chỉnh sửa khiếu nại</h5>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="form-group">
-                                                                        <label>Tố cáo</label>
+                                                                        <label>Khiếu nại</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
                                                                         <input type="text" class="form-control" name="report" value="@item.report" required placeholder="Nhập nội dung" />
-                                                                        <label>Tên chủ tiệc cần tố cáo</label>
+                                                                        <label>Tên chủ tiệc cần khiếu nại</label>
                                                                         <p class="form-control">@item.host_name</p>
                                                                         <input type="hidden" class="form-control" name="host_name" value="@item.host_name" required placeholder="Nhập tên" />
                                                                     </div>
@@ -122,7 +122,7 @@
                     }
                     else
                     {
-                        <p class="alert alert-danger">Danh sách yêu cầu thêm mới danh mục trống</p>
+                        <p class="alert alert-danger">Danh sách khiếu nại trống</p>
                     }
                 </div>
             </div>
@@ -135,18 +135,18 @@
         <div class="modal-content">
             <form method="post" asp-action="Create" asp-controller="GuestReport" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Tố cáo chủ tiệc</h5>
+                    <h5 class="modal-title" id="productModalLabel">Khiếu nại chủ tiệc</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tố cáo</label>
+                        <label>Khiếu nại</label>
                         <input type="text" class="form-control" name="report" required placeholder="Nhập nội dung">
                     </div>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên chủ tiệc cần tố cáo</label>
-                        <input type="text" class="form-control" name="host_name" required placeholder="Nhập tên chủ tiệc cần tố cáo">
+                        <label>Tên chủ tiệc cần Khiếu nại</label>
+                        <input type="text" class="form-control" name="host_name" required placeholder="Nhập tên chủ tiệc cần khiếu nại">
                     </div>
                 </div>
                 <div class="modal-footer">

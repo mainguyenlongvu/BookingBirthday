@@ -57,40 +57,27 @@ namespace BookingBirthday.Server.Controllers
             }
             return Json(null);
         }
-        public async Task<IActionResult> HuyDon(int orderId)
+        [HttpPost]
+        public IActionResult HuyDon(int orderId)
         {
             try
             {
-                var data = await _dbContext.Bookings.SingleOrDefaultAsync(x => x.Id == orderId);
+                var data =  _dbContext.Bookings.Find(orderId);
                 if (data != null)
                 {
                     data.BookingStatus = "Declined";
-                    await _dbContext.SaveChangesAsync();
-                    var order_item = await _dbContext.BookingPackages.Where(x => x.BookingId == orderId).ToListAsync();
-                    if (order_item != null)
-                    {
-                        foreach (var item in order_item)
-                        {
-                            var product = await _dbContext.Packages.SingleOrDefaultAsync(x => x.Id == item.PackageId);
-                            if (product != null)
-                            {
-                                await _dbContext.SaveChangesAsync();
-                            }
-                        }
-                    }
-                    TempData["Message"] = "Hủy đơn hàng thành công";
+                    data.Date_cancel = DateTime.Now;
+                     _dbContext.SaveChanges();
+                    TempData["Message"] = "Nhân viên sẽ liên hệ hoàn cọc nếu bạn hủy đúng thời gian quy định";
                     TempData["Success"] = true;
-                    return Json(data);
                 }
-                TempData["Message"] = "Đơn hàng không tồn tại";
-                TempData["Success"] = false;
-                return Json(null);
+                return Ok();
             }
             catch (Exception ex)
             {
                 TempData["Message"] = "Lỗi";
                 TempData["Success"] = false;
-                return RedirectToAction("", "Cart");
+                return BadRequest();
             }
 
         }

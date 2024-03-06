@@ -4,7 +4,6 @@ using BookingBirthday.Server.Controllers;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Linq;
 
 public class HostPackageController : HostBaseController
 {
@@ -45,6 +44,7 @@ public class HostPackageController : HostBaseController
                 Id = x.Id,
                 Name = x.Name,
                 Detail = x.Detail,
+                Note = x.Note,
                 Venue = x.Venue,
                 Price = x.Price,
                 image_url = x.image_url
@@ -73,6 +73,7 @@ public class HostPackageController : HostBaseController
                 Name = productData.Name!,
                 Venue = productData.Venue!,
                 Detail = productData.Detail!,
+                Note = productData.Note,
                 Price = productData.Price,
                 image_url = UploadedFile(productData.file!)
             };
@@ -106,6 +107,7 @@ public class HostPackageController : HostBaseController
         {
             p.Name = productData.Name;
             p.Detail = productData.Detail;
+            p.Note = productData.Note;
             p.Price = productData.Price;
             p.Venue = productData.Venue;
             if (productData.file != null)
@@ -177,15 +179,13 @@ public class HostPackageController : HostBaseController
         return "/imgPackage/" + uniqueFileName;
     }
 
-    private void DeleteImage(string fileName)
+    public void DeleteImage(string fileName)
     {
-        if (string.IsNullOrEmpty(fileName))
-            return;
-
         var filePath = Path.Combine(_imageContentFolder, fileName);
         if (System.IO.File.Exists(filePath))
         {
-            System.IO.File.Delete(filePath);
+            Task.Run(() => System.IO.File.Delete(filePath));
         }
     }
 }
+

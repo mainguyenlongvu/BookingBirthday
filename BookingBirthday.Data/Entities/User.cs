@@ -21,6 +21,7 @@ namespace BookingBirthday.Data.Entities
         public string? Address { get; set; }
         public string? Image_url { get; set; }
         public string?  Role { get; set; }
+        public string? Status { get; set; }
 
         public List<Booking>? Bookings { get; set; }
         public List<Promotion>? Promotions { get; set; }
