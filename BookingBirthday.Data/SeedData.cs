@@ -110,7 +110,7 @@ namespace BookingBirthday.Data
                         BookingStatus = bookingData[2].Trim(),
                         Total = double.Parse(bookingData[3].Trim()),
                         UserId = int.Parse(bookingData[4].Trim()),
-                        PaymentId = int.Parse(bookingData[5].Trim()),
+                        DepositPaymentId = int.Parse(bookingData[5].Trim()),
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);
@@ -149,7 +149,7 @@ namespace BookingBirthday.Data
 
         public static void InitializePayment(ModelBuilder modelBuilder)
         {
-            var payment = new List<Payment>();
+            var payment = new List<DepositPayment>();
 
             if (File.Exists(PAYMENT_FILE_PATH))
             {
@@ -162,29 +162,18 @@ namespace BookingBirthday.Data
                 {
                     string[] paymentData = paymentLine!.Split("|");
 
-                    PaymentMethod paymentMethod = PaymentMethod.VnPay;
-                    if (int.Parse(paymentData[2].Trim()) == 1)
-                    {
-                        paymentMethod = PaymentMethod.ByCast;
-                    }
-                    else if (int.Parse(paymentData[2].Trim()) == 2)
-                    {
-                        paymentMethod = PaymentMethod.Installment;
-                    }
-
-                    payment.Add(new Payment
+                    payment.Add(new DepositPayment
                     {
                         Id = paymentId++,
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        PaymentMethod = paymentMethod,
-                        Success = bool.Parse(paymentData[3].Trim()),
-                        Token = paymentData[4].Trim(),
-                        VnPayResponseCode = paymentData[5].Trim(),
-                        OrderDescription = paymentData[6].Trim(),
-                        BookingId = int.Parse(paymentData[7].Trim())
+                        Success = bool.Parse(paymentData[2].Trim()),
+                        Token = paymentData[3].Trim(),
+                        VnPayResponseCode = paymentData[4].Trim(),
+                        OrderDescription = paymentData[5].Trim(),
+                        BookingId = int.Parse(paymentData[6].Trim())
                     });
                 }
-                modelBuilder.Entity<Payment>().HasData(payment);
+                modelBuilder.Entity<DepositPayment>().HasData(payment);
             }
         }
 

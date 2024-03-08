@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Configurations
 {
-    public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
+    public class RemainingPaymentConfiguration : IEntityTypeConfiguration<RemainingPayment>
     {
-        public void Configure(EntityTypeBuilder<Payment> builder)
+        public void Configure(EntityTypeBuilder<RemainingPayment> builder)
         {
-            builder.ToTable("Payment");
+            builder.ToTable("RemainingPayment");
 
             // Primary Key
             builder.HasKey(x => x.Id);
@@ -22,7 +22,6 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.PaymentMethod).IsRequired();
 			builder.Property(x => x.Success).IsRequired();
 			builder.Property(x => x.Token).IsRequired();
 			builder.Property(x => x.VnPayResponseCode).IsRequired();
@@ -32,8 +31,8 @@ namespace BookingBirthday.Data.Configurations
 
             // 1:1 relationship with Booking
             builder.HasOne(x => x.Booking)
-                .WithOne(x => x.Payment)
-                .HasForeignKey<Booking>(x => x.PaymentId);
+                .WithOne(x => x.RemainingPayments)
+                .HasForeignKey<Booking>(x => x.RemainingPaymentId);
         }
     }
 }
