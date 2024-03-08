@@ -28,42 +28,54 @@ namespace BookingBirthday.Server.Controllers
         [HttpPost]
         public IActionResult Login(LoginModel loginData)
         {
-            var pwt = CreateMD5.MD5Hash(loginData.Password!);
-            var user = _dbContext.Users.FirstOrDefault(x => x.Username == loginData.Username && x.Password == pwt);
-            if (user.Status == "InActive")
+            try
             {
-                TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                var pwt = CreateMD5.MD5Hash(loginData.Password!);
+                var user = _dbContext.Users.FirstOrDefault(x => x.Username == loginData.Username && x.Password == pwt);
+                
+                if (user != null)
+                {
+                    if (user!.Status == "InActive")
+                    {
+                        TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                        TempData["Success"] = false;
+                        return View(loginData);
+                    }
+
+                    HttpContext.Session.SetString("username", user.Username!);
+                    HttpContext.Session.SetString("role", user.Role!);
+                    HttpContext.Session.SetString("status", user.Status!);
+                    HttpContext.Session.SetString("user_id", user.Id.ToString()!);
+                    HttpContext.Session.SetString("name", user.Name!);
+                    HttpContext.Session.SetString("email", user.Email!);
+                    HttpContext.Session.SetString("phone", user.Phone!);
+                    HttpContext.Session.SetString("address", user.Address!);
+                    if (user.Role == "Admin")
+                    {
+                        TempData["Message"] = "Chào mừng quản trị viên";
+                    }
+                    else if (user.Role == "Host")
+                    {
+                        TempData["Message"] = "Chào mừng chủ tiệc";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Chào mừng khách hàng";
+                    }
+                    TempData["Success"] = true;
+                    return RedirectToAction("Index", "Home");
+                }
+                TempData["Message"] = "Tài khoản không tồn tại";
                 TempData["Success"] = false;
                 return View(loginData);
             }
-            if (user != null)
+            catch(Exception ex)
             {
-                HttpContext.Session.SetString("username", user.Username!);
-                HttpContext.Session.SetString("role", user.Role!);
-                HttpContext.Session.SetString("status", user.Status!);
-                HttpContext.Session.SetString("user_id", user.Id.ToString()!);
-                HttpContext.Session.SetString("name", user.Name!);
-                HttpContext.Session.SetString("email", user.Email!);
-                HttpContext.Session.SetString("phone", user.Phone!);
-                HttpContext.Session.SetString("address", user.Address!);
-                if (user.Role == "Admin")
-                {
-                    TempData["Message"] = "Chào mừng quản trị viên";
-                }
-                else if (user.Role == "Host")
-                {
-                    TempData["Message"] = "Chào mừng chủ tiệc";
-                }
-                else
-                {
-                    TempData["Message"] = "Chào mừng khách hàng";
-                }
-                TempData["Success"] = true;
-                return RedirectToAction("Index", "Home");
+                TempData["Message"] = "Đăng nhập không thành công";
+                TempData["Success"] = false;
+                return View(loginData);
             }
-            TempData["Message"] = "Đăng nhập không thành công";
-            TempData["Success"] = false;
-            return View(loginData);
+            
         }
         
         // POST: Users/Register
@@ -104,7 +116,7 @@ namespace BookingBirthday.Server.Controllers
                 }
                 else
                 {
-                    user.Image_url = "";
+                    user.Image_url = "/imgProfile/avatar.png";
                 }
                 _dbContext.Users.Add(user);
                 _dbContext.SaveChanges();
@@ -192,7 +204,7 @@ namespace BookingBirthday.Server.Controllers
                     user.Name = userData.Name;
                     if (userData.file != null)
                     {
-                        if (user.Image_url != "/imgProfile/" && user.Image_url != null)
+                        if (user.Image_url != "/imgProfile/avatar.png" && user.Image_url != null)
                         {
                             var n = user.Image_url!.Remove(0, 12);
                             DeleteImage(n);

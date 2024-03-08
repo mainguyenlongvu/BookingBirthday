@@ -1,4 +1,5 @@
 ﻿@model List<BookingBirthday.Data.Entities.Booking>
+@using BookingBirthday.Server.Common;
 
 @{
     ViewData["Title"] = "QL_DonHang Page";
@@ -32,7 +33,7 @@
                                     <th>Ngày đặt hàng</th>
                                     <th>Thời gian bắt đầu tiệc</th>
                                     <th>Thời gian hủy tiệc</th>
-                                    <th>Tổng tiền</th>
+                                    <th>Tổng tiền: đồng</th>
                                     <th>Ghi chú</th>
                                     <th>Lý do hủy đơn của chủ tiệc</th>
                                     <th>Trạng thái</th>
@@ -44,7 +45,7 @@
                                     <tr>
                                         <td>@(stt++)</td>
                                         <td>
-                                            <label style="width: auto">@item.Id</label>
+                                            <label style="width: auto">@CreateMD5.MD5Hash(item.Id.ToString())</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Phone</label>
@@ -67,7 +68,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
+                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
