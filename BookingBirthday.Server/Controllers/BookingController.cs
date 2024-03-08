@@ -8,7 +8,7 @@ using System;
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class BookingController : GuestBaseController
+    public class BookingController : BaseController
     {
         private readonly BookingDbContext _dbContext;
 
