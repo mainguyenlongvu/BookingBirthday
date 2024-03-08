@@ -8,13 +8,13 @@ using Newtonsoft.Json;
 public class HostPackageController : HostBaseController
 {
     private readonly BookingDbContext _dbContext;
-    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IWebHostEnvironment webHostEnvironment;
     private readonly string _imageContentFolder;
 
     public HostPackageController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
     {
         _dbContext = dbContext;
-        _webHostEnvironment = webHostEnvironment;
+        this.webHostEnvironment = webHostEnvironment;
         _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgPackage");
     }
 
