@@ -12,8 +12,9 @@ namespace BookingBirthday.Server.Models
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string? Address { get; set; }
-        public Role? Role { get; set; }
+        public string? Role { get; set; }
+        public string? Status { get; set; }
         public string? Image_url { get; set; }
-        public IFormFile? File { get; set; }
+        public IFormFile? file { get; set; }
     }
 }

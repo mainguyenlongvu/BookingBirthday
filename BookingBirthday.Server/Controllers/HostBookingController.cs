@@ -5,6 +5,7 @@ using static NuGet.Packaging.PackagingConstants;
 using System;
 using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
+using BookingBirthday.Data.Enums;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -36,11 +37,13 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var query = from a in _dbContext.Bookings
-                        join b in _dbContext.Carts
-                        on a.Id equals b.Id
+                        join b in _dbContext.BookingPackages
+                        on a.Id equals b.BookingId
                         join c in _dbContext.Packages
-                        on b.Id equals c.Id
-            where c.Id == user_id
+                        on b.PackageId equals c.Id
+                        //join d in _dbContext.Users
+                        //on c.UserId equals d.Id
+                        where c.UserId == user_id
                         select new { a };
             var orders = await query.OrderByDescending(x => x.a.Date_order).Select(x => new Booking
             {
@@ -49,7 +52,10 @@ namespace BookingBirthday.Server.Controllers
                 Phone = x.a.Phone,
                 Email = x.a.Email,
                 Note = x.a.Note,
+                Reason = x.a.Reason,
                 Date_order = x.a.Date_order,
+                Date_start = x.a.Date_start,
+                Date_cancel = x.a.Date_cancel,
                 Total = x.a.Total,
                 BookingStatus = x.a.BookingStatus,
 
@@ -57,16 +63,16 @@ namespace BookingBirthday.Server.Controllers
             return View(orders);
         }
         [HttpPost]
-        public IActionResult Edit(int orderId, int status)
+        public IActionResult Edit(int Id, string status)
         {
             try
             {
                 var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
-                var order = _dbContext.Bookings.Find(orderId);
+                var order = _dbContext.Bookings.Find(Id);
                 if (order != null)
                 {
-                    order.BookingStatus = (Data.Enums.BookingStatus)status;
+                    order.BookingStatus = status;
                     _dbContext.SaveChanges();
                     TempData["Message"] = "Cập nhật trạng thái đơn hàng thành công";
                     TempData["Success"] = true;
@@ -96,5 +102,99 @@ namespace BookingBirthday.Server.Controllers
             }
             return View(user);
         }
-    }
+
+        [HttpPost]
+        public IActionResult DuyetDon(int Id)
+        {
+            try
+            {
+                var data =  _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Accepted";
+                     _dbContext.SaveChanges();
+          
+                    TempData["Message"] = "Nhận đơn hàng thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult dathanhtoan(int Id)
+        {
+            try
+            {
+                var data = _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Paid";
+                    _dbContext.SaveChanges();
+
+                    TempData["Message"] = "Chuyển trạng thái đơn thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost]
+        public  IActionResult TuChoiDon(int Id, string? Reason)
+        {
+            try
+            {
+                var data =  _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Declined";
+                    data.Date_cancel = DateTime.Now;
+                    data.Reason = Reason;
+                     _dbContext.SaveChanges();
+                    
+                    TempData["Message"] = "Hủy đơn hàng thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+
+        }
 }
+    }

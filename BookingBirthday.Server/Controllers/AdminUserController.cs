@@ -32,7 +32,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var users = _dbContext.Users.OrderByDescending(x => x.Id).ToList();
+            var users = _dbContext.Users.OrderByDescending(x => x.Id).Where(x=> x.Role != "Admin").ToList();
             return View(users);
         }
         [HttpPost]
@@ -54,10 +54,11 @@ namespace BookingBirthday.Server.Controllers
                     return RedirectToAction("Index");
                 }
                 var user = new Data.Entities.User();
-                user.Username = userData.Username;
-                user.Role=Data.Enums.Role.Guest;
+                user.Username = userData.Username!;
+                user.Role= userData.Role;
+                user.Status = "Active";
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
-                user.Email = userData.Email;
+                user.Email = userData.Email!;
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;
@@ -113,12 +114,13 @@ namespace BookingBirthday.Server.Controllers
                         return RedirectToAction("Index");
                     }
                 }
-                user.Role = (Data.Enums.Role)userData.Role;
+                user.Role = userData.Role;
+                user.Status = userData.Status;
                 if (userData.Password != null)
                 {
                     user.Password = CreateMD5.MD5Hash(userData.Password!);
                 }
-                user.Email = userData.Email;
+                user.Email = userData.Email!;
                 user.Address = userData.Address;
                 user.Phone = userData.Phone;
                 user.Name = userData.Name;

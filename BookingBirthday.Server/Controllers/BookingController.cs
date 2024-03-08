@@ -16,96 +16,68 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult ViewOrders()
+        public IActionResult ViewBookings()
         {
-            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.Id == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
+
+            //Ràng điều kiện ở đây
+
+            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.UserId == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
             return View(orders);
         }
-        public IActionResult ViewOrder(int orderId)
+        public IActionResult ViewBooking(int Id)
         {
             var session = HttpContext.Session;
-            var role = HttpContext.Session.GetString("role");
             List<Category_requests> category_request = null!;
+            var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
-            if (role != null)
-            {
-
-                if (role == "Admin")
-                {
-                    category_request = _dbContext.Category_Requests
-                        .Where(x => x.is_approved == 0 && x.is_deleted_by_admin == false)
-                        .OrderByDescending(x => x.created_at)
-                        .ToList();
-                }
-                else if (role == "Store Owner")
-                {
-                    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-                    category_request = _dbContext.Category_Requests
-                        .Where(x => x.is_deleted_by_owner == false && x.requester_id == user_id && (x.is_approved == -1 || x.is_approved == 1))
-                        .OrderByDescending(x => x.created_at)
-                        .ToList();
-                }
-
-                if (category_request != null)
+            if (category_request != null)
                 {
                     var jsonNotification = JsonConvert.SerializeObject(category_request);
                     session.SetString("notification", jsonNotification);
                 }
-            }
+            //}
 
 
-            var query = from a in _dbContext.Carts.Include(x => x.Package)
-                        where a.BookingId == orderId
+            var query = from a in _dbContext.BookingPackages
+                        join b in _dbContext.Bookings
+                        on a.BookingId equals b.Id
+                        where b.UserId == user_id && a.BookingId == Id
                         select new { a };
             if (query != null)
             {
-                var data = query.Select(x => new CartModel()
+                var data = query.Select(x => new BookingPackageModel()
                 {
-                    Id = x.a.Id,
-                    BookingId = orderId,
-                    PackageId = x.a.PackageId,
-                    Package_Name = x.a.Package!.Name,
-                    Price = x.a.Price,
-                    Total = x.a.Total,
+                    Booking_Package_Id = x.a.Id,
+                    Booking_id = Id,
+                    Package_Id = x.a.PackageId,
+                    Package_name = x.a.Package!.Name,
+                    price = x.a.Price,
                 }).ToList();
-                return Json(data);
+                return Json (data);
             }
             return Json(null);
         }
-        public async Task<IActionResult> HuyDon(int orderId)
+        [HttpPost]
+        public IActionResult HuyDon(int orderId)
         {
             try
             {
-                var data = await _dbContext.Bookings.SingleOrDefaultAsync(x => x.Id == orderId);
+                var data =  _dbContext.Bookings.Find(orderId);
                 if (data != null)
                 {
-                    data.BookingStatus = Data.Enums.BookingStatus.Declined;
-                    await _dbContext.SaveChangesAsync();
-                    var order_item = await _dbContext.Carts.Where(x => x.BookingId == orderId).ToListAsync();
-                    if (order_item != null)
-                    {
-                        foreach (var item in order_item)
-                        {
-                            var product = await _dbContext.Packages.SingleOrDefaultAsync(x => x.Id == item.Id);
-                            if (product != null)
-                            {
-                                await _dbContext.SaveChangesAsync();
-                            }
-                        }
-                    }
-                    TempData["Message"] = "Hủy đơn hàng thành công";
+                    data.BookingStatus = "Declined";
+                    data.Date_cancel = DateTime.Now;
+                     _dbContext.SaveChanges();
+                    TempData["Message"] = "Nhân viên sẽ liên hệ hoàn cọc nếu bạn hủy đúng thời gian quy định";
                     TempData["Success"] = true;
-                    return Json(data);
                 }
-                TempData["Message"] = "Đơn hàng không tồn tại";
-                TempData["Success"] = false;
-                return Json(null);
+                return Ok();
             }
             catch (Exception ex)
             {
                 TempData["Message"] = "Lỗi";
                 TempData["Success"] = false;
-                return RedirectToAction("", "Cart");
+                return BadRequest();
             }
 
         }

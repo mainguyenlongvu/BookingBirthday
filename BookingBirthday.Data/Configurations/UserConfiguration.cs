@@ -21,7 +21,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.HasIndex(x => x.Name);
+            builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Gender).HasDefaultValue(Gender.Male);
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Username).IsRequired();
@@ -30,6 +30,7 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(x => x.Phone);
             builder.HasIndex(x => x.Address); // Define index for Address
             builder.Property(x => x.Role).IsRequired();
+            builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.Image_url); // This should not be a primary key
 
             // Relationships, if any

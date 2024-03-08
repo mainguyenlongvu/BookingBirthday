@@ -21,23 +21,24 @@
                     @if (Model.Count > 0) {
                       double total = 0;
                       int stt = 1;
-  
-                      <div class="table-responsive card mt-2">
+                        var Venue= "";
+                        <div class="table-responsive card mt-2">
                           <table class="table table-hover">
                             <tr>
                               <th>#</th>
                               <th>Sản phẩm</th>
                               <th>Giá</th>
                               <th>Thành tiền</th>
+                              <th>Địa chỉ</th>
                               <th></th>
                             </tr>
                             <!-- Print Package Start -->
                             @foreach (var cartitem in Model)
                             {
                                 var thanhtien =  cartitem.Package!.Price;
-                                total += thanhtien;
-
-                                <tr>
+                                    total += thanhtien;
+                                     Venue = cartitem.Package.Venue;
+                                    <tr>
                                    <td>@(stt++)</td>
                                    <td>
                                        <label style="width: auto">@cartitem.Package.Name</label>
@@ -50,13 +51,16 @@
                                            <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
                                        </label>
                                    </td> *@
+                                        <td>
+                                            <label style="width: auto">@cartitem.Package.Venue</label>
+                                        </td>
                                    <td>
                                        <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
                                    </td>
                                    <td>
                                       <label style="width: auto">
-                                          <button class="btn btn-success updatecartitem" 
-                                            data-productid="@cartitem.Package.Id">Cập nhật</button>
+                                          @* <button class="btn btn-success updatecartitem" 
+                                            data-productid="@cartitem.Package.Id">Cập nhật</button> *@
                                           <a asp-route="removecart" asp-route-productid="@cartitem.Package.Id"
                                             class="btn btn-danger">Xóa</a>
                                       </label>
@@ -65,41 +69,6 @@
                             }
                             <!-- Print Package End -->
 
-                            <!-- Print Service Start -->
-                            @foreach (var cartitem in Model)
-                            {
-                                var thanhtien =  cartitem.Service!.Price;
-                                total += thanhtien;
-
-                                <tr>
-                                   <td>@(stt++)</td>
-                                   <td>
-                                       <label style="width: auto">@cartitem.Service.Name</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(cartitem.Service.Price).ToString("#,##0") đồng</label>
-                                   </td>
-                                   @* <td>
-                                       <label style="width: auto">
-                                           <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Service.Id}")" type="number" min="1"/>
-                                       </label>
-                                   </td> *@
-                                   <td>
-                                       <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
-                                   </td>
-                                   <td>
-                                      <label style="width: auto">
-                                          <button class="btn btn-success updatecartitem" 
-                                            data-productid="@cartitem.Service.Id">Cập nhật</button>
-                                          <a asp-route="removecart" asp-route-productid="@cartitem.Service.Id"
-                                            class="btn btn-danger">Xóa</a>
-                                      </label>
-                                   </td>
-                                </tr>
-                            }
-                            <!-- Print Service End -->
-
-
                               <tr>
                                   <td colspan="5" style="text-align: right">Tổng tiền</td>
                                   <td>@Convert.ToDouble(total).ToString("#,##0") đồng</td>
@@ -107,41 +76,45 @@
                               </tr>
                           </table>
                       </div>
-                      @if (Context.Session.GetString("username") != null)
-                      {
-                         <form asp-action="AddOrder" asp-controller="Cart" method="post">
-                              <div class="col-md-4">
-                                  <input type="hidden" name="TongTien" value="@total" />
-                                  <div class="mb-3">
-                                      <label class="form-label">Họ tên</label>
-                                      <input type="text" class="form-control" name="TenKH" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
-                                  </div>
+                        @if (Context.Session.GetString("username") != null && Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
+                        {
+                            
+                                <form asp-action="AddOrder" asp-controller="Cart" method="post">
+                                    <div class="col-md-4">
+                                    <input type="hidden" name="Address" value="@Venue" />
+                                        <input type="hidden" name="Total" value="@total" />
+                                        <div class="mb-3">
+                                            <label class="form-label">Họ tên</label>
+                                            <input type="text" class="form-control" name="Name" required placeholder="Tên khách hàng" value="@Context.Session.GetString("name")" />
+                                        </div>
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Số điện thoại</label>
-                                      <input type="tel" class="form-control" name="SDT" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
-                                  </div>
-                                  
+                                        <div class="mb-3">
+                                            <m class="form-label">Số điện thoại</m>
+                                            <input type="tel" class="form-control" name="Phone" required placeholder="Số điện thoại" value="@Context.Session.GetString("phone")" />
+                                        </div>
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Email</label>
-                                      <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
-                                  </div>
 
-                                  <div class="mb-3">
-                                      <label class="form-label">Địa chỉ giao</label>
-                                      <input type="text" class="form-control" name="DiaChiGiao" required placeholder="Địa chỉ giao" value="@Context.Session.GetString("address")" />
-                                  </div>
-                                  <div class="mb-3">
-                                      <label class="form-label">Ghi chú</label>
-                                      <input type="text" class="form-control" name="note" placeholder="Ghi chú" value="" />
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" name="Email" required placeholder="Email" value="@Context.Session.GetString("email")" />
+                                        </div>
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Thời gian tiệc diễn ra</label>
+                                        <input type="text" class="form-control" name="Date_start" required placeholder="thời gian + dd/MM//yyyy" value="" />
                                     </div>
-                                </div>
-                              @* <button type="submit" class="btn btn-success">Gửi đơn hàng</button> *@
-                              <a href="/Cart/Payment" class="btn btn-success">Thanh Toán</a>
-                              <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
-                            </form>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Ghi chú</label>
+                                            <input type="text" class="form-control" name="Note" placeholder="Ghi chú" value="" />
+                                        </div>
+                                    </div>
 
+                                    <button type="submit" class="btn btn-success">Thanh toán cọc</button>
+                                    <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                                </form>
+                            
                         }
                         else
                         {
@@ -156,13 +129,11 @@
                                   $(".updatecartitem").click(function (event) {
                                       event.preventDefault();
                                       var productid = $(this).attr("data-productid");
-                                      var quantity = $("#quantity-" + productid).val();
                                       $.ajax({
                                           type: "POST",
                                           url:"@Url.RouteUrl("updatecart")",
                                           data: {
                                               productid: productid,
-                                              quantity:quantity
                                           },
                                           success: function (result) {
                                               window.location.href = "@Url.RouteUrl("cart")";

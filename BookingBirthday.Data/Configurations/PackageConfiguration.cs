@@ -17,20 +17,21 @@ namespace BookingBirthday.Data.Configurations
 
             // Primary Key
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
             builder.Property(x => x.Name).IsUnicode().IsRequired();
             builder.Property(x => x.Price).IsRequired();
             builder.Property(x => x.Venue).IsUnicode().IsRequired();
             builder.Property(x => x.Detail).IsUnicode().IsRequired();
-            builder.Property(x => x.image_url).IsRequired();
+            builder.Property(x => x.Note).IsUnicode().IsRequired();
+            builder.Property(x => x.image_url);
             builder.HasIndex(p => p.PromotionId);
             builder.HasIndex(p => p.UserId);
-            builder.Property(x => x.ServiceId).IsRequired();
 
             // 1:M relationship with Promotion
             builder.HasOne<Promotion>(x => x.Promotion)
-                .WithMany(x => x.Services)
+                .WithMany(x => x.Package)
                 .HasForeignKey(x => x.PromotionId);
         }
     }

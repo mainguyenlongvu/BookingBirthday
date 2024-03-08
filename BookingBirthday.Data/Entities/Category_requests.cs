@@ -12,6 +12,8 @@ namespace BookingBirthday.Data.Entities
         [Key]
         public int category_request_id { get; set; }
         public string? category_name { get; set; }
+        public string? host_name { get; set; }
+        public string? report { get; set; }
         public int requester_id { get; set; }
         public int is_approved { get; set; }
         public bool is_viewed_by_admin { get; set; }

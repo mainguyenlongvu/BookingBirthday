@@ -19,12 +19,9 @@ namespace BookingBirthday.Data.Configurations
             builder.HasKey(cp => new { cp.CartId, cp.PackageId });
 
             // Foreign Key
-            builder.HasOne(cp => cp.Cart)
-                .WithMany(x => x.CartPackages)
-                .HasForeignKey(cp => cp.CartId);
 
             builder.HasOne(cp => cp.Package)
-                .WithMany(x => x.CartServices)
+                .WithMany(x => x.CartPackages)
                 .HasForeignKey(cp => cp.PackageId);
         }
     }

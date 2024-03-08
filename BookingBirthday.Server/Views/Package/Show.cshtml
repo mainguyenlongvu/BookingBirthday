@@ -1,0 +1,50 @@
+﻿@model BookingBirthday.Server.Models.PackageModel
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Detail Product Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = HttpContextAccessor.HttpContext!.Session;
+    var role = session.GetString("role");
+}
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Chi tiết sản phẩm</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img src="@Model.image_url" alt="@Model.Name" class="img-fluid">
+                            </div>
+                            <div class="col-md-6">
+                                <h2>@Model.Name</h2>
+                                <label>Địa Chỉ: @Model.Venue</label>
+                                <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>
+                                @if (role != "Admin" && role != "Host")
+                                {
+                                    <a class="text-body" class="btn btn-primary" asp-route="addcart" asp-route-productid="@Model.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                                }
+                                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                                    <h1 class="display-5 mb-3">MÔ TẢ</h1>
+                                </div>
+                                @Html.Raw(Model.Detail)
+                                <div>
+                                    <label>***Chú ý*** @Model.Note</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

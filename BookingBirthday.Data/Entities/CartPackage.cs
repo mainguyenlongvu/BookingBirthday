@@ -10,10 +10,10 @@ namespace BookingBirthday.Data.Entities
     {
         //CartId
         public int CartId { get; set; }
-        public Cart Cart { get; set; }
+        public Cart? Cart { get; set; }
 
         //PackageId
         public int PackageId { get; set; }
-        public Package Package { get; set; }
+        public Package? Package { get; set; }
     }
 }

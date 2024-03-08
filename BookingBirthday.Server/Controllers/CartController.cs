@@ -1,18 +1,15 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
-using static NuGet.Packaging.PackagingConstants;
-using System;
 using BookingBirthday.Data.EF;
-using BookingBirthday.Application.Payment.Models;
-using BookingBirthday.Application.Payment.Services;
+using BookingBirthday.Server.Services;
 
 
 namespace BookingBirthday.Server.Controllers
 {
-    public class CartController : Controller
+    public class CartController : GuestBaseController
     {
         private readonly BookingDbContext _appContext;
         private readonly IVnPayService _vnPayService;
@@ -25,7 +22,6 @@ namespace BookingBirthday.Server.Controllers
         public const string CARTKEY = "cart";
         public List<CartModel> GetCartItems()
         {
-
             var session = HttpContext.Session;
             string jsoncart = session.GetString(CARTKEY)!;
             if (jsoncart != null)
@@ -41,7 +37,7 @@ namespace BookingBirthday.Server.Controllers
             session.Remove(CARTKEY);
         }
 
-        void SaveCartSession(List<CartModel> ls)
+        void SaveCartSession(List<Models.CartModel> ls)
         {
             var session = HttpContext.Session;
             string jsoncart = JsonConvert.SerializeObject(ls);
@@ -65,7 +61,7 @@ namespace BookingBirthday.Server.Controllers
                         .OrderByDescending(x => x.created_at)
                         .ToList();
                 }
-                else if (role == "Store Owner")
+                else if (role == "Host")
                 {
 
                     var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
@@ -98,56 +94,26 @@ namespace BookingBirthday.Server.Controllers
             if (product == null)
                 return NotFound("Không có sản phẩm");
 
+
             var cart = GetCartItems();
-            var cartitem = cart.Find(p => p.Package!.Id == productid);
-            if (cartitem != null)
+
+            //var cartitem = cart.Find(p => p.Package!.Id == productid);
+
+            if (cart.Count >=1)
             {
-                TempData["Message"] = "Sản phẩm đã được thêm";
+                TempData["Message"] = "Giỏ hàng đã có bữa tiệc";
                 TempData["Success"] = false;
-                return Ok();
+                return RedirectToAction("Index", "Home");
             }
             else
             {
-                cart.Add(new CartModel() {  Package = product });
+                cart.Add(new Models.CartModel() {  Package = product });
             }
 
             SaveCartSession(cart);
             return RedirectToAction(nameof(Index));
         }
-        //[Route("/updatecart", Name = "updatecart")]
-        //[HttpPost]
-        //public IActionResult UpdateCart([FromForm] int productid, [FromForm] int quantity)
-        //{
-        //    var cart = GetCartItems();
-        //    var cartitem = cart.Find(p => p.Package!.Id == productid);
-        //    if (cartitem != null)
-        //    {
-        //        var product = _appContext.Services
-        //        .Where(p => p.product_id == productid)
-        //        .FirstOrDefault();
-        //        if (product != null)
-        //        {
-        //            if (product.quantity >= quantity)
-        //            {
-        //                cartitem.Quantity = quantity;
-        //            }
-        //            else
-        //            {
-        //                TempData["Message"] = "Sản phẩm không đủ số lượng";
-        //                TempData["Success"] = false;
-        //                return Ok();
-        //            }
-        //        }
-        //        else
-        //        {
-        //            TempData["Message"] = "Sản phẩm không tồn tại";
-        //            TempData["Success"] = false;
-        //            return Ok();
-        //        }
-        //    }
-        //    SaveCartSession(cart);
-        //    return Ok();
-        //}
+        
         [Route("/removecart/{productid:int}", Name = "removecart")]
         public IActionResult RemoveCart([FromRoute] int productid)
         {
@@ -167,19 +133,65 @@ namespace BookingBirthday.Server.Controllers
         {
             if (HttpContext.Session.GetString("user_id") != null)
             {
+                //var Venue = _appContext.Packages.FirstOrDefault(x => x.Id == cartModel.Package!.Id);
+                var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                //var query = from a in _appContext.Bookings
+                //            join b in _appContext.BookingPackages
+                //            on a.Id equals b.BookingId
+                //            join c in _appContext.Packages
+                //            on b.PackageId equals c.Id
+
+                //            where c.Id == b.PackageId && a.Id == b.BookingId && c.Id == cartModel.Package!.Id
+                //            select c.Venue;
 
                 try
                 {
                     request.CartModels = GetCartItems();
-                    request.Id = int.Parse(HttpContext.Session.GetString("user_id")!);
+                    request.UserId = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var donHang = new Booking();
-                    donHang.Id = request.Id;
+                    donHang.UserId = request.UserId;
                     donHang.Date_order = DateTime.Now;
-                    donHang.BookingStatus= Data.Enums.BookingStatus.Processing;
+
+                    if(request.Date_start != null)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Không được để trống ngày bắt đầu tiệc";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+                    if (request.Date_start > DateTime.Now)
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Thời gian bắt đầu sai";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
+
+
+                    donHang.Date_start = request.Date_start;
+                    
+                    donHang.BookingStatus = "Processing";
+
+                    //Lấy địa chỉ từ kết quả truy vấn
+                    //var addressList =  query.FirstOrDefault();
+                    //var address = string.Join(", ", addressList);
+                    //donHang.Address = query.FirstOrDefault();
+
+                    donHang.Address = request.Address;
+
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;
                     donHang.Total = request.Total;
+                    donHang.DepositPaymentId = null;
+
                     await _appContext.AddAsync(donHang);
                     await _appContext.SaveChangesAsync();
 
@@ -187,37 +199,27 @@ namespace BookingBirthday.Server.Controllers
                     {
                         foreach (var item in request.CartModels)
                         {
-                            var chiTietDonHang = new Cart();
-                            chiTietDonHang.Id = donHang.Id;
+                            var chiTietDonHang = new BookingPackage();
+                            chiTietDonHang.BookingId = donHang.Id;
                             chiTietDonHang.PackageId = item.Package!.Id;
                             chiTietDonHang.Price = item.Package!.Price;
                             await _appContext.AddAsync(chiTietDonHang);
                             await _appContext.SaveChangesAsync();
-
-                            var product = _appContext.Packages
-                                .Where(p => p.Id == item.Package!.Id)
-                                .FirstOrDefault();
-                            if (product != null)
-                            {
-                                TempData["Message"] = "Sản phẩm đã được thêm";
-                                TempData["Success"] = false;
-                                await _appContext.SaveChangesAsync();
-                            }
                         }
 
-                        TempData["Message"] = "Đặt hàng thành công";
+                        TempData["Message"] = "Đặt thành công";
                         TempData["Success"] = true;
                         ClearCart();
-                        return RedirectToAction("Succ", "Cart");
+                        return RedirectToAction("DepositPayment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
                     }
                     else
                     {
-                        TempData["Message"] = "Đặt hàng không thành công";
+                        TempData["Message"] = "Đặt không thành công";
                         TempData["Success"] = false;
                     }
                     return RedirectToAction("", "Cart");
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     TempData["Message"] = "Lỗi";
                     TempData["Success"] = false;
@@ -227,23 +229,119 @@ namespace BookingBirthday.Server.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        // POST: Cart/Payment
-        public IActionResult Payment()
+        public IActionResult DepositPayment(int bookingId, int userId)
         {
+            var booking = _appContext.Bookings.Find(bookingId);
+            var user = _appContext.Users.Find(userId);
+
+            ViewData["BookingId"] = bookingId;
+            ViewData["Total"] = (booking.Total / 2);
+            ViewData["Name"] = user.Name;
             return View();
         }
-        public IActionResult CreatePaymentUrl(PaymentInformationModel model)
-        {
-            var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
 
+        public IActionResult RemainingPayment(int bookingId, int userId)
+        {
+            var booking = _appContext.Bookings.Find(bookingId);
+            var user = _appContext.Users.Find(userId);
+
+            ViewData["BookingId"] = bookingId;
+            ViewData["Total"] = (booking.Total / 2);
+            ViewData["Name"] = user.Name;
+            return View();
+        }
+
+        public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
+        {
+            ViewData["BookingId"] = bookingId;
+            var url = _vnPayService.CreateDepositPaymentUrl(bookingId, model, HttpContext);
             return Redirect(url);
         }
 
-        public IActionResult PaymentCallback()
+        public IActionResult CreateRemainingPaymentUrl(PaymentInformationModel model, int bookingId)
         {
-            var response = _vnPayService.PaymentExecute(Request.Query);
+            ViewData["BookingId"] = bookingId;
+            var url = _vnPayService.CreateRemainingPaymentUrl(bookingId, model, HttpContext);
+            return Redirect(url);
+        }
 
-            return Json(response);
+        public IActionResult PaymentSuccess()
+        {
+            return View();
+        }
+
+        public IActionResult PaymentFail()
+        {
+            return View();
+        }
+
+        public IActionResult DepositPaymentCallBack()
+        {
+            var response = _vnPayService.DepositPaymentExecute(Request.Query);
+
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+            var depositPayment = new DepositPayment
+            {
+                Date = DateTime.Now,
+                Success = response.Success,
+                Token = response.Token,
+                VnPayResponseCode = response.VnPayResponseCode,
+                OrderDescription = response.OrderDescription,
+                Amount = response.Amount,
+                BookingId = int.Parse(response.BookingId)
+            };
+
+            _appContext.DepositPayments.Add(depositPayment);
+            _appContext.SaveChanges();
+
+            var booking = _appContext.Bookings.Find(int.Parse(response.BookingId));
+
+            booking.DepositPaymentId = depositPayment.Id;
+
+            _appContext.SaveChanges();
+
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+            return RedirectToAction("Succ", "Cart");
+        }
+
+        public IActionResult RemainingPaymentCallBack()
+        {
+            var response = _vnPayService.RemainingPaymentExecute(Request.Query);
+
+            if (response == null || response.VnPayResponseCode != "00")
+            {
+                TempData["Message"] = $"Lỗi thanh toán VN Pay: {response.VnPayResponseCode}";
+                return RedirectToAction("PaymentFail");
+            }
+
+            var remainingPayment = new RemainingPayment
+            {
+                Date = DateTime.Now,
+                Success = response.Success,
+                Token = response.Token,
+                VnPayResponseCode = response.VnPayResponseCode,
+                OrderDescription = response.OrderDescription,
+                Amount = response.Amount,
+                BookingId = int.Parse(response.BookingId)
+            };
+
+            _appContext.RemainingPayments.Add(remainingPayment);
+            _appContext.SaveChanges();
+
+            var booking = _appContext.Bookings.Find(int.Parse(response.BookingId));
+
+            booking.RemainingPaymentId = remainingPayment.Id;
+            booking.BookingStatus = "Paid";
+
+            _appContext.SaveChanges();
+
+            TempData["Message"] = $"Thanh toán VNPay thành công";
+            return RedirectToAction("ViewBookings", "Booking");
         }
     }
 }

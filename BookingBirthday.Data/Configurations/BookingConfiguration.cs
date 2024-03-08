@@ -23,19 +23,25 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.Property(x => x.Date_order).IsRequired();
-            builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
+            builder.Property(x => x.Date_start).IsRequired();
+            builder.Property(x => x.Date_cancel);
+            builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
+            builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.Property(x => x.Note).IsRequired();
+            builder.Property(x => x.Note);
+            builder.Property(x => x.Reason);
+            builder.Property(x => x.DepositPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.DepositPaymentId);
+            builder.Property(x => x.RemainingPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.RemainingPaymentId);
             builder.HasIndex(b => b.UserId);
-            builder.HasIndex(x => x.PaymentId).IsUnique();
 
             // 1:M relationship with User
             builder.HasOne(b => b.User)
                    .WithMany(u => u.Bookings)
-                   .HasForeignKey(b => b.UserId)
-                   .IsRequired();
+                   .HasForeignKey(b => b.UserId);
         }
     }
 }

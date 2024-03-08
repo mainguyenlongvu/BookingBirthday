@@ -17,19 +17,13 @@ namespace BookingBirthday.Data
 {
     public static class SeedData
     {
-        private static readonly string GUEST_FILE_PATH = "Resources/guests.txt";
-        private static readonly string HOST_FILE_PATH = "Resources/hosts.txt";
         private static readonly string PACKAGE_FILE_PATH = "Resources/packages.txt";
         private static readonly string CART_FILE_PATH = "Resources/carts.txt";
         private static readonly string BOOKING_FILE_PATH = "Resources/bookings.txt";
-        private static readonly string SERVICE_FILE_PATH = "Resources/services.txt";
         private static readonly string PROMOTION_FILE_PATH = "Resources/promotions.txt";
         private static readonly string PAYMENT_FILE_PATH = "Resources/payments.txt";
-        private static readonly string PACKAGE_SERVICE_FILE_PATH = "Resources/package-service.txt";
-        private static readonly string CART_SERVICE_FILE_PATH = "Resources/cart-service.txt";
         private static readonly string CART_PACKAGE_FILE_PATH = "Resources/cart-package.txt";
         private static readonly string BOOKING_PACKAGE_FILE_PATH = "Resources/booking-package.txt";
-        private static readonly string BOOKING_SERVICE_FILE_PATH = "Resources/booking-service.txt";
         private static readonly string USER_FILE_PATH = "Resources/users.txt";
 
         public static void Initialize(ModelBuilder modelBuilder)
@@ -37,14 +31,10 @@ namespace BookingBirthday.Data
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
             InitializeBooking(modelBuilder);
-            InitializeService(modelBuilder);
             InitializePromotion(modelBuilder);
             InitializePayment(modelBuilder);
-            InitializePackageService(modelBuilder);
-            InitializeCartService(modelBuilder);
             InitializeCartPackage(modelBuilder);
             InitializeBookingPackage(modelBuilder);
-            InitializeBookingService(modelBuilder);
             InitializeUser(modelBuilder);
         }
 
@@ -108,62 +98,25 @@ namespace BookingBirthday.Data
             if (File.Exists(BOOKING_FILE_PATH))
             {
                 using StreamReader sr = new(BOOKING_FILE_PATH);
-                int bookingId = 1;
                 string? bookingLine;
 
                 while ((bookingLine = sr.ReadLine()) != null)
                 {
                     string[]? bookingData = bookingLine!.Split('|');
 
-                    BookingStatus bookingStatus = BookingStatus.Accepted;
-                    if (int.Parse(bookingData[1].Trim()) == 2)
-                    {
-                        bookingStatus = BookingStatus.Declined;
-                    }
-                    else if (int.Parse(bookingData[1].Trim()) == 3)
-                    {
-                        bookingStatus = BookingStatus.Processing;
-                    }
-
                     booking.Add(new Booking
                     {
-                        Id = bookingId++,
                         Date_order = DateTime.ParseExact(bookingData[0].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        BookingStatus = bookingStatus,
-                        Total = double.Parse(bookingData[2].Trim()),
-                        UserId = int.Parse(bookingData[3].Trim()),
-                        PaymentId = int.Parse(bookingData[4].Trim()),
+                        BookingStatus = bookingData[2].Trim(),
+                        Total = double.Parse(bookingData[3].Trim()),
+                        UserId = int.Parse(bookingData[4].Trim()),
+                        DepositPaymentId = int.Parse(bookingData[5].Trim()),
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);
             }
         }
 
-        public static void InitializeService(ModelBuilder modelBuilder)
-        {
-            var service = new List<Service>();
-
-            if (File.Exists(SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(SERVICE_FILE_PATH);
-                int serviceId = 1;
-                string? serviceLine;
-
-                while ((serviceLine = sr.ReadLine()) != null)
-                {
-                    string[]? serviceData = serviceLine!.Split('|');
-
-                    service.Add(new Service
-                    {
-                        Id = serviceId++,
-                        Name = serviceData[0].Trim(),
-                        Price = double.Parse(serviceData[1].Trim()),
-                        Detail = serviceData[2].Trim(),
-                    });
-                }
-                modelBuilder.Entity<Service>().HasData(service);
-            }
-        }
 
         public static void InitializePromotion(ModelBuilder modelBuilder)
         {
@@ -186,7 +139,7 @@ namespace BookingBirthday.Data
                         FromDate = DateTime.ParseExact(promotionData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         ToDate = DateTime.ParseExact(promotionData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
                         DiscountPercent = double.Parse(promotionData[3].Trim()),
-                        Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
+                        //Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
                         //UserId = int.Parse(promotionData[5].Trim()),
                     });
                 }
@@ -196,7 +149,7 @@ namespace BookingBirthday.Data
 
         public static void InitializePayment(ModelBuilder modelBuilder)
         {
-            var payment = new List<Payment>();
+            var payment = new List<DepositPayment>();
 
             if (File.Exists(PAYMENT_FILE_PATH))
             {
@@ -209,73 +162,18 @@ namespace BookingBirthday.Data
                 {
                     string[] paymentData = paymentLine!.Split("|");
 
-                    Types types = Types.Banking;
-                    if (int.Parse(paymentData[2].Trim()) == 1)
-                    {
-                        types = Types.ByCast;
-                    }
-                    else if (int.Parse(paymentData[2].Trim()) == 2)
-                    {
-                        types = Types.Installment;
-                    }
-
-                    payment.Add(new Payment
+                    payment.Add(new DepositPayment
                     {
                         Id = paymentId++,
-                        Amount = double.Parse(paymentData[0].Trim()),
                         Date = DateTime.ParseExact(paymentData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        Types = types,
-                        BookingId = int.Parse(paymentData[3].Trim())
+                        Success = bool.Parse(paymentData[2].Trim()),
+                        Token = paymentData[3].Trim(),
+                        VnPayResponseCode = paymentData[4].Trim(),
+                        OrderDescription = paymentData[5].Trim(),
+                        BookingId = int.Parse(paymentData[6].Trim())
                     });
                 }
-                modelBuilder.Entity<Payment>().HasData(payment);
-            }
-        }
-
-        public static void InitializePackageService(ModelBuilder modelBuilder)
-        {
-            var PackageService = new List<PackageService>();
-
-            if (File.Exists(PACKAGE_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(PACKAGE_SERVICE_FILE_PATH);
-
-                string? PackageServiceLine;
-
-                while ((PackageServiceLine = sr.ReadLine()) != null)
-                {
-                    string[] PackageServiceData = PackageServiceLine!.Split("|");
-
-                    PackageService.Add(new PackageService
-                    {
-                        PackageId = int.Parse(PackageServiceData[0].Trim()),
-                        ServiceId = int.Parse(PackageServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<PackageService>().HasData(PackageService);
-            }
-        }
-
-        public static void InitializeCartService(ModelBuilder modelBuilder)
-        {
-            var cartService = new List<CartService>();
-
-            if (File.Exists(CART_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(CART_SERVICE_FILE_PATH);
-                string? cartServiceLine;
-
-                while ((cartServiceLine = sr.ReadLine()) != null)
-                {
-                    string[]? cartServiceData = cartServiceLine!.Split('|');
-
-                    cartService.Add(new CartService
-                    {
-                        CartId = int.Parse(cartServiceData[0].Trim()),
-                        ServiceId = int.Parse(cartServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<CartService>().HasData(cartService);
+                modelBuilder.Entity<DepositPayment>().HasData(payment);
             }
         }
 
@@ -302,29 +200,6 @@ namespace BookingBirthday.Data
             }
         }
 
-        public static void InitializeBookingService(ModelBuilder modelBuilder)
-        {
-            var bookingService = new List<BookingService>();
-
-            if (File.Exists(BOOKING_SERVICE_FILE_PATH))
-            {
-                using StreamReader sr = new(BOOKING_SERVICE_FILE_PATH);
-
-                string? bookingServiceLine;
-
-                while ((bookingServiceLine = sr.ReadLine()) != null)
-                {
-                    string[]? bookingServiceData = bookingServiceLine!.Split('|');
-
-                    bookingService.Add(new BookingService
-                    {
-                        BookingId = int.Parse(bookingServiceData[0].Trim()),
-                        ServiceId = int.Parse(bookingServiceData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<BookingService>().HasData(bookingService);
-            }
-        }
 
         public static void InitializeBookingPackage(ModelBuilder modelBuilder)
         {
@@ -356,7 +231,7 @@ namespace BookingBirthday.Data
             if (File.Exists(USER_FILE_PATH))
             {
                 using StreamReader sr = new(USER_FILE_PATH);
-                
+
                 int userId = 1;
                 string? userLine;
 
@@ -364,23 +239,20 @@ namespace BookingBirthday.Data
                 {
                     string[]? userData = userLine!.Split('|');
 
-                    Role role = Role.Admin;
-                    if (int.Parse(userData[3].Trim()) == 1)
-                    {
-                        role = Role.Guest;
-                    }
-                    else if (int.Parse(userData[3].Trim()) == 2)
-                    {
-                        role = Role.Host;
-                    }
 
                     users.Add(new User
                     {
                         Id = userId++,
-                        Username = userData[0].Trim(),
-                        Password = userData[1].Trim(),
-                        Email = userData[2].Trim(),
-                        Role = role
+                        Name = userData[0],
+                        Gender = (Gender)Enum.Parse(typeof(Gender), userData[1]),
+                        DateOfBirth = DateTime.Parse(userData[2]),
+                        Username = userData[3],
+                        Password = userData[4],
+                        Email = userData[5],
+                        Phone = userData[6],
+                        Address = userData[7],
+                        Image_url = userData[8],
+                        Role = userData[9]
                     });
                 }
 
