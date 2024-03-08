@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Entities
 {
-    public class Payment
+    public class RemainingPayment
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public PaymentMethod PaymentMethod { get; set; }
         public bool Success { get; set; }
         public string Token { get; set; }
         public string VnPayResponseCode { get; set; }
