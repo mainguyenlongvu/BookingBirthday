@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Register Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="login-container" style="margin-top: 150px;">
+    <div class="card" style="width: 300px;">
+        <div class="card-body">
+            <h2 class="text-center">Đăng ký</h2>
+            <form method="post" asp-action="Register" asp-controller="Account" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Tên người dùng</label>
+                    <input type="text" class="form-control" id="Name" name="Name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <input type="text" class="form-control" id="Username" name="Username" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control" id="Password" name="Password" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Xác nhận mật khẩu</label>
+                    <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" id="Email" name="Email" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Số điện thoại</label>
+                    <input type="tel" class="form-control" id="Phone" name="Phone" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="Address" name="Address" required>
+                </div>
+                <div class="form-group">
+                    <label>Ảnh đại diện</label>
+                    <input class="form-control" name="file" type="file" />
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+            </form>
+            <p class="text-center">Đã có tài khoản? <a href="/Account/Login">Đăng nhập</a></p>
+        </div>
+    </div>
+</div>

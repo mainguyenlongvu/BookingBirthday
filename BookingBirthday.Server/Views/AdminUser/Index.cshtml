@@ -1,0 +1,207 @@
+﻿@model List<BookingBirthday.Data.Entities.User>
+
+@{
+    ViewData["Title"] = "QL_NguoiDung Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Quản lí người dùng</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    <a class="btn btn-primary" onclick="openAdd()">Thêm mới</a>
+                    @if (Model.Count > 0)
+                    {
+                        int stt = 1;
+
+                        <div class="table-responsive card mt-2">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên người dùng</th>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Quyền</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td>
+                                            <label style="width: auto">@item.Name</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Username</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Email</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Phone</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Address</label>
+                                        </td>
+                                        <td>
+                                            @if (@item.Role == "Host")
+                                            {
+                                                <label style="width: auto">Chủ tiệc</label>
+                                            }
+                                            else if (@item.Role == "Guest")
+                                            {
+                                                <label style="width: auto">Khách hàng</label>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (@item.Status == "Active")
+                                            {
+                                                <label style="width: auto">Hoạt động</label>
+                                            }
+                                            else if (@item.Status == "InActive")
+                                            {
+                                                <label style="width: auto">Khóa</label>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @* <a class="btn btn-primary" onclick="xoaUser(@item.Id)">Xóa</a> *@
+
+                                            <a class="btn btn-success" onclick="openUpdate(@item.Id)">Sửa</a>
+                                            <div class="modal fade" id="@("update"+item.Id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <form method="post" asp-action="Edit" asp-controller="AdminUser">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <label>Tên người dùng </label>
+                                                                    <input type="hidden" value="@item.Id" name="user_id" />
+                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên người dùng">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Tên đăng nhập</label>
+                                                                    <input class="form-control" name="Username" value="@item.Username" placeholder="Nhập tên đăng nhập" required />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Email</label>
+                                                                    <input class="form-control" name="Email" value="@item.Email" placeholder="Nhập email" type="email" required />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Số điện thoại</label>
+                                                                    <input class="form-control" name="Phone" value="@item.Phone" placeholder="Nhập số điện thoại" required type="tel" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Địa chỉ</label>
+                                                                    <input class="form-control" name="Address" value="@item.Address" placeholder="Nhập địa chỉ" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Quyền</label>
+                                                                    <select name="Role" class="form-control">
+                                                                        <option value="Guest" selected="@(item.Role == "Guest")">Khách hàng</option>
+                                                                        <option value="Host" selected="@(item.Role == "Host")">Chủ tiệc</option>
+                                                                        @* <option value="Admin" selected="@(item.Role  == "Admin")">Quản trị viên</option> *@
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Trạng thái</label>
+                                                                    <select name="Status" class="form-control">
+                                                                        <option value="Active" selected="@(item.Status == "Active")">Hoạt động</option>
+                                                                        <option value="InActive" selected="@(item.Status == "InActive")">Khóa</option>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" onclick="closeUpdate(@item.Id)" class="btn btn-secondary">Đóng</button>
+                                                                <button type="submit" class="btn btn-success">Sửa</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Danh sách người dùng trống</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="post" asp-action="Create" asp-controller="AdminUser">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Thêm mới người dùng</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tên người dùng</label>
+                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên người dùng">
+                    </div>
+                    <div class="form-group">
+                        <label>Tên đăng nhập</label>
+                        <input class="form-control" name="Username" placeholder="Nhập tên đăng nhập" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Mật khẩu</label>
+                        <input class="form-control" type="password" name="Password" placeholder="Nhập mật khẩu" required />
+                    </div>
+                     <div class="form-group">
+                        <label>Xác nhận mật khẩu</label>
+                        <input class="form-control" type="password" name="ConfirmPassword" placeholder="Nhập xác nhận mật khẩu" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input class="form-control" name="Email" placeholder="Nhập email" required type="email" />
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại</label>
+                        <input class="form-control" name="Phone" placeholder="Nhập số điện thoại" required type="tel" />
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input class="form-control" name="Address" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Quyền</label>
+                        <select name="Role" class="form-control">
+                            <option>Guest</option>
+                            <option>Host</option>
+                            @* <option>Admin</option> *@
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeAdd()" class="btn btn-secondary">Đóng</button>
+                    <button type="submit" class="btn btn-success">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

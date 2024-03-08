@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -16,18 +16,23 @@ namespace BookingBirthday.Data.Configurations
             builder.ToTable("BookingPackage");
 
             // Primary Key
-            builder.HasKey(bp => new { bp.BookingId, bp.PackageId });
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
+            builder.HasIndex(x => x.BookingId);
+            builder.HasIndex(x => x.PackageId);
+
+            builder.Property(x => x.Price);
             // Foreign Keys
             builder.HasOne(bp => bp.Booking)
                 .WithMany(b => b.BookingPackages)
                 .HasForeignKey(bp => bp.BookingId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.NoAction); 
 
             builder.HasOne(bp => bp.Package)
                 .WithMany(p => p.BookingPackages)
                 .HasForeignKey(bp => bp.PackageId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.NoAction); ;
         }
     }
 }

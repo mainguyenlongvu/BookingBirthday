@@ -1,4 +1,4 @@
-﻿using BookingBirthday.Data.Entities;
+using BookingBirthday.Data.Entities;
 using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,33 +22,26 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.Date).IsRequired();
-            builder.Property(x => x.BookingStatus).HasDefaultValue(BookingStatus.Accepted);
+            builder.Property(x => x.Date_order).IsRequired();
+            builder.Property(x => x.Date_start).IsRequired();
+            builder.Property(x => x.Date_cancel);
+            builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
+            builder.Property(x => x.Address).IsRequired();
             builder.Property(x => x.Total).IsRequired();
-            builder.HasIndex(b => b.GuestId);
-            builder.HasIndex(b => b.HostId);
-            builder.HasIndex(x => x.BillId).IsUnique();
-            builder.HasIndex(x => x.PaymentId).IsUnique();
+            builder.Property(x => x.Phone).IsRequired();
+            builder.Property(x => x.Email).IsRequired();
+            builder.Property(x => x.Note);
+            builder.Property(x => x.Reason);
+            builder.Property(x => x.DepositPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.DepositPaymentId);
+            builder.Property(x => x.RemainingPaymentId).IsRequired(false);
+            builder.HasIndex(x => x.RemainingPaymentId);
+            builder.HasIndex(b => b.UserId);
 
-            //// 1:1 relationship with Bill
-            //builder.HasOne(x => x.Bill)
-            //    .WithOne(x => x.Booking)
-            //    .HasForeignKey<Bill>(x => x.BookingId);
-
-            //// 1:1 relationship with Payment
-            //builder.HasOne(x => x.Payment)
-            //    .WithOne(x => x.Booking)
-            //    .HasForeignKey<Payment>(x => x.BookingId);
-
-            // 1:M relationship with Host
-            builder.HasOne(x => x.Host)
-                .WithMany(x => x.Bookings)
-                .HasForeignKey(x => x.HostId);
-
-            // 1:M relationship with Guest
-            builder.HasOne(x => x.Guest).
-                WithMany(x => x.Bookings).
-                HasForeignKey(x => x.GuestId);
+            // 1:M relationship with User
+            builder.HasOne(b => b.User)
+                   .WithMany(u => u.Bookings)
+                   .HasForeignKey(b => b.UserId);
         }
     }
 }

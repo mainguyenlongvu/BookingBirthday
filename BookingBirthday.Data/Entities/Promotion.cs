@@ -16,10 +16,10 @@ namespace BookingBirthday.Data.Entities
         public double DiscountPercent { get; set; }
         public Status Status { get; set; }
 
-        //HostId
-        public int HostId { get; set; }
-        public Host Host { get; set; }
+        //UserId
+        public int UserId { get; set; }
+        public User User { get; set; }
 
-        public ICollection<Package> Packages { get; set; }
+        public ICollection<Package> Package { get; set; }
     }
 }

@@ -13,14 +13,20 @@ namespace BookingBirthday.Data.Entities
         public double Price { get; set; }
         public string Venue { get; set; }
         public string Detail { get; set; }
+        public string Note { get; set; }
+        public string? image_url { get; set; }
 
-        //PromotionId
+        // Foreign key properties
         public int? PromotionId { get; set; }
-        public Promotion Promotion { get; set; }
+        public int UserId { get; set; }
 
-        public IList<CartPackage> CartPackages { get; set; }
-        public IList<PackageService> PackageServices { get; set; }
-        public IList<BookingPackage> BookingPackages { get; set; }
+        // Navigation properties
+        public Promotion? Promotion { get; set; }
+        public User? User { get; set; }
 
+        // Collection navigation properties
+        public List<Cart>? Carts { get; set; }
+        public IList<CartPackage>? CartPackages { get; set; }
+        public IList<BookingPackage>? BookingPackages { get; set; }
     }
 }

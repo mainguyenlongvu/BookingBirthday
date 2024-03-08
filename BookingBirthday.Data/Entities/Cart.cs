@@ -10,12 +10,16 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public double Total { get; set; }
+        public double? Price { get; set; }
+        public string PackageName { get; set; }
 
-        //GuestId
-        public int GuestId { get; set; }
-        public Guest Guest { get; set; }
+        // Foreign key properties
+        public int BookingId { get; set; }
+        public int PackageId { get; set; }
 
-        public ICollection<CartService> CartServices { get; set; }
-        public ICollection<CartPackage> CartPackages { get; set; }
+        // Navigation properties
+        public Booking? Booking { get; set; }
+        public Package? Package { get; set; }
     }
 }
+

@@ -1,0 +1,97 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var session = HttpContextAccessor.HttpContext!.Session;
+    string jsonNotification = session.GetString("notification")!;
+    if (jsonNotification != null)
+    {
+        var notification = JsonConvert.DeserializeObject<List<BookingBirthday.Data.Entities.Category_requests>>(jsonNotification);
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Thông báo mới(@notification!.Count)</a>
+            <div class="dropdown-menu m-0">
+                @for (var i = 0; i < notification.Count; i++)
+                {
+                    var item = notification[i];
+                    var itemClass = "";
+
+                    <!-- Yêu cầu -->
+                    var text = "Yêu cầu mới " + item.category_name;
+
+                    if (item.is_approved == 1)
+                    {
+                        text += " đã được duyệt";
+                        if (item.is_viewed_by_owner == false)
+                        {
+                            itemClass = "notification-item-seen";
+                        }
+                    }
+                    else if (item.is_approved == -1)
+                    {
+                        text += " đã bị từ chối";
+                        if (item.is_viewed_by_owner == false)
+                        {
+                            itemClass = "notification-item-seen";
+                        }
+                    }
+                    else
+                    {
+                        if (item.is_viewed_by_admin == true)
+                        {
+                            itemClass = "notification-item-seen";
+                        }
+                    }
+                    var url = (item.is_approved == 1 || item.is_approved == -1) ? "/GuestRequest/Seen?category_request_id=" + item.category_request_id : "/HostRequest";
+
+
+                    // <!-- Khiếu nại -->
+                    // var textReport = "";
+                    // if (session.GetString("role") == "Guest")
+                    // {
+                    //     textReport = "Khiếu nại mới " + item.report;
+
+                    //     if (item.is_approved == 1)
+                    //     {
+                    //         textReport += " đã được duyệt";
+                    //         if (item.is_viewed_by_owner == false)
+                    //         {
+                    //             itemClass = "notification-item-seen";
+                    //         }
+                    //     }
+                    //     else if (item.is_approved == -1)
+                    //     {
+                    //         textReport += " đã bị từ chối";
+                    //         if (item.is_viewed_by_owner == false)
+                    //         {
+                    //             itemClass = "notification-item-seen";
+                    //         }
+                    //     }
+                    //     else
+                    //     {
+                    //         if (item.is_viewed_by_admin == true)
+                    //         {
+                    //             itemClass = "notification-item-seen";
+                    //         }
+                    //     }
+                    // }
+                    
+                    // var urlReport = (item.is_approved == 1 || item.is_approved == -1) ? "/GuestReport/Seen?category_request_id=" + item.category_request_id : "/AdminReport";
+
+
+                    <div class="dropdown-item @itemClass">
+                        <a style="color: black" href="@url">@text</a>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Thông báo mới(0)</a>
+            <div class="dropdown-menu m-0">
+            </div>
+        </div>
+    }
+}
