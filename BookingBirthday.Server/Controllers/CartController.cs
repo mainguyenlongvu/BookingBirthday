@@ -239,7 +239,7 @@ namespace BookingBirthday.Server.Controllers
             ViewData["Name"] = user.Name;
             return View();
         }
-
+       
         public IActionResult RemainingPayment(int bookingId, int userId)
         {
             var booking = _appContext.Bookings.Find(bookingId);

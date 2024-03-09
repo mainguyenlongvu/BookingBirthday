@@ -1,154 +1,201 @@
-﻿@model List<BookingBirthday.Data.Entities.Booking>
+using BookingBirthday.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using static NuGet.Packaging.PackagingConstants;
+using System;
+using BookingBirthday.Data.EF;
+using Microsoft.EntityFrameworkCore;
+using BookingBirthday.Data.Enums;
+using BookingBirthday.Server.Common;
 
-@{
-    ViewData["Title"] = "QL_DonHang Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+namespace BookingBirthday.Server.Controllers
+{
+    public class HostBookingController : HostBaseController
+    {
+        private readonly BookingDbContext _dbContext;
+
+        public HostBookingController(BookingDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+
+            var session = HttpContext.Session;
+            List<Category_requests> category_request = null!;
+
+            category_request = _dbContext.Category_Requests
+                    .Where(x => x.is_deleted_by_owner == false && x.requester_id == user_id && (x.is_approved == -1 || x.is_approved == 1))
+                    .OrderByDescending(x => x.created_at)
+                    .ToList();
+
+            if (category_request != null)
+            {
+                var jsonNotification = JsonConvert.SerializeObject(category_request);
+                session.SetString("notification", jsonNotification);
+            }
+
+            var query = from a in _dbContext.Bookings
+                        join b in _dbContext.BookingPackages
+                        on a.Id equals b.BookingId
+                        join c in _dbContext.Packages
+                        on b.PackageId equals c.Id
+                        //join d in _dbContext.Users
+                        //on c.UserId equals d.Id
+                        where c.UserId == user_id
+                        select new { a };
+            var orders = await query.OrderByDescending(x => x.a.Date_order).Select(x => new Booking
+            {
+                Id = x.a.Id,                
+                UserId = x.a.UserId,
+                Phone = x.a.Phone,
+                Email = x.a.Email,
+                Note = x.a.Note,
+                Reason = x.a.Reason,
+                Date_order = x.a.Date_order,
+                Date_start = x.a.Date_start,
+                Date_cancel = x.a.Date_cancel,
+                Total = x.a.Total,
+                BookingStatus = x.a.BookingStatus,
+
+            }).ToListAsync();
+            return View(orders);
+        }
+        [HttpPost]
+        public IActionResult Edit(int Id, string status)
+        {
+            try
+            {
+                var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+
+                var order = _dbContext.Bookings.Find(Id);
+                if (order != null)
+                {
+                    order.BookingStatus = status;
+                    _dbContext.SaveChanges();
+                    TempData["Message"] = "Cập nhật trạng thái đơn hàng thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+        }
+        public IActionResult ProfileCustomer(string email)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.Email == email);
+            if (user == null)
+            {
+                TempData["Message"] = "Tài khoản không tồn tại";
+                TempData["Success"] = false;
+                return RedirectToAction("Index");
+            }
+            return View(user);
+        }
+
+        [HttpPost]
+        public IActionResult DuyetDon(int Id)
+        {
+            try
+            {
+                var data =  _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Accepted";
+                     _dbContext.SaveChanges();
+          
+                    TempData["Message"] = "Nhận đơn hàng thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult dathanhtoan(int Id)
+        {
+            try
+            {
+                var data = _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Paid";
+                    _dbContext.SaveChanges();
+
+                    TempData["Message"] = "Chuyển trạng thái đơn thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPost]
+        public  IActionResult TuChoiDon(int Id, string? Reason)
+        {
+            try
+            {
+                var data =  _dbContext.Bookings.Find(Id);
+                if (data != null)
+                {
+                    data.BookingStatus = "Declined";
+                    data.Date_cancel = DateTime.Now;
+                    data.Reason = Reason;
+                     _dbContext.SaveChanges();
+                    
+                    TempData["Message"] = "Hủy đơn hàng thành công";
+                    TempData["Success"] = true;
+                }
+                else
+                {
+                    TempData["Message"] = "Đơn hàng không tồn tại";
+                    TempData["Success"] = false;
+                }
+                
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                TempData["Message"] = "Lỗi";
+                TempData["Success"] = false;
+                return BadRequest();
+            }
+
+        }
 }
-@await Html.PartialAsync("response")
-
-<div class="container-xxl py-5" style="margin-top: 100px">
-    <div class="container">
-        <div class="row g-0 gx-5 align-items-end">
-            <div class="col-lg-6">
-                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Quản lí đơn hàng</h1>
-                </div>
-            </div>
-        </div>
-        <div class="tab-content">
-            <div id="tab-1" class="tab-pane fade show p-0 active">
-                <div class="row g-4">
-                    @if (Model.Count > 0)
-                    {
-                        int stt = 1;
-
-                        <div class="table-responsive card mt-2">
-                            <table class="table table-hover">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Email</th>
-                                    <th>Ngày đặt hàng</th>
-                                    <th>Thời gian bắt đầu tiệc</th>
-                                    <th>Thời gian hủy tiệc</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Ghi chú</th>
-                                    <th>Lý do hủy đơn của chủ tiệc</th>
-                                    <th>Trạng thái</th>
-                                    <th></th>
-                                </tr>
-                                @foreach (var item in Model)
-                                {
-
-                                    <tr>
-                                        <td>@(stt++)</td>
-                                        <td>
-                                            <label style="width: auto">@item.Id</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Phone</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">
-                                                <a href="@("/HostBooking/ProfileCustomer?Email="+ item.Email)">@item.Email</a>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Date_order</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Date_start</label>
-                                        </td>
-                                        <td>
-                                            @if (item.Date_cancel != default(DateTime))
-                                            {
-                                                <label style="width: auto">@item.Date_cancel</label>
-                                            }
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Note</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Reason</label>
-                                        </td>
-                                        <td>
-                                            @if (@item.BookingStatus == "Declined"){
-                                                <label style="width: auto">Hủy đơn</label>
-                                            }
-                                            @if (@item.BookingStatus == "Paid")
-                                            {
-                                                <label style="width: auto">Đã thanh toán</label>
-                                            }
-                                            @if (@item.BookingStatus == "Processing")
-                                            {
-                                                <label style="width: auto">Chờ xử lý</label>
-                                            }
-                                            @if (@item.BookingStatus == "Accepted")
-                                            {
-                                                <label style="width: auto">Đã xác nhận</label>
-                                            }
-                                            @* {
-                                                <select name="status" id="@("status"+item.Id)" class="form-control" onchange="changeStatusOrder(@item.Id)">
-                                                    <option value="Processing" selected="@(item.BookingStatus == "Processing" )">Chờ xử lý</option>
-
-                                                    <option value="Accepted" selected="@(item.BookingStatus == "Accepted")">Đã xác nhận</option>
-
-                                                    <option value="Paid" selected="@(item.BookingStatus =="Paid")"></option>
-                                                </select>
-                                            } *@
-
-                                        </td>
-                                        <td>
-                                            @if (@item.BookingStatus == "Processing")
-                                            {
-                                                <a class="btn btn-primary" onclick="DuyetDon(@item.Id)">Đồng ý</a>
-                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
-                                            }
-                                            @if (@item.BookingStatus == "Accepted")
-                                            {
-                                                <a class="btn btn-primary" onclick="dathanhtoan(@item.Id)">Đã thanh toán</a>
-                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
-                                            }
-                                        </td>
-
-                                       @*  <td>
-                                            <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
-                                        </td> *@
-                                    </tr>
-                                }
-                            </table>
-                        </div>
-
-                    }
-                    else
-                    {
-                        <p class="alert alert-danger">Danh sách đơn hàng trống</p>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">Chi tiết đơn hàng</h5>
-            </div>
-            <div class="modal-body">
-                <!-- Nội dung chi tiết đơn hàng -->
-                <h4>Tên sản phẩm</h4>
-                <p>Mô tả sản phẩm</p>
-                <p>Giá sản phẩm:</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
+    }
