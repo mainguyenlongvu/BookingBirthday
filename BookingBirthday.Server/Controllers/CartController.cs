@@ -239,12 +239,10 @@ namespace BookingBirthday.Server.Controllers
             ViewData["Name"] = user.Name;
             return View();
         }
-<<<<<<< HEAD
-        public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
-        {
-            ViewData["BookingId"] = bookingId;
-            var url = _vnPayService.CreatePaymentUrl(bookingId, model, HttpContext);
-=======
+        //public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
+        //{
+        //    ViewData["BookingId"] = bookingId;
+        //    var url = _vnPayService.CreatePaymentUrl(bookingId, model, HttpContext);
        
         public IActionResult RemainingPayment(int bookingId, int userId)
         {
@@ -261,7 +259,6 @@ namespace BookingBirthday.Server.Controllers
         {
             ViewData["BookingId"] = bookingId;
             var url = _vnPayService.CreateDepositPaymentUrl(bookingId, model, HttpContext);
->>>>>>> e2cd7af89d2155efb4150828b2ef8f0d29bf2ab6
             return Redirect(url);
         }
 
