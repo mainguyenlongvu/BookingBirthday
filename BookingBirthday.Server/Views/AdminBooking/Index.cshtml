@@ -1,5 +1,5 @@
 ﻿@model List<BookingBirthday.Data.Entities.Booking>
-
+@using BookingBirthday.Server.Common;
 @{
     ViewData["Title"] = "QL_DonHang Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,10 +28,14 @@
                                     <th>#</th>
                                     <th>Mã đơn hàng</th>
                                     <th>Số điện thoại</th>
-                                    <th>Địa chỉ</th>
+                                    <th>Địa chỉ diễn ra tiệc</th>
+                                    <th>Email</th>
                                     <th>Ngày đặt hàng</th>
-                                    <th>Tổng tiền</th>
+                                    <th>Thời gian bắt đầu tiệc</th>
+                                    <th>Thời gian hủy tiệc</th>
+                                    <th>Tổng tiền: đồng</th>
                                     <th>Ghi chú</th>
+                                    <th>Lý do hủy đơn của chủ tiệc</th>
                                     <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
@@ -41,40 +45,73 @@
                                     <tr>
                                         <td>@(stt++)</td>
                                         <td>
-                                            <label style="width: auto">@item.Id</label>
+                                            <label style="width: auto">@CreateMD5.MD5Hash(item.Id.ToString())</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Phone</label>
                                         </td>
                                         <td>
-                                            @{
-                                                string address = "";
-                                                if (item.BookingPackages != null && item.BookingPackages.Any())
-                                                {
-                                                    var package = item.BookingPackages.FirstOrDefault();
-                                                    if (package != null && package.Package != null)
-                                                    {
-                                                        address = package.Package.Venue;
-                                                    }
-                                                }
-                                            }
-                                            <label style="width: auto">@address</label>
+                                            <label style="width: auto">@item.Address</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">
+                                                <a>@item.Email</a>
+                                            </label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Date_order</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0") đồng</label>
+                                            <label style="width: auto">@item.Date_start</label>
+                                        </td>
+                                        <td>
+                                            @if (item.Date_cancel != default(DateTime))
+                                            {
+                                                <label style="width: auto">@item.Date_cancel</label>
+                                            }
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.BookingStatus</label>
+                                            <label style="width: auto">@item.Reason</label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a>
-                                        </td>
+                                            @if (@item.BookingStatus == "Declined")
+                                            {
+                                                <label style="width: auto">Hủy đơn</label>
+                                            }
+                                            @if (@item.BookingStatus == "Paid")
+                                            {
+                                                <label style="width: auto">Đã thanh toán</label>
+                                            }
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <label style="width: auto">Chờ xử lý</label>
+                                            }
+                                            @if (@item.BookingStatus == "Accepted")
+                                            {
+                                                <label style="width: auto">Đã xác nhận</label>
+                                            }
+
+                                        @* </td>
+                                        <td>
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <a class="btn btn-primary" onclick="DuyetDon(@item.Id)">Đồng ý</a>
+                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
+                                            }
+                                            @if (@item.BookingStatus == "Accepted")
+                                            {
+                                                <a class="btn btn-primary" onclick="dathanhtoan(@item.Id)">Đã thanh toán</a>
+                                                <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
+                                            }
+                                        </td> *@
+
+                                       
                                     </tr>
                                 }
                             </table>
