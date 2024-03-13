@@ -1,6 +1,11 @@
 @using Newtonsoft.Json
 @using static NuGet.Packaging.PackagingConstants
 @using BookingBirthday.Server.Common
+@model List<BookingBirthday.Data.Entities.Booking>
+@{
+    ViewData["Title"] = "QL_DonHang Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @await Html.PartialAsync("response")
 
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -153,6 +158,4 @@
         </div>
     </div>
 </div>
-=======
-    }
->>>>>>> e2cd7af89d2155efb4150828b2ef8f0d29bf2ab6
+
