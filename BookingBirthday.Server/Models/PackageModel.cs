@@ -10,6 +10,8 @@
         public string Note { get; set; }
         public string? image_url { get; set; }
         public IFormFile? file { get; set; }
+        public string? Status { get; set; }
+
 
         //PromotionId
         public int? PromotionId { get; set; }
