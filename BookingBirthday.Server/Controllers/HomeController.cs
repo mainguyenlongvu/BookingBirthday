@@ -62,7 +62,10 @@ namespace BookingBirthday.Server.Controllers
                     Detail = x.a.Detail,
                     Price = x.a.Price,
                     Venue = x.a.Venue,
-                    image_url = x.a.image_url
+                    Note = x.a.Note,
+                    image_url = x.a.image_url,
+                    Status =x.a.Status,
+                    UserId = x.a.UserId,
                 }).ToList();
                 ViewBag.Categories = _dbContext.Packages.ToList();
                 return View(lstProducts);
@@ -85,7 +88,10 @@ namespace BookingBirthday.Server.Controllers
                     Venue = x.a.Venue,
                     PromotionId = x.a.PromotionId,
                     Price = x.a.Price,
-                    image_url = x.a.image_url
+                    Note = x.a.Note,
+                    image_url = x.a.image_url,
+                    Status = x.a.Status,
+                    UserId = x.a.UserId,
                 }).ToList();
                 return PartialView("ProductList", lstProducts);
             }
@@ -107,7 +113,10 @@ namespace BookingBirthday.Server.Controllers
                     Venue = x.a.Venue,
                     PromotionId = x.a.PromotionId,
                     Price = x.a.Price,
-                    image_url = x.a.image_url
+                    Note = x.a.Note,
+                    image_url = x.a.image_url,
+                    Status = x.a.Status,
+                    UserId = x.a.UserId,
                 }).ToList();
                 return View(lstProducts);
             }

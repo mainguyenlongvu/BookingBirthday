@@ -2,9 +2,7 @@
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -44,6 +42,26 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
+            //var package = (from a in _dbContext.Packages
+            //               join b in _dbContext.Users on a.UserId equals b.Id
+            //               where a.Id == Id && b.Status == "Active"
+            //               select new PackageModel
+            //               {
+            //                   Id = a.Id,
+            //                   Name = a.Name,
+            //                   Venue = a.Venue,
+            //                   Detail = a.Detail,
+            //                   Note = a.Note,
+            //                   Price = a.Price,
+            //                   image_url = a.image_url
+            //               }).FirstOrDefault();
+
+            //if (package != null)
+            //{
+            //    return View(package);
+            //}
+            //return null;
+
             var product = _dbContext.Packages.Where(x => x.Id == Id).FirstOrDefault();
             if (product != null)
             {
@@ -55,6 +73,7 @@ namespace BookingBirthday.Server.Controllers
                 p.Note = product.Note;
                 p.Price = product.Price;
                 p.image_url = product.image_url;
+                p.Status = product.Status;
                 return View(p);
             }
             return View(product);
