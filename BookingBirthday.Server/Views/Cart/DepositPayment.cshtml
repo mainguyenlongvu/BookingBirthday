@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "DepositPayment";
+}
+@await Html.PartialAsync("response")
+<div class="text-center" style="margin-top: 100px">
+    <h1 class="display-4">Thanh toán VnPay tại <a href="#">Booking Birthday</a></h1>
+</div>
+
+<div class="table-responsive">
+    <form action="/Cart/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+        <input type="hidden" name="BookingId" value="@ViewData["BookingId"]">
+        <div class="form-group">
+            <label for="ordertype">Danh mục</label>
+            <select name="OrderType" id="ordertype" class="form-control">
+                <option value="package">Gói Tiệc</option>
+                <option value="packageservice">Gói Tiệc & Dịch Vụ</option>
+                <option value="other">Khác</option>
+            </select>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Name">Tên khách hàng</label>
+            <input class="form-control"
+                   id="Name"
+                   name="Name"
+                   type="text"
+                   value="@ViewData["Name"]"
+                   readonly>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Amount">Số tiền</label>
+            <input class="form-control"
+                   id="Amount"
+                   name="Amount"
+                   type="text"
+                   value="@ViewData["Total"]"
+                   readonly>
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="Description">Nội dung thanh toán</label>
+            <textarea class="form-control"
+                      cols="20"
+                      id="Description"
+                      name="Description"
+                      rows="2"></textarea>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Thanh toán (Checkout)</button>
+    </form>
+</div>
+

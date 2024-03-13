@@ -1,22 +1,17 @@
 ﻿
 @{
-    ViewData["Title"] = "Payment";
+    ViewData["Title"] = "RemainingPayment";
 }
 @await Html.PartialAsync("response")
 <div class="text-center" style="margin-top: 100px">
-    <h1 class="display-4">Thanh toán VnPay tại <a href="#">Booking Birthday</a></h1>
+    <h1 class="display-4">Tất toán VnPay tại <a href="#">Booking Birthday</a></h1>
 </div>
 
 <div class="table-responsive">
-    <form action="/Cart/CreatePaymentUrl" id="frmCreateOrder" method="POST">
+    <form action="/Cart/CreateRemainingPaymentUrl" id="frmCreateOrder" method="POST">
         <input type="hidden" name="BookingId" value="@ViewData["BookingId"]">
         <div class="form-group">
-            <label for="ordertype">Danh mục</label>
-            <select name="OrderType" id="ordertype" class="form-control">
-                <option value="package">Gói Tiệc</option>
-                <option value="packageservice">Gói Tiệc & Dịch Vụ</option>
-                <option value="other">Khác</option>
-            </select>
+            <input type="hidden" name="OrderType" id="ordertype" value="@ViewData["BookingId"]">
         </div>
         <br />
         <div class="form-group">
@@ -48,7 +43,7 @@
                       rows="2"></textarea>
         </div>
         <br />
-        <button type="submit" class="btn btn-primary">Thanh toán (Checkout)</button>
+        <button type="submit" class="btn btn-primary">Tất toán</button>
     </form>
 </div>
 

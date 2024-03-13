@@ -20,20 +20,22 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartPackageConfiguration());
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
-            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new DepositPaymentConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
+            modelBuilder.ApplyConfiguration(new RemainingPaymentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+
             // Generate data
             SeedData.Initialize(modelBuilder);
         }
-
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingPackage> BookingPackages { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartPackage> CartPackages { get; set; }
         public DbSet<Package> Packages { get; set; }
-        public DbSet<Payment> Payments { get; set; }
+        public DbSet<DepositPayment> DepositPayments { get; set; }
+        public DbSet<RemainingPayment> RemainingPayments { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category_requests> Category_Requests { get; set; }
