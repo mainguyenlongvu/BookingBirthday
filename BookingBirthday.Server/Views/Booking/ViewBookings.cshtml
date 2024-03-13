@@ -20,79 +20,87 @@
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
                 <div class="row g-4">
-                    @if (Model.Count > 0) {
-                      int stt = 1;
-  
-                      <div class="table-responsive card mt-2">
-                          <table class="table table-hover">
-                            <tr>
-                              <th>Thứ tự</th>
-                              <th>Mã đơn hàng</th>
-                              <th>Số điện thoại</th>
-                              <th>Địa chỉ tổ chức</th>
-                              <th>Ngày đặt hàng</th>
-                              <th>Thời gian tiệc diễn ra</th>
-                              <th>Thời gian hủy tiệc</th>
-                              <th>Tổng tiền: đồng</th>
-                              <th>Ghi chú</th>
-                              <th>Lý do hủy đơn của chủ tiệc</th>
-                              <th>Trạng thái</th>
-                            </tr>
-                            @foreach (var item in Model)
-                            {
+                    @if (Model.Count > 0)
+                    {
+                        int stt = 1;
 
+                        <div class="table-responsive card mt-2">
+                            <table class="table table-hover">
                                 <tr>
-                                   <td>@(stt++)</td>
-                                   <td>
-                                            <label style="width: auto">@CreateMD5.MD5Hash(item.Id.ToString())</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@item.Phone</label>
-                                   </td>
-                                   <td>
-                                            <label style="width: auto">@item.Address</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@item.Date_order</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@item.Date_start</label>
-                                   </td>
-                                   <td>
-                                       @if (item.Date_cancel != default(DateTime))
-                                       {
-                                           <label style="width: auto">@item.Date_cancel</label>
-                                       }
-                                   </td>
-                                       
+                                    <th>Thứ tự</th>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ tổ chức</th>
+                                    <th>Ngày đặt hàng</th>
+                                    <th>Thời gian tiệc diễn ra</th>
+                                    <th>Thời gian hủy tiệc</th>
+                                    <th>Tổng tiền: đồng</th>
+                                    <th>Ghi chú</th>
+                                    <th>Lý do hủy đơn của chủ tiệc</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@(stt++)</td>
                                         <td>
-                                       <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@item.Note</label>
-                                   </td>
-                                   <td>
-                                       <label style="width: auto">@item.Reason</label>
-                                   </td>
-                                   <td>
-                                      <label style="width: auto">@item.BookingStatus</label>
-                                   </td>
-                                   <td>
+                                            <label style="width: auto">@CreateMD5.MD5Hash(item.Id.ToString())</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Phone</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Address</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Date_order</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Date_start</label>
+                                        </td>
+                                        <td>
+                                            @if (item.Date_cancel != default(DateTime))
+                                            {
+                                                <label style="width: auto">@item.Date_cancel</label>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Note</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Reason</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.BookingStatus</label>
+                                        </td>
+                                        <td>
                                             @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
                                             @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
                                             {
                                                 <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
                                             }
-                                   </td>
-                                </tr>
-                            }
-                          </table>
-                      </div>
+                                        </td>
+                                        <td>
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-                     userId="@item.UserId">Tất toán</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
 
                     }
-                    else {
-                      <p class="alert alert-danger">Danh sách đơn hàng trống</p>
-                      <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                    else
+                    {
+                        <p class="alert alert-danger">Danh sách đơn hàng trống</p>
+                        <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                     }
                 </div>
             </div>
@@ -118,3 +126,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Get the button element
+    var remainingPaymentBtn = document.getElementById("remainingPaymentBtn");
+    // Add click event listener to the button
+    remainingPaymentBtn.addEventListener("click", function () {
+        // Get bookingId and userId from data attributes
+        var BookingId = remainingPaymentBtn.getAttribute("data-bookingId");
+        var userId = remainingPaymentBtn.getAttribute("data-userId");
+        // Redirect to the RemainingPayment page with bookingId and userId parameters
+        window.location.href = "/Cart/RemainingPayment?bookingId=" + BookingId + "&userId=" + userId;
+    });
+</script>

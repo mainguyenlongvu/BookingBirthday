@@ -3,6 +3,12 @@ using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using BookingBirthday.Server.Common;
+using System.Configuration;
+using GoogleAuthentication.Services;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using Humanizer;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -12,19 +18,26 @@ namespace BookingBirthday.Server.Controllers
         private readonly BookingDbContext _dbContext;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly string _imageContentFolder;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
+        public AccountController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _webHostEnvironment = webHostEnvironment;
             _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgProfile");
+            _configuration = configuration;
         }
 
         // POST: Users/Login
         public IActionResult Login()
         {
+            var clientId = _configuration["Authentication:Google:ClientId"];
+            var url = "https://localhost:7297/signin-google";
+            var response = GoogleAuth.GetAuthUrl(clientId, url);
+            ViewBag.Response = response;
             return View();
         }
+
         [HttpPost]
         public IActionResult Login(LoginModel loginData)
         {
@@ -78,7 +91,91 @@ namespace BookingBirthday.Server.Controllers
             }
             
         }
-        
+
+        public async Task<ActionResult> LoginWithGoogle(string code)
+        {
+            var clientId = _configuration["Authentication:Google:ClientId"];
+            var clientSecret = _configuration["Authentication:Google:ClientSecret"];
+            var url = "https://localhost:7297/signin-google";
+            var token = await GoogleAuth.GetAuthAccessToken(code, clientId, clientSecret, url);
+            var userProfile = await GoogleAuth.GetProfileResponseAsync(token.AccessToken.ToString());
+
+            var userProfile2 = await GetGoogleUserProfile(userProfile);
+
+            // Sử dụng thông tin người dùng ở đây hoặc lưu vào cơ sở dữ liệu
+            var userName = userProfile2.Name;
+            var userEmail = userProfile2.Email;
+            var user = new User();
+            user.Email = userEmail;
+            user.Name = userName;
+            user.Status = "Active";
+
+            var data = InsertForGoogle(user);
+            if (data > 0)
+            {
+                var userSession = new UserLogin();
+                userSession.Email = user.Email;
+                userSession.Name = user.Name;
+                userSession.UserId = data;
+                HttpContext.Session.SetString("username", user.Username!);
+                HttpContext.Session.SetString("role", user.Role!);
+                HttpContext.Session.SetString("status", user.Status!);
+                HttpContext.Session.SetString("user_id", user.Id.ToString()!);
+                HttpContext.Session.SetString("name", user.Name!);
+                HttpContext.Session.SetString("email", user.Email!);
+                HttpContext.Session.SetString("phone", user.Phone!);
+                HttpContext.Session.SetString("address", user.Address!);
+            }
+            if (user.Role == "Admin")
+            {
+                TempData["Message"] = "Chào mừng quản trị viên";
+            }
+            else if (user.Role == "Host")
+            {
+                TempData["Message"] = "Chào mừng chủ tiệc";
+            }
+            else
+            {
+                TempData["Message"] = "Chào mừng khách hàng";
+            }
+            TempData["Success"] = true;
+            return RedirectToAction("Index", "Home");
+        }
+
+        private async Task<GoogleUserInfo> GetGoogleUserProfile(string accessToken)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var response = await client.GetAsync("https://www.googleapis.com/oauth2/v3/userinfo");
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var userProfile = JsonConvert.DeserializeObject<GoogleUserInfo>(content);
+                    return userProfile;
+                }
+                else
+                {
+                    // Xử lý lỗi khi gọi API
+                    throw new Exception("Failed to get user profile from Google API.");
+                }
+            }
+        }
+        public long InsertForGoogle(User user)
+        {
+            var data = _dbContext.Users.SingleOrDefault(x => x.Email == user.Email);
+            if (data == null)
+            {
+                _dbContext.Users.Add(user);
+                _dbContext.SaveChanges();
+                return user.Id;
+            }
+            else
+            {
+                return data.Id;
+            }
+        }
+
         // POST: Users/Register
         public IActionResult Register()
         {
@@ -249,5 +346,20 @@ namespace BookingBirthday.Server.Controllers
                 Task.Run(() => System.IO.File.Delete(filePath));
             }
         }
+
+        //public long InsertForGoogle(User user)
+        //{
+        //    var data = _dbContext.Users.SingleOrDefault(x => x.Email == user.Email);
+        //    if (data == null)
+        //    {
+        //        _dbContext.Users.Add(user);
+        //        _dbContext.SaveChanges();
+        //        return user.Id;
+        //    }
+        //    else
+        //    {
+        //        return data.Id;
+        //    }
+        //}
     }
 }
