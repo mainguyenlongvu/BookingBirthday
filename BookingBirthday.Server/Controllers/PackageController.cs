@@ -74,6 +74,7 @@ namespace BookingBirthday.Server.Controllers
                 p.Price = product.Price;
                 p.image_url = product.image_url;
                 p.Status = product.Status;
+                p.Host_name = product.Host_name;
                 return View(p);
             }
             return View(product);
