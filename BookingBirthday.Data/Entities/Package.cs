@@ -15,6 +15,7 @@ namespace BookingBirthday.Data.Entities
         public string Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
+        public string? Status { get; set; }
 
         // Foreign key properties
         public int? PromotionId { get; set; }

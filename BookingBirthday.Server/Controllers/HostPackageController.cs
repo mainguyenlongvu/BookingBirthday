@@ -68,14 +68,15 @@ public class HostPackageController : HostBaseController
         try
         {
             var p = new Package
-            {   
+            {
                 UserId = user_id,
                 Name = productData.Name!,
                 Venue = productData.Venue!,
                 Detail = productData.Detail!,
                 Note = productData.Note,
                 Price = productData.Price,
-                image_url = UploadedFile(productData.file!)
+                image_url = UploadedFile(productData.file!),
+                Status = "Active",
             };
 
             _dbContext.Packages.Add(p);
