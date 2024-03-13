@@ -32,7 +32,7 @@ namespace BookingBirthday.Data.Configurations
             builder.HasOne(bp => bp.Package)
                 .WithMany(p => p.BookingPackages)
                 .HasForeignKey(bp => bp.PackageId)
-                .OnDelete(DeleteBehavior.NoAction); ;
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
