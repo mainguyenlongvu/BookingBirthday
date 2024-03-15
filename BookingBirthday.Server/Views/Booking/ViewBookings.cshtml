@@ -25,77 +25,56 @@
                         int stt = 1;
 
                         <div class="table-responsive card mt-2">
-                            <table class="table table-hover">
-                                <tr>
-                                    <th>Thứ tự</th>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Địa chỉ tổ chức</th>
-                                    <th>Ngày đặt hàng</th>
-                                    <th>Thời gian tiệc diễn ra</th>
-                                    <th>Thời gian hủy tiệc</th>
-                                    <th>Tổng tiền: đồng</th>
-                                    <th>Ghi chú</th>
-                                    <th>Lý do hủy đơn của chủ tiệc</th>
-                                    <th>Trạng thái</th>
-                                </tr>
-                                @foreach (var item in Model)
-                                {
-
+                            <table class="table table-striped table-hover">
+                                <thead class="table-green">
                                     <tr>
-                                        <td>@(stt++)</td>
-                                        <td>
-                                            <label style="width: auto">@CreateMD5.MD5Hash(item.Id.ToString())</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Phone</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Address</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Date_order</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Date_start</label>
-                                        </td>
-                                        <td>
-                                            @if (item.Date_cancel != default(DateTime))
-                                            {
-                                                <label style="width: auto">@item.Date_cancel</label>
-                                            }
-                                        </td>
-
-                                        <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Note</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.Reason</label>
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@item.BookingStatus</label>
-                                        </td>
-                                        <td>
-                                            @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
-                                            @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
-                                            {
-                                                <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (@item.BookingStatus == "Processing")
-                                            {
-                                                <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data- userId="@item.UserId">Tất toán</a>
-                                            }
-                                        </td>
+                                        <th>Thứ tự</th>
+                                        <th style="white-space: normal;">Mã đơn hàng</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Địa chỉ tổ chức</th>
+                                        <th>Ngày đặt hàng</th>
+                                        <th>Thời gian tiệc diễn ra</th>
+                                        <th>Thời gian hủy tiệc</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Ghi chú</th>
+                                        <th colspan="2">Lý do hủy đơn của chủ tiệc</th>
+                                        <th>Trạng thái</th>
+                                        <th></th>
                                     </tr>
-                                }
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@stt</td>
+                                            <td style="white-space: normal;">@CreateMD5.MD5Hash(item.Id.ToString())</td>
+                                            <td>@item.Phone</td>
+                                            <td>@item.Address</td>
+                                            <td>@item.Date_order</td>
+                                            <td>@item.Date_start</td>
+                                            <td>@(item.Date_cancel != default(DateTime) ? item.Date_cancel.ToString() : "")</td>
+                                            <td>@Convert.ToDouble(item.Total).ToString("#,##0") đồng</td>
+                                            <td>@item.Note</td>
+                                            <td colspan="2">@item.Reason</td>
+                                            <td>@item.BookingStatus</td>
+                                            <td>
+                                                @if (item.BookingStatus == "Processing" || item.BookingStatus == "Accepted")
+                                                {
+                                                    <a class="btn btn-warning" onclick="huydonhang('@item.Id')">Hủy đơn</a>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.BookingStatus == "Processing")
+                                                {
+                                                    <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                </tbody>
                             </table>
                         </div>
-
                     }
                     else
                     {
@@ -103,7 +82,6 @@
                         <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                     }
                 </div>
-            </div>
         </div>
     </div>
 </div>
