@@ -27,7 +27,9 @@
                             </div>
                             <div class="col-md-6">
                                 <h2>@Model.Name</h2>
-                                <label>Tên chủ tiệc: @Model.Host_name</label>
+                                <label style="width: auto">
+                                    <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
+                                </label>
                                 <br/>
                                 <label>Địa Chỉ: @Model.Venue</label>
                                 <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>

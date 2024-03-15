@@ -1,0 +1,72 @@
+﻿@model BookingBirthday.Server.Models.ProfileViewModel
+
+@{
+    ViewData["Title"] = "ProfileCustomer Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Thông tin khách hàng</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            @if(Model.User.Image_url== "")
+                            {
+                                <img src="/imgProfile/avatar.png" class="card-img-top" alt="Avatar">
+                            }
+                            else
+                            {
+                                <img src="@Model.User.Image_url" class="card-img-top" alt="Avatar">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@Model.User.Name</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Thông tin cá nhân</h5>
+                                <p class="card-text">Họ và tên: @Model.User.Name</p>
+                                <p class="card-text">Email: @Model.User.Email</p>
+                                <p class="card-text">Số điện thoại: @Model.User.Phone</p>
+                                <p class="card-text">Địa chỉ: @Model.User.Address</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Bữa tiệc liên quan</h1>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4" id="productListContainer">
+                    @Html.Partial("PackageListOfHost", Model.Packages)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Product End -->

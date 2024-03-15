@@ -64,7 +64,8 @@ namespace BookingBirthday.Server.Controllers
                     Venue = x.a.Venue,
                     Note = x.a.Note,
                     image_url = x.a.image_url,
-                    Status =x.a.Status,
+                    Status = x.a.Status,
+                    Host_name = x.a.Host_name,
                     UserId = x.a.UserId,
                 }).ToList();
                 ViewBag.Categories = _dbContext.Packages.ToList();
@@ -77,7 +78,7 @@ namespace BookingBirthday.Server.Controllers
             // Logic filter danh sách sản phẩm theo category
             var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
-           
+
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -92,6 +93,8 @@ namespace BookingBirthday.Server.Controllers
                     image_url = x.a.image_url,
                     Status = x.a.Status,
                     UserId = x.a.UserId,
+                    Host_name = x.a.Host_name,
+
                 }).ToList();
                 return PartialView("ProductList", lstProducts);
             }
@@ -115,6 +118,7 @@ namespace BookingBirthday.Server.Controllers
                     Price = x.a.Price,
                     Note = x.a.Note,
                     image_url = x.a.image_url,
+                    Host_name = x.a.Host_name,
                     Status = x.a.Status,
                     UserId = x.a.UserId,
                 }).ToList();
