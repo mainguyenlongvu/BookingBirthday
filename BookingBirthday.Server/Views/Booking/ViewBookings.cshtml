@@ -83,11 +83,25 @@
                                             {
                                                 <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
                                             }
+<<<<<<< Updated upstream
                                    </td>
                                 </tr>
                             }
                           </table>
                       </div>
+=======
+                                        </td>
+                                        <td>
+                                            @if (@item.BookingStatus == "Processing")
+                                            {
+                                                <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+>>>>>>> Stashed changes
 
                     }
                     else {
