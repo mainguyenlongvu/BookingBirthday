@@ -37,6 +37,7 @@
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
+                                    <th>Tên chủ tiệc</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Địa chỉ</th>
                                     <th>Mô tả</th>
@@ -48,6 +49,9 @@
                                 {
                                     <tr>
                                         <td>@(stt++)</td>
+                                        <td>
+                                            <label style="width: auto">@item.Host_name</label>
+                                        </td>
                                         <td>
                                             <label style="width: auto">@item.Name</label>
                                         </td>

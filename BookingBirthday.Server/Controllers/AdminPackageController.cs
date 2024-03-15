@@ -48,6 +48,7 @@ namespace BookingBirthday.Server.Controllers
                     Price = x.a.Price,
                     Note = x.a.Note,
                     Venue = x.a.Venue,
+                    Host_name = x.a.Host_name,
                     image_url = x.a.image_url
                 }).ToList();
                 return View(lstProducts);
