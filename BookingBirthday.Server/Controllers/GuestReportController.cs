@@ -62,6 +62,7 @@ namespace BookingBirthday.Server.Controllers
                 p.created_at = DateTime.Now;
                 p.is_approved = 0;
                 p.host_name = request.host_name;
+                p.guest_name = HttpContext.Session.GetString("name")!;
                 p.is_deleted_by_admin = false;
                 p.is_deleted_by_owner = false;
                 p.is_viewed_by_admin = false;
