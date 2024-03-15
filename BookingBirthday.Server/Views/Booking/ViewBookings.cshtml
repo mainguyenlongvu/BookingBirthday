@@ -38,10 +38,10 @@
                                     <th>Ghi chú</th>
                                     <th>Lý do hủy đơn của chủ tiệc</th>
                                     <th>Trạng thái</th>
-                                    <th></th> <!-- Thêm cột này để đóng thẻ table row -->
                                 </tr>
                                 @foreach (var item in Model)
                                 {
+
                                     <tr>
                                         <td>@(stt++)</td>
                                         <td>
@@ -65,6 +65,7 @@
                                                 <label style="width: auto">@item.Date_cancel</label>
                                             }
                                         </td>
+
                                         <td>
                                             <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
                                         </td>
@@ -78,22 +79,23 @@
                                             <label style="width: auto">@item.BookingStatus</label>
                                         </td>
                                         <td>
-                                            @if (item.BookingStatus == "Processing" || item.BookingStatus == "Accepted")
+                                            @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
+                                            @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
                                             {
                                                 <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
                                             }
                                         </td>
                                         <td>
-                                            <!-- Mở một cột mới -->
-                                            @if (item.BookingStatus == "Processing")
+                                            @if (@item.BookingStatus == "Processing")
                                             {
-                                                <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
+                                                <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data- userId="@item.UserId">Tất toán</a>
                                             }
                                         </td>
                                     </tr>
                                 }
                             </table>
                         </div>
+
                     }
                     else
                     {
@@ -105,8 +107,6 @@
         </div>
     </div>
 </div>
-</div>
-
 <!-- Modal -->
 <div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -126,3 +126,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Get the button element
+    var remainingPaymentBtn = document.getElementById("remainingPaymentBtn");
+    // Add click event listener to the button
+    remainingPaymentBtn.addEventListener("click", function () {
+        // Get bookingId and userId from data attributes
+        var BookingId = remainingPaymentBtn.getAttribute("data-bookingId");
+        var userId = remainingPaymentBtn.getAttribute("data-userId");
+        // Redirect to the RemainingPayment page with bookingId and userId parameters
+        window.location.href = "/Cart/RemainingPayment?bookingId=" + BookingId + "&userId=" + userId;
+    });
+</script>

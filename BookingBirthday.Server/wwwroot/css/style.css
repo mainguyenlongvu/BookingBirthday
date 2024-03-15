@@ -50,13 +50,14 @@
     font-weight: 500;
     transition: .5s;
 }
-
-.btn.btn-primary,
-.btn.btn-secondary,
-.btn.btn-outline-primary:hover,
-.btn.btn-outline-secondary:hover {
-    color: #FFFFFF;
-}
+    .btn.btn-primary
+    .btn.btn-secondary,
+    .btn.btn-outline-primary:hover,
+    .btn.btn-outline-secondary:hover {
+        color: #FFFFFF;
+        border-radius: 30px;
+        margin-top: 10px
+    }
 
 .btn-square {
     width: 38px;
