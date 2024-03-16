@@ -4,7 +4,7 @@
 }
 @await Html.PartialAsync("response")
 
-<div class="login-container" style="margin-top: 150px;">
+<div class="login-container">
     <style>
         .login-container {
             background-image: url('https://cdn.shopify.com/s/files/1/0257/6718/2416/files/Party-Background-green-with-presents.jpg?v=1595051600');
@@ -13,53 +13,60 @@
             height: 100vh;
         }
     </style>
-    <div class="card" style="width: 300px;">
+    <div class="card" style="top: 50px">
         <div class="card-body">
             <h2 class="text-center">Đăng ký</h2>
             <form method="post" asp-action="Register" asp-controller="Account" enctype="multipart/form-data" style="margin-top: 20px;">
-                <div class="mb-3">
-                    <label class="form-label" style="
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
                            margin-left: 0px;">Tên người dùng</label>
-                    <input type="text" class="form-control" id="Name" name="Name" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
-                           margin-left: 0px;">Tên đăng nhập</label>
-                    <input type="text" class="form-control" id="Username" name="Username" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
-                           margin-left: 0px;">Mật khẩu</label>
-                    <input type="password" class="form-control" id="Password" name="Password" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
-                           margin-left: 0px;">Xác nhận mật khẩu</label>
-                    <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
+                        <input type="text" class="form-control" id="Name" name="Name" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
                            margin-left: 0px;">Email</label>
-                    <input type="email" class="form-control" id="Email" name="Email" required>
+                        <input type="email" class="form-control" id="Email" name="Email" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
+                           margin-left: 0px;">Tên đăng nhập</label>
+                        <input type="text" class="form-control" id="Username" name="Username" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
                            margin-left: 0px;">Số điện thoại</label>
-                    <input type="tel" class="form-control" id="Phone" name="Phone" required>
+                        <input type="tel" class="form-control" id="Phone" name="Phone" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label" style="
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
+                           margin-left: 0px;">Mật khẩu</label>
+                        <input type="password" class="form-control" id="Password" name="Password" required>
+                    </div>
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
                            margin-left: 0px;">Địa chỉ</label>
-                    <input type="text" class="form-control" id="Address" name="Address" required>
+                        <input type="text" class="form-control" id="Address" name="Address" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label style="
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
+                           margin-left: 0px;">Xác nhận mật khẩu</label>
+                        <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
+                    </div>
+                    <div class="form-group mb-3 col">
+                        <label class="form-label" style="
                            margin-left: 0px;">Ảnh đại diện</label>
-                    <input class="form-control" style="
-                           margin-left: 0px; name="file" type="file" />
+                        <input class="form-control" style="
+                               margin-left: 0px; name="file" type="file" />
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="
-                        margin-top: 20px; margin-left: 100px;">
+                <button type="submit" class="btn btn-primary" style="display: block; margin: 0 auto">
                     Đăng ký
                 </button>
             </form>
