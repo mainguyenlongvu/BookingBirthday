@@ -74,9 +74,32 @@ namespace BookingBirthday.Server.Controllers
                 p.Price = product.Price;
                 p.image_url = product.image_url;
                 p.Status = product.Status;
+                p.Host_name = product.Host_name;
+                p.UserId = product.UserId;
                 return View(p);
             }
             return View(product);
+        }
+
+        public IActionResult ProfileHost(int UserId)
+        {
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == UserId);
+            if (user == null)
+            {
+                TempData["Message"] = "Tài khoản không tồn tại";
+                TempData["Success"] = false;
+                return RedirectToAction("Index");
+            }
+
+            var packages = _dbContext.Packages.Where(p => p.UserId == UserId).ToList(); // Lấy danh sách package của user
+
+            var viewModel = new ProfileViewModel
+            {
+                User = user,
+                Packages = packages
+            };
+
+            return View(viewModel);
         }
     }
 }

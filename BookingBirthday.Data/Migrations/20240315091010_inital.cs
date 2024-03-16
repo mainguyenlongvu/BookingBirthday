@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookingBirthday.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class inital : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,6 +19,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    guest_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     report = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     requester_id = table.Column<int>(type: "int", nullable: false),
                     is_approved = table.Column<int>(type: "int", nullable: false),
@@ -167,6 +168,7 @@ namespace BookingBirthday.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Host_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
                     Venue = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),

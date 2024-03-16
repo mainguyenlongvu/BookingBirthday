@@ -177,6 +177,9 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("guest_name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("host_name")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,6 +263,10 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Detail")
                         .IsRequired()
                         .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Host_name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

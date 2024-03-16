@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
+<<<<<<<< HEAD:BookingBirthday.Data/Migrations/20240313143956_initial.Designer.cs
     [Migration("20240313143956_initial")]
     partial class initial
+========
+    [Migration("20240315091010_inital")]
+    partial class inital
+>>>>>>>> aa7a0157a168399d005fb1d4f5e5d812cd94fb51:BookingBirthday.Data/Migrations/20240315091010_inital.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,6 +185,9 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("guest_name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("host_name")
                         .HasColumnType("nvarchar(max)");
 
@@ -263,6 +271,10 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Detail")
                         .IsRequired()
                         .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Host_name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

@@ -77,6 +77,7 @@ public class HostPackageController : HostBaseController
                 Price = productData.Price,
                 image_url = UploadedFile(productData.file!),
                 Status = "Active",
+                Host_name = HttpContext.Session.GetString("name")!,
             };
 
             _dbContext.Packages.Add(p);
