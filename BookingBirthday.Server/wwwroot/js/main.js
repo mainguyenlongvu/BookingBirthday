@@ -282,6 +282,30 @@ function dathanhtoan(Id) {
     }
 }
 
+function formatDate(dateString) {
+    var date = new Date(dateString);
+
+    var day = date.getDate();
+    var month = date.getMonth() + 1; // Lưu ý: Tháng bắt đầu từ 0
+    var year = date.getFullYear();
+
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+
+    var period = "AM";
+    if (hours >= 12) {
+        period = "PM";
+        hours = hours % 12;
+    }
+    if (hours === 0) {
+        hours = 12;
+    }
+
+    var formattedDate = `${day}-${month}-${year} ${hours}:${minutes}:${seconds} ${period}`;
+    return formattedDate;
+}
+
 
 function changeSelectRequest(type) {
     var selectElement = document.getElementById("selectRequest");
@@ -290,75 +314,219 @@ function changeSelectRequest(type) {
     $.getJSON('/' + type + '/getRequest?is_approved=' + selectedValue, function (data) {
         var html = '';
         if (data != null) {
-            $.each(data, function (item, value) {
-                console.log(value)
-                html += '<tr>'
-                html += '<td>' + (item + 1) + '</td>'
-                html += '<td>'
-                html += '<label style="width: auto">' + value.category_name + '</label>'
-                html += '</td>'
-                html += '<td>'
-                html += '<label style="width: auto">' + value.created_at + '</label>'
-                html += '</td>'
-                html += '<td>'
-                html += '<label style="width: auto">' + value.rejection_reason + '</label>'
-                html += '</td>'
-                html += '<td>'
+            $.each(data, function (index, value) { // Sử dụng biến index thay vì item
+                console.log(value);
+                html += '<tr>';
+                html += '<td>' + (index + 1) + '</td>'; // Sử dụng biến index để đếm
+                html += '<td><label style="width: auto">' + value.category_name + '</label></td>';
+                html += '<td><label style="width: auto">' + formatDate(value.created_at) + '</label></td>';
+                html += '<td><label style="width: auto">' + value.rejection_reason + '</label></td>';
+                html += '<td><label style="width: auto">' + value.host_name + '</label></td>';
+                html += '<td>';
                 if (value.is_approved == -1) {
-                    html += '<label style="width: auto">Yêu cầu bị từ chối</label>'
+                    html += '<label style="width: auto">Yêu cầu bị từ chối</label>';
+                } else if (value.is_approved == 1) {
+                    html += '<label style="width: auto">Yêu cầu được duyệt</label>';
+                } else {
+                    html += '<label style="width: auto">Yêu cầu chờ duyệt</label>';
                 }
-                else if (value.is_approved == 1) {
-                    html += '<label style="width: auto">Yêu cầu được duyệt</label>'
-                }
-                else {
-                    html += '<label style="width: auto">Yêu cầu chờ duyệt</label>'
-                }
-                html += '</td>'
-                html += '<td>'
+                html += '</td>';
+                html += '<td>';
                 if (value.is_approved == 0) {
                     if (type == "HostRequest") {
-                        html += '<a class="btn btn-primary" onclick="Duyet(' + item.category_request_id + ')">Duyệt</a>'
-                        html += '<a class="btn btn-success" onclick="TuChoi(' + item.category_request_id + ')">Từ chối</a>'
+                        html += '<a class="btn btn-primary" onclick="Duyet(' + value.category_request_id + ')">Duyệt</a>';
+                        html += '<a class="btn btn-success" onclick="TuChoi(' + value.category_request_id + ')">Từ chối</a>';
                     } else {
-                        html += '<a class="btn btn-primary" onclick="xoaRequest(' + value.category_request_id + ')">Xóa</a>'
-                        html += '<a class="btn btn-success" onclick="openUpdate(' + value.category_request_id + ')">Sửa</a>'
+                        html += '<a class="btn btn-primary" onclick="xoaRequest(' + value.category_request_id + ')">Xóa</a>';
+                        html += '<a class="btn btn-success" onclick="openUpdate(' + value.category_request_id + ')">Sửa</a>';
                     }
                 }
-
-                html += '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">'
-                html += '<div class="modal-dialog modal-dialog-centered" role="document">'
-                html += '<div class="modal-content">'
-                html += '<form method="post" action="/GuestRequest/Edit">'
-                html += '<div class="modal-header">'
-                html += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>'
-                html += '</div>'
-                html += '<div class="modal-body">'
-                html += '<div class="form-group">'
-                html += '<label>Tên sản phẩm</label>'
-                html += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />'
-                html += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">'
-                /*html += '<input type="text" class="form-control" name="host_name" value="' + value.host_name + '" required placeholder="Nhập tên chủ tiệc">'*/
-                html += '</div>'
-                html += '</div>'
-                html += '<div class="modal-footer">'
-                html += '<button type="button" onclick="closeUpdate(' + value.category_request_id + ')" class="btn btn-secondary">Đóng</button>'
-                html += '<button type="submit" class="btn btn-success">Sửa</button>'
-                html += '</div>'
-                html += '</form>'
-                html += '</div>'
-                html += '</div>'
-                html += '</div>'
-                html += '</td>'
-                html += '</tr>'
-
+                html += '</td>';
+                html += '</tr>';
             });
+        } else {
+            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
         }
-        else {
+        $("#bodyRequest").html(html);
+
+        // Tạo modal ở đây, bên ngoài vòng lặp
+        $.each(data, function (index, value) {
+            var modalHtml = '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">';
+            modalHtml += '<div class="modal-dialog modal-dialog-centered" role="document">';
+            modalHtml += '<div class="modal-content">';
+            modalHtml += '<form method="post" action="/GuestRequest/Edit">';
+            modalHtml += '<div class="modal-header">';
+            modalHtml += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>';
+            modalHtml += '</div>';
+            modalHtml += '<div class="modal-body">';
+            modalHtml += '<div class="form-group">';
+            modalHtml += '<label>Tên sản phẩm</label>';
+            modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
+            modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '<div class="modal-footer">';
+            modalHtml += '<button type="button" onclick="closeUpdate(' + value.category_request_id + ')" class="btn btn-secondary">Đóng</button>';
+            modalHtml += '<button type="submit" class="btn btn-success">Sửa</button>';
+            modalHtml += '</div>';
+            modalHtml += '</form>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+
+            $("#bodyRequest").append(modalHtml);
+        });
+    });
+}
+
+function changeSelectRequestHost(type) {
+    var selectElement = document.getElementById("selectRequest");
+
+    var selectedValue = selectElement.value;
+    $.getJSON('/' + type + '/getRequest?is_approved=' + selectedValue, function (data) {
+        var html = '';
+        if (data != null) {
+            $.each(data, function (index, value) { // Sử dụng biến index thay vì item
+                console.log(value);
+                html += '<tr>';
+                html += '<td>' + (index + 1) + '</td>'; // Sử dụng biến index để đếm
+                html += '<td><label style="width: auto">' + value.category_name + '</label></td>';
+                html += '<td><label style="width: auto">' + formatDate(value.created_at) + '</label></td>';
+                html += '<td><label style="width: auto">' + value.rejection_reason + '</label></td>';
+                html += '<td>';
+                if (value.is_approved == -1) {
+                    html += '<label style="width: auto">Yêu cầu bị từ chối</label>';
+                } else if (value.is_approved == 1) {
+                    html += '<label style="width: auto">Yêu cầu được duyệt</label>';
+                } else {
+                    html += '<label style="width: auto">Yêu cầu chờ duyệt</label>';
+                }
+                html += '</td>';
+                html += '<td>';
+                if (value.is_approved == 0) {
+                    if (type == "HostRequest") {
+                        html += '<a class="btn btn-primary" onclick="Duyet(' + value.category_request_id + ')">Duyệt</a>';
+                        html += '<a class="btn btn-success" onclick="TuChoi(' + value.category_request_id + ')">Từ chối</a>';
+                    } else {
+                        html += '<a class="btn btn-primary" onclick="xoaRequest(' + value.category_request_id + ')">Xóa</a>';
+                        html += '<a class="btn btn-success" onclick="openUpdate(' + value.category_request_id + ')">Sửa</a>';
+                    }
+                }
+                html += '</td>';
+                html += '</tr>';
+            });
+        } else {
+            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+        }
+        $("#bodyRequest").html(html);
+
+        // Tạo modal ở đây, bên ngoài vòng lặp
+        $.each(data, function (index, value) {
+            var modalHtml = '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">';
+            modalHtml += '<div class="modal-dialog modal-dialog-centered" role="document">';
+            modalHtml += '<div class="modal-content">';
+            modalHtml += '<form method="post" action="/GuestRequest/Edit">';
+            modalHtml += '<div class="modal-header">';
+            modalHtml += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>';
+            modalHtml += '</div>';
+            modalHtml += '<div class="modal-body">';
+            modalHtml += '<div class="form-group">';
+            modalHtml += '<label>Tên sản phẩm</label>';
+            modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
+            modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '<div class="modal-footer">';
+            modalHtml += '<button type="button" onclick="closeUpdate(' + value.category_request_id + ')" class="btn btn-secondary">Đóng</button>';
+            modalHtml += '<button type="submit" class="btn btn-success">Sửa</button>';
+            modalHtml += '</div>';
+            modalHtml += '</form>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+            modalHtml += '</div>';
+
+            $("#bodyRequest").append(modalHtml);
+        });
+    });
+}
+
+
+
+
+function changeSelectReport(type) {
+    var selectElement = document.getElementById("selectReport");
+
+    var selectedValue = selectElement.value;
+    $.getJSON('/' + type + '/getReport?is_approved=' + selectedValue, function (data) {
+        var html = '';
+        if (data != null) {
+            $.each(data, function (index, value) {
+                console.log(value);
+                html += '<tr>';
+                html += '<td>' + (index + 1) + '</td>';
+                html += '<td><label style="width: auto">' + value.report + '</label></td>';
+                html += '<td><label style="width: auto">' + value.host_name + '</label></td>';
+                html += '<td><label style="width: auto">' + formatDate(value.created_at) + '</label></td>';
+                html += '<td><label style="width: auto">' + value.rejection_reason + '</label></td>';
+                html += '<td>';
+                if (value.is_approved == -1) {
+                    html += '<label style="width: auto">Yêu cầu bị từ chối</label>';
+                } else if (value.is_approved == 1) {
+                    html += '<label style="width: auto">Yêu cầu được duyệt</label>';
+                } else {
+                    html += '<label style="width: auto">Yêu cầu chờ duyệt</label>';
+                }
+                html += '</td>';
+                html += '<td>';
+                if (value.is_approved == 0) {
+                    if (type == "AdminReport") {
+                        html += '<a class="btn btn-primary" onclick="Duyet(' + value.category_request_id + ')">Duyệt</a>';
+                        html += '<a class="btn btn-success" onclick="TuChoi(' + value.category_request_id + ')">Từ chối</a>';
+                    } else {
+                        html += '<a class="btn btn-primary" onclick="xoaRequest(' + value.category_request_id + ')">Xóa</a>';
+                        html += '<a class="btn btn-success" onclick="openUpdate(' + value.category_request_id + ')">Sửa</a>';
+                    }
+                }
+                html += '</td>';
+                html += '</tr>';
+            });
+
+            // Tạo modal ở đây, bên ngoài vòng lặp
+            $.each(data, function (index, value) {
+                var modalHtml = '<div class="modal fade" id="update' + value.category_request_id + '" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">';
+                modalHtml += '<div class="modal-dialog modal-dialog-centered" role="document">';
+                modalHtml += '<div class="modal-content">';
+                modalHtml += '<form method="post" action="/GuestRequest/Edit">';
+                modalHtml += '<div class="modal-header">';
+                modalHtml += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>';
+                modalHtml += '</div>';
+                modalHtml += '<div class="modal-body">';
+                modalHtml += '<div class="form-group">';
+                modalHtml += '<label>Tên sản phẩm</label>';
+                modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
+                modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
+                /*modalHtml += '<input type="text" class="form-control" name="host_name" value="' + value.host_name + '" required placeholder="Nhập tên chủ tiệc">';*/
+                modalHtml += '</div>';
+                modalHtml += '</div>';
+                modalHtml += '<div class="modal-footer">';
+                modalHtml += '<button type="button" onclick="closeUpdate(' + value.category_request_id + ')" class="btn btn-secondary">Đóng</button>';
+                modalHtml += '<button type="submit" class="btn btn-success">Sửa</button>';
+                modalHtml += '</div>';
+                modalHtml += '</form>';
+                modalHtml += '</div>';
+                modalHtml += '</div>';
+                modalHtml += '</div>';
+
+                $("#bodyRequest").append(modalHtml);
+            });
+        } else {
             html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
     });
 }
+
+
 function Duyet(category_request_id) {
     if (confirm("Bạn muốn duyệt yêu cầu mới?")) {
         $.ajax({
@@ -450,17 +618,19 @@ function DuyetReport(category_request_id) {
             type: "POST",
             data: {
                 category_request_id: category_request_id,
-                is_approved: 1
+                is_approved: 1,
             },
             success: function (response) {
-                window.location.reload() = true;
+                window.location.reload();
             },
             error: function (xhr, status, error) {
-                window.location.reload() = true;
+                window.location.reload();
             }
         });
     }
 }
+
+
 function TuChoiReport(category_request_id) {
     var lyDo = prompt("Nhập lý do từ chối:");
 

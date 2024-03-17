@@ -200,11 +200,11 @@ namespace BookingBirthday.Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult getRequest(int is_approved)
+        public IActionResult getReport(int is_approved)
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
             var query = _dbContext.Category_Requests
-            .Where(x => x.requester_id == user_id);
+            .Where(x => x.requester_id == user_id && x.report != null);
 
             if (is_approved != 2)
             {

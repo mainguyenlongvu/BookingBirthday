@@ -48,7 +48,15 @@ namespace BookingBirthday.Server.Controllers
                 {
                     
                     category_Requests.is_approved = is_approved;
-                    category_Requests.rejection_reason = rejection_reason;
+                    if(rejection_reason != null)
+                    {
+                        category_Requests.rejection_reason = rejection_reason;
+
+                    }
+                    else 
+                    {
+                        category_Requests.rejection_reason = "";
+                    }
                     _dbContext.SaveChanges();
                     TempData["Message"] = "Duyệt Khiếu nại thành công";
                     TempData["Success"] = true;
@@ -114,12 +122,12 @@ namespace BookingBirthday.Server.Controllers
         }
 
         [HttpGet]
-        public IActionResult getRequest(int is_approved)
+        public IActionResult getReport(int is_approved)
         {
             if (is_approved != 2)
             {
                 var query = _dbContext.Category_Requests
-                    .Where(x => x.is_approved == is_approved)
+                    .Where(x => x.is_approved == is_approved && x.report != null)
                     .OrderByDescending(x => x.created_at)
                     .ToList();
 
@@ -127,7 +135,7 @@ namespace BookingBirthday.Server.Controllers
             }
             else
             {
-                var query = _dbContext.Category_Requests
+                var query = _dbContext.Category_Requests.Where(x => x.report != null)
                     .OrderByDescending(x => x.created_at)
                     .ToList();
 

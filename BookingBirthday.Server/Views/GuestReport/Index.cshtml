@@ -23,7 +23,7 @@
                     {
                         int stt = 1;
                         <div class="col-md-4">
-                            <select id="selectRequest" class="form-control" onchange="changeSelectRequest('GuestRequest')">
+                            <select id="selectReport" class="form-control" onchange="changeSelectReport('GuestReport')">
                                 <option value="2">Tất cả</option>
                                 <option value="0">Chờ duyệt</option>
                                 <option value="1">Đã duyệt</option>
@@ -39,7 +39,6 @@
                                         <th>Người bị khiếu nại</th>
                                         <th>Ngày khiếu nại</th>
                                         <th>Ghi chú của quản trị viên</th>
-                                        <th>Tên chủ tiệc</th>
                                         <th>Trạng thái</th>
                                         <th></th>
                                     </tr>
@@ -61,9 +60,6 @@
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.rejection_reason</label>
-                                            </td>
-                                            <td>
-                                                <label style="width: auto">@item.host_name</label>
                                             </td>
                                             <td>
                                                 @if (item.is_approved == -1)
