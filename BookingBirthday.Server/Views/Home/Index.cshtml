@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
-   // var Categories = ViewBag.Categories;
+    var Categories = ViewBag.Categories;
 }
 @await Html.PartialAsync("response")
 
@@ -42,7 +42,7 @@
                     <h1 class="display-5 mb-3">Bữa tiệc</h1>
                 </div>
             </div>
-            @* <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+            <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                 <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                     <li class="nav-item me-2">
                         <button class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" onclick="FillterByCategory(0)">Tất cả</button>
@@ -52,12 +52,12 @@
                         foreach (var item in Categories)
                         {
                             <li class="nav-item me-2">
-                                <button class="btn btn-outline-primary border-2" data-bs-toggle="pill" onclick="FillterByCategory(@item.Id)">@item.Name</button>
+                                <button class="btn btn-outline-primary border-2" data-bs-toggle="pill" onclick="FillterByCategory(@item.category_id)">@item.name</button>
                             </li>
                         }
                     }
                 </ul>
-            </div> *@
+            </div>
         </div>
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">

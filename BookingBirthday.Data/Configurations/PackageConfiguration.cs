@@ -35,6 +35,11 @@ namespace BookingBirthday.Data.Configurations
             builder.HasOne<Promotion>(x => x.Promotion)
                 .WithMany(x => x.Package)
                 .HasForeignKey(x => x.PromotionId);
+
+            builder.HasOne(x => x.Category)
+              .WithMany(b => b.Package)
+              .HasForeignKey(x => x.category_id)
+              .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

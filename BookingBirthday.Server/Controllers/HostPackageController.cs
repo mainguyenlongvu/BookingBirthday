@@ -10,6 +10,7 @@ public class HostPackageController : HostBaseController
     private readonly BookingDbContext _dbContext;
     private readonly IWebHostEnvironment webHostEnvironment;
     private readonly string _imageContentFolder;
+    
 
     public HostPackageController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
     {
@@ -47,8 +48,14 @@ public class HostPackageController : HostBaseController
                 Note = x.Note,
                 Venue = x.Venue,
                 Price = x.Price,
-                image_url = x.image_url
+                category_id = x.category_id,
+                cateogry_name = x.Category!.name,
+                image_url = x.image_url,
+                Host_name = x.Host_name,
+                Status = x.Status,
+                UserId = x.UserId
             }).ToList();
+            ViewBag.Categories = _dbContext.Categories.ToList();
             return View(lstProducts);
         }
         return View();
@@ -61,24 +68,121 @@ public class HostPackageController : HostBaseController
         var product = _dbContext.Packages.FirstOrDefault(x => x.Name == productData.Name);
         if (product != null)
         {
-            TempData["Message"] = "Sản phẩm đã tồn tại";
+            TempData["Message"] = "Bữa tiệc đã tồn tại";
+            TempData["Success"] = false;
+            return RedirectToAction("Index");
+        }
+        if (productData!.Price <500000)
+        {
+            TempData["Message"] = "Giá bữa tiệc phải trên 500k";
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
         try
         {
-            var p = new Package
+            var p = new Package();
+            // Giá từ 500k-1tr
+            if (productData.Price >= 500000 && productData.Price < 1000000)
             {
-                UserId = user_id,
-                Name = productData.Name!,
-                Venue = productData.Venue!,
-                Detail = productData.Detail!,
-                Note = productData.Note,
-                Price = productData.Price,
-                image_url = UploadedFile(productData.file!),
-                Status = "Active",
-                Host_name = HttpContext.Session.GetString("name")!,
-            };
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 1,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
+            // Giá từ 1tr-2tr
+            if (productData.Price >= 1000000 && productData.Price < 2000000)
+            {
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 2,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
+            // Giá từ 2tr-3tr
+            if (productData.Price >= 2000000 && productData.Price < 3000000)
+            {
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 3,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
+            // Giá từ 3tr-4tr
+            if (productData.Price >= 3000000 && productData.Price < 4000000)
+            {
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 4,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
+            // Giá từ 4tr-5tr
+            if (productData.Price >= 4000000 && productData.Price < 5000000)
+            {
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 5,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
+            //Giá trên 5tr
+            if (productData.Price >= 5000000)
+            {
+                 p = new Package
+                {
+                    UserId = user_id,
+                    Name = productData.Name!,
+                    Venue = productData.Venue!,
+                    Detail = productData.Detail!,
+                    Note = productData.Note,
+                    Price = productData.Price,
+                    category_id = 6,
+                    image_url = UploadedFile(productData.file!),
+                    Status = "Active",
+                    Host_name = HttpContext.Session.GetString("name")!,
+                };
+            }
 
             _dbContext.Packages.Add(p);
             _dbContext.SaveChanges();

@@ -49,7 +49,7 @@ namespace BookingBirthday.Server.Controllers
                 var usr = _dbContext.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
                 if (usr.Count() > 0)
                 {
-                    TempData["Message"] = "Tài khoản đã tồn tại";
+                    TempData["Message"] = "Tài khoản hoặc mail đã tồn tại";
                     TempData["Success"] = false;
                     return RedirectToAction("Index");
                 }
