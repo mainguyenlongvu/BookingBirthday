@@ -4,18 +4,27 @@
 }
 @await Html.PartialAsync("response")
 <div class="login-container">
+    <style>
+        .login-container {
+            background-image: url('https://cdn.shopify.com/s/files/1/0257/6718/2416/files/Party-Background-green-with-presents.jpg?v=1595051600');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+        }
+    </style>
     <div class="card" style="width: 500px;">
         <div class="card-body">
-            <h5 class="card-title">Login</h5>
+
+            <h2 class="text-center">Đăng Nhập</h2>
             <form asp-action="Login" asp-controller="Account" method="post">
                 <div class="form-group">
-                    <label for="username" style="
+                    <label class="form-label" for="username" style="
                            margin-left: 0px;">Tài Khoản</label>
                     <input type="text" class="form-control" name="Username" required placeholder="Nhập tài khoản">
                 </div>
                 <div class="form-group" style="
                      margin-top: 10px;">
-                    <label for="password" style="
+                    <label class="form-label" for="password" style="
                            margin-left: 0px;">Mật khẩu</label>
                     <input type="password" class="form-control" name="Password" required placeholder="Nhập mật khẩu">
                 </div>
