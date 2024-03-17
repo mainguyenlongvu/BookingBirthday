@@ -51,7 +51,7 @@ namespace BookingBirthday.Server.Controllers
             }
 
 
-            var products = from a in _dbContext.Packages
+            var products = from a in _dbContext.Packages.Include(x => x.Category)
                            select new { a };
             if (products != null)
             {
@@ -67,18 +67,24 @@ namespace BookingBirthday.Server.Controllers
                     Status = x.a.Status,
                     Host_name = x.a.Host_name,
                     UserId = x.a.UserId,
+                    category_id = x.a.category_id,
+                    cateogry_name = x.a.Category!.name,
                 }).ToList();
-                ViewBag.Categories = _dbContext.Packages.ToList();
+                ViewBag.Categories = _dbContext.Categories.ToList();
                 return View(lstProducts);
             }
             return View();
         }
-        public IActionResult FilterProducts(int ServiceId)
+        public IActionResult FilterProducts(int category_id)
         {
             // Logic filter danh sách sản phẩm theo category
-            var filteredProducts = from a in _dbContext.Packages
+            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Category)
                                    select new { a };
 
+            if (category_id != 0)
+            {
+                filteredProducts = filteredProducts.Where(x => x.a.category_id == category_id);
+            }
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -94,18 +100,20 @@ namespace BookingBirthday.Server.Controllers
                     Status = x.a.Status,
                     UserId = x.a.UserId,
                     Host_name = x.a.Host_name,
+                    category_id = x.a.category_id,
 
                 }).ToList();
-                return PartialView("ProductList", lstProducts);
+                return PartialView("PackageList", lstProducts);
             }
-            return PartialView("ProductList", null);
+            return PartialView("PackageList", null);
         }
+
         public IActionResult Search(string keyword)
         {
-            var filteredProducts = from a in _dbContext.Packages
+            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Category)
                                    select new { a };
 
-            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword));
+            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Venue.Contains(keyword) || x.a.Host_name!.Contains(keyword)) ;
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -121,6 +129,8 @@ namespace BookingBirthday.Server.Controllers
                     Host_name = x.a.Host_name,
                     Status = x.a.Status,
                     UserId = x.a.UserId,
+                    category_id = x.a.category_id,
+                    cateogry_name = x.a.Category!.name,
                 }).ToList();
                 return View(lstProducts);
             }

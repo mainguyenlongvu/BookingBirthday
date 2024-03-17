@@ -29,6 +29,9 @@ namespace BookingBirthday.Data.Entities
         // Collection navigation properties
         public List<Cart>? Carts { get; set; }
         public IList<CartPackage>? CartPackages { get; set; }
+        //Category
+        public int category_id { get; set; }
+        public Categories? Category { get; set; }
         public IList<BookingPackage>? BookingPackages { get; set; }
     }
 }

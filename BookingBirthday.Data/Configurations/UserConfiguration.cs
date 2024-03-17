@@ -27,7 +27,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.HasIndex(x => x.Phone);
+            builder.HasIndex(x => x.Phone).IsUnique();
             builder.HasIndex(x => x.Address); // Define index for Address
             builder.Property(x => x.Role).IsRequired();
             builder.Property(x => x.Status).IsRequired();

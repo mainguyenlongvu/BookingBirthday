@@ -31,7 +31,16 @@
     <!--Start of Fchat.vn-->
     <script type="text/javascript" src="https://cdn.fchat.vn/assets/embed/webchat.js?id=65f428c3efc0f204641bb4a5" async="async"></script><!--End of Fchat.vn-->
 
-  
+  @*   <script>
+        window.markerConfig = {
+            project: '65f515e8e488925ed8ab8981',
+            source: 'snippet'
+        };
+
+        !function (e, r, a) { if (!e.__Marker) { e.__Marker = {}; var t = [], n = { __cs: t };["show", "hide", "isVisible", "capture", "cancelCapture", "unload", "reload", "isExtensionInstalled", "setReporter", "setCustomData", "on", "off"].forEach(function (e) { n[e] = function () { var r = Array.prototype.slice.call(arguments); r.unshift(e), t.push(r) } }), e.Marker = n; var s = r.createElement("script"); s.async = 1, s.src = "https://edge.marker.io/latest/shim.js"; var i = r.getElementsByTagName("script")[0]; i.parentNode.insertBefore(s, i) } }(window, document);
+    </script> *@
+
+
 
 
 </head>
@@ -42,9 +51,9 @@
     </div>
     <!-- Spinner End -->
     <!-- Navbar Start -->
-    <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid fixed-top px-0 wow fadeIn bg-white shadow" data-wow-delay="0.1s" style="top: 0px">
 
-        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 40px">
+        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
             <a href="/" class="navbar-brand ms-4 ms-lg-0">
                 <h1 class="fw-bold text-primary m-0"><span class="text-secondary">Booking</span> Birthday</h1>
             </a>
@@ -135,7 +144,7 @@
     @RenderBody()
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid bg-dark footer wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
@@ -153,13 +162,13 @@
                     <p><i class="fa fa-phone-alt me-3"></i>096 968 0078</p>
                     <p><i class="fa fa-envelope me-3"></i>mainguyenlongvu0703@gmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                @*<div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Quick Links</h4>
                     <a class="btn btn-link" href="">Thông tin về chúng tôi</a>
                     <a class="btn btn-link" href="">Tương tác với chúng tôi</a>
                     <a class="btn btn-link" href="">Dịch vụ của chúng tôi</a>
                     <a class="btn btn-link" href="">hỗ trợ</a>
-                </div> 
+                </div>*@
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Bản tin</h4>
                     <p>Hãy nói cho chúng tôi biết vấn đề của bạn nhé!</p>

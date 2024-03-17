@@ -18,5 +18,8 @@
         public int? PromotionId { get; set; }
         public int UserId { get; set; }
 
+        public int category_id { get; set; }
+        public string? cateogry_name { get; set; }
+
     }
 }

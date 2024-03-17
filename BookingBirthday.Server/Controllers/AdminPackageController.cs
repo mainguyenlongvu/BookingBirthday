@@ -49,8 +49,13 @@ namespace BookingBirthday.Server.Controllers
                     Note = x.a.Note,
                     Venue = x.a.Venue,
                     Host_name = x.a.Host_name,
-                    image_url = x.a.image_url
+                    image_url = x.a.image_url,
+                    category_id = x.a.category_id,
+                    Status = x.a.Status,
+                    cateogry_name = x.a.Category.name,
+                    UserId = x.a.UserId,
                 }).ToList();
+                ViewBag.Categories = _dbContext.Categories.ToList();
                 return View(lstProducts);
             }
             return View();

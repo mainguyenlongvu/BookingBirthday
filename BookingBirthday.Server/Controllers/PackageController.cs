@@ -2,6 +2,7 @@
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace BookingBirthday.Server.Controllers
@@ -62,7 +63,7 @@ namespace BookingBirthday.Server.Controllers
             //}
             //return null;
 
-            var product = _dbContext.Packages.Where(x => x.Id == Id).FirstOrDefault();
+            var product = _dbContext.Packages.Include(x => x.Category).Where(x => x.Id == Id).FirstOrDefault();
             if (product != null)
             {
                 var p = new PackageModel();

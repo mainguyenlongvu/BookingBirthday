@@ -68,7 +68,7 @@ namespace BookingBirthday.Data
 
         private static void InitializeCart(ModelBuilder modelBuilder)
         {
-            var cart = new List<Cart>();
+            var cart = new List<Categories>();
 
             if (File.Exists(CART_FILE_PATH))
             {
@@ -80,13 +80,13 @@ namespace BookingBirthday.Data
                 {
                     string[]? cartData = cartLine!.Split('|');
 
-                    cart.Add(new Cart
+                    cart.Add(new Categories
                     {
-                        Id = cartID++,
-                        Total = double.Parse(cartData[0].Trim()),
+                        //Id = cartID++,
+                        //Total = double.Parse(cartData[0].Trim()),
                     });
                 }
-                modelBuilder.Entity<Cart>().HasData(cart);
+                modelBuilder.Entity<Categories>().HasData(cart);
             }
         }
 
