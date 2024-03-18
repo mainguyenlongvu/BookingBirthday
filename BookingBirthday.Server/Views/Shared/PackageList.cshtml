@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<BookingBirthday.Server.Models.PackageModel>
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
+@using BookingBirthday.Data.EF
 @inject IHttpContextAccessor HttpContextAccessor
 
 @{
@@ -13,30 +14,34 @@
     var delay = 0.1;
     @foreach (var item in Model)
     {
-        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay + "s")">
-            <div class="product-item">
-                <div class="position-relative bg-light overflow-hidden mt-2">
-                    <img class="img-fluid w-100" src="@item.image_url" alt="">
-                </div>
-                <div class="text-center p-4">
-                    <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
-                    <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng</span>
-                </div>
-                <div class="d-flex border-top">
-                    <small class="w-50 text-center border-end py-2">
-                        <a class="text-body" href="@("/Package/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem sản phẩm</a>
-                    </small>
-                    <small class="w-50 text-center py-2">
-                        @if (role != "Admin" && role != "Host")
-                        {
-                            <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
-                        }
-                    </small>
+        if(item.Status == "Active")
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay + "s")">
+                <div class="product-item">
+                    <div class="position-relative bg-light overflow-hidden mt-2">
+                        <img class="img-fluid w-100" src="@item.image_url" alt="">
+                    </div>
+                    <div class="text-center p-4">
+                        <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
+                        <a class="d-block h5 mb-2" href="@("/Package/ProfileHost?UserId=" + item.UserId)">Chủ tiệc: @item.Host_name</a>
+                        <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng</span>
+                    </div>
+                    <div class="d-flex border-top">
+                        <small class="w-50 text-center border-end py-2">
+                            <a class="text-body" href="@("/Package/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem sản phẩm</a>
+                        </small>
+                        <small class="w-50 text-center py-2">
+                            @if (role != "Admin" && role != "Host")
+                            {
+                                <a class="text-body" asp-route="addcart" asp-route-productid="@item.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                            }
+                        </small>
 
+                    </div>
                 </div>
             </div>
-        </div>
-        delay += 0.1;
+            delay += 0.1;
+        }
     }
 }
 else{

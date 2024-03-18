@@ -1,6 +1,7 @@
 ﻿using BookingBirthday.Data.Configurations;
 using BookingBirthday.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
@@ -24,6 +25,7 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
             modelBuilder.ApplyConfiguration(new RemainingPaymentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
 
             // Generate data
             SeedData.Initialize(modelBuilder);
@@ -32,6 +34,7 @@ namespace BookingBirthday.Data.EF
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingPackage> BookingPackages { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Categories> Categories { get; set; }
         public DbSet<CartPackage> CartPackages { get; set; }
         public DbSet<Package> Packages { get; set; }
         public DbSet<DepositPayment> DepositPayments { get; set; }

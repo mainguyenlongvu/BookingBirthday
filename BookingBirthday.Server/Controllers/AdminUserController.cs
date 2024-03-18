@@ -49,7 +49,7 @@ namespace BookingBirthday.Server.Controllers
                 var usr = _dbContext.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
                 if (usr.Count() > 0)
                 {
-                    TempData["Message"] = "Tài khoản đã tồn tại";
+                    TempData["Message"] = "Tài khoản hoặc mail đã tồn tại";
                     TempData["Success"] = false;
                     return RedirectToAction("Index");
                 }
@@ -116,6 +116,38 @@ namespace BookingBirthday.Server.Controllers
                 }
                 user.Role = userData.Role;
                 user.Status = userData.Status;
+
+                if (userData.Status == "InActive")
+                {
+                    var packagesToUpdate = (from a in _dbContext.Packages
+                                            join b in _dbContext.Users on a.UserId equals b.Id
+                                            where a.UserId == b.Id && b.Status == "Active"
+                                            select a).ToList();
+
+                    foreach (var package in packagesToUpdate)
+                    {
+                        package.Status = "InActive";
+                    }
+
+                    _dbContext.SaveChanges();
+                }
+                else if(userData.Status == "Active")
+                
+                {
+                    var packagesToUpdate = (from a in _dbContext.Packages
+                                            join b in _dbContext.Users on a.UserId equals b.Id
+                                            where a.UserId == b.Id && b.Status == "InActive"
+                                            select a).ToList();
+
+                    foreach (var package in packagesToUpdate)
+                    {
+                        package.Status = "Active";
+                    }
+
+                    _dbContext.SaveChanges();
+                }
+
+
                 if (userData.Password != null)
                 {
                     user.Password = CreateMD5.MD5Hash(userData.Password!);

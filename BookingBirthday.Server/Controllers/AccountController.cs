@@ -3,13 +3,10 @@ using BookingBirthday.Data.EF;
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using BookingBirthday.Server.Common;
-using System.Configuration;
+using System.Text.RegularExpressions;
 using GoogleAuthentication.Services;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using Humanizer;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
-using System.Diagnostics;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -198,12 +195,46 @@ namespace BookingBirthday.Server.Controllers
         {
             try
             {
+                // Kiểm tra tài khoản
+                if (userData.Username.Length < 8)
+                {
+                    TempData["Message"] = "Tài khoản phải chứa ít nhất 8 ký tự.";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
+                // Kiểm tra mật khẩu và mật khẩu xác nhận
                 if (userData.Password != userData.ConfirmPassword)
                 {
                     TempData["Message"] = "Mật khẩu xác nhận không đúng";
                     TempData["Success"] = false;
                     return View(userData);
                 }
+
+                // Kiểm tra mật khẩu
+                if (userData.Password.Length < 8)
+                {
+                    TempData["Message"] = "Mật khẩu phải chứa ít nhất 8 ký tự.";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
+                // Kiểm tra số điện thoại
+                if (!Regex.IsMatch(userData.Phone, @"^(0[0-9]{9,10})$"))
+                {
+                    TempData["Message"] = "Số điện thoại không hợp lệ.";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
+                // Kiểm tra email
+                if (!userData.Email.EndsWith("@gmail.com"))
+                {
+                    TempData["Message"] = "Email phải là địa chỉ theo format XXX@gmail.com";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
                 var usr = _dbContext.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
                 if (usr.Count() > 0)
                 {
@@ -211,6 +242,7 @@ namespace BookingBirthday.Server.Controllers
                     TempData["Success"] = false;
                     return View(userData);
                 }
+
                 var user = new User();
                 user.Username = userData.Username!;
                 user.Role = "Guest";
@@ -241,6 +273,7 @@ namespace BookingBirthday.Server.Controllers
                 return View(userData);
             }
         }
+
 
         public IActionResult Logout()
         {

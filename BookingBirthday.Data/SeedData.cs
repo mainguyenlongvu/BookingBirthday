@@ -17,14 +17,14 @@ namespace BookingBirthday.Data
 {
     public static class SeedData
     {
-        private static readonly string PACKAGE_FILE_PATH = "Resources/packages.txt";
-        private static readonly string CART_FILE_PATH = "Resources/carts.txt";
-        private static readonly string BOOKING_FILE_PATH = "Resources/bookings.txt";
-        private static readonly string PROMOTION_FILE_PATH = "Resources/promotions.txt";
-        private static readonly string PAYMENT_FILE_PATH = "Resources/payments.txt";
-        private static readonly string CART_PACKAGE_FILE_PATH = "Resources/cart-package.txt";
-        private static readonly string BOOKING_PACKAGE_FILE_PATH = "Resources/booking-package.txt";
-        private static readonly string USER_FILE_PATH = "Resources/users.txt";
+        private static readonly string PACKAGE_FILE_PATH = "Resources/package.txt";
+        private static readonly string CART_FILE_PATH = "Resources/cart.txt";
+        private static readonly string BOOKING_FILE_PATH = "Resources/booking.txt";
+        private static readonly string PROMOTION_FILE_PATH = "Resources/promotion.txt";
+        private static readonly string PAYMENT_FILE_PATH = "Resources/payment.txt";
+        private static readonly string CART_PACKAGE_FILE_PATH = "Resources/cart-packages.txt";
+        private static readonly string BOOKING_PACKAGE_FILE_PATH = "Resources/booking-packages.txt";
+        private static readonly string USER_FILE_PATH = "Resources/user.txt";
 
         public static void Initialize(ModelBuilder modelBuilder)
         {
@@ -68,7 +68,7 @@ namespace BookingBirthday.Data
 
         private static void InitializeCart(ModelBuilder modelBuilder)
         {
-            var cart = new List<Cart>();
+            var cart = new List<Categories>();
 
             if (File.Exists(CART_FILE_PATH))
             {
@@ -80,13 +80,13 @@ namespace BookingBirthday.Data
                 {
                     string[]? cartData = cartLine!.Split('|');
 
-                    cart.Add(new Cart
+                    cart.Add(new Categories
                     {
-                        Id = cartID++,
-                        Total = double.Parse(cartData[0].Trim()),
+                        //Id = cartID++,
+                        //Total = double.Parse(cartData[0].Trim()),
                     });
                 }
-                modelBuilder.Entity<Cart>().HasData(cart);
+                modelBuilder.Entity<Categories>().HasData(cart);
             }
         }
 

@@ -61,6 +61,7 @@ namespace BookingBirthday.Server.Controllers
                 p.created_at = DateTime.Now;
                 p.is_approved = 0;
                 p.host_name = request.host_name;
+                p.guest_name = HttpContext.Session.GetString("name")!;
                 p.is_deleted_by_admin = false;
                 p.is_deleted_by_owner = false;
                 p.is_viewed_by_admin = false;
@@ -202,7 +203,26 @@ namespace BookingBirthday.Server.Controllers
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
             var query = _dbContext.Category_Requests
-            .Where(x => x.requester_id == user_id);
+            .Where(x => x.requester_id == user_id && x.report == null);
+
+            if (is_approved != 2)
+            {
+                query = query.Where(x => x.is_approved == is_approved);
+            }
+
+            var data = query
+                .OrderByDescending(x => x.created_at)
+                .ToList();
+
+            return Json(data);
+        }
+
+        [HttpGet]
+        public IActionResult getReport(int is_approved)
+        {
+            var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+            var query = _dbContext.Category_Requests
+            .Where(x => x.requester_id == user_id && x.report != null);
 
             if (is_approved != 2)
             {

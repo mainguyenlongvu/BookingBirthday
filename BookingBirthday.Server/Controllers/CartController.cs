@@ -249,6 +249,10 @@ namespace BookingBirthday.Server.Controllers
             ViewData["Name"] = user.Name;
             return View();
         }
+        //public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
+        //{
+        //    ViewData["BookingId"] = bookingId;
+        //    var url = _vnPayService.CreatePaymentUrl(bookingId, model, HttpContext);
        
         public IActionResult RemainingPayment(int bookingId, int userId)
         {

@@ -131,7 +131,7 @@ namespace BookingBirthday.Server.Controllers
             if (is_approved != 2)
             {
                 var query = _dbContext.Category_Requests
-                    .Where(x => x.is_approved == is_approved && x.host_name == host_name)
+                    .Where(x => x.is_approved == is_approved && x.host_name == host_name && x.report == null)
                     .OrderByDescending(x => x.created_at)
                     .ToList();
                 return Json(query);
@@ -139,7 +139,7 @@ namespace BookingBirthday.Server.Controllers
             else
             {
                 var query = _dbContext.Category_Requests
-                    .Where(x => x.host_name == host_name)
+                    .Where(x => x.host_name == host_name && x.report == null)
                     .OrderByDescending(x => x.created_at)
                     .ToList();
                 return Json(query);

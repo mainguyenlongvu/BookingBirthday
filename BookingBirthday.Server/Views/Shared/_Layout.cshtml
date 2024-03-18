@@ -28,6 +28,20 @@
 
     <!-- Template Stylesheet -->
     <link href="../css/style.css" rel="stylesheet">
+    <!--Start of Fchat.vn-->
+    <script type="text/javascript" src="https://cdn.fchat.vn/assets/embed/webchat.js?id=65f428c3efc0f204641bb4a5" async="async"></script><!--End of Fchat.vn-->
+
+  @*   <script>
+        window.markerConfig = {
+            project: '65f515e8e488925ed8ab8981',
+            source: 'snippet'
+        };
+
+        !function (e, r, a) { if (!e.__Marker) { e.__Marker = {}; var t = [], n = { __cs: t };["show", "hide", "isVisible", "capture", "cancelCapture", "unload", "reload", "isExtensionInstalled", "setReporter", "setCustomData", "on", "off"].forEach(function (e) { n[e] = function () { var r = Array.prototype.slice.call(arguments); r.unshift(e), t.push(r) } }), e.Marker = n; var s = r.createElement("script"); s.async = 1, s.src = "https://edge.marker.io/latest/shim.js"; var i = r.getElementsByTagName("script")[0]; i.parentNode.insertBefore(s, i) } }(window, document);
+    </script> *@
+
+
+
 
 </head>
 <body>
@@ -37,9 +51,9 @@
     </div>
     <!-- Spinner End -->
     <!-- Navbar Start -->
-    <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid fixed-top px-0 wow fadeIn bg-white shadow" data-wow-delay="0.1s" style="top: 0px">
 
-        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 40px">
+        <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
             <a href="/" class="navbar-brand ms-4 ms-lg-0">
                 <h1 class="fw-bold text-primary m-0"><span class="text-secondary">Booking</span> Birthday</h1>
             </a>
@@ -71,8 +85,8 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quản lí</a>
                                 <div class="dropdown-menu m-0">
-                                @*<a href="/AdminProduct" class="dropdown-item">Quản lí sản phẩm</a>
-                                <a href="/AdminOrder" class="dropdown-item">Quản lí đơn hàng</a>*@
+                                <a href="/AdminPackage" class="dropdown-item">Quản lí sản phẩm</a>
+                                <a href="/AdminBooking" class="dropdown-item">Quản lí đơn hàng</a>
                                 <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
                                 <a href="/AdminReport" class="dropdown-item">Quản lí khiếu nại</a>
                                 </div>
@@ -130,33 +144,31 @@
     @RenderBody()
 
     <!-- Footer Start -->
-    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container-fluid bg-dark footer wow fadeIn" data-wow-delay="0.1s">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <h1 class="fw-bold text-primary mb-4"><span class="text-secondary">Booking</span> Birthday</h1>
                     <p> Tiệc sinh nhật là dịp để kỷ niệm và chúc mừng sự sống của một người. Ý nghĩa của tiệc sinh nhật có thể khác nhau đối với mỗi người và mỗi gia đình, nhưng nhìn chung, nó thể hiện sự quan tâm, yêu thương và tôn trọng đối với người đang sinh nhật. </p>
                     <div class="d-flex pt-2">
-                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-youtube"></i></a>
-                        <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-square btn-outline-light rounded-circle me-1" href="https://www.facebook.com/profile.php?id=61556806808136"><i class="fab fa-facebook-f"></i></a>
+                        @* <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i class="fab fa-linkedin-in"></i></a> *@
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <h4 class="text-light mb-4">Address</h4>
-                    <p><i class="fa fa-map-marker-alt me-3"></i>447, Lê Văn Việt, Thủ Đức, TP.HCM </p>
+                    <h4 class="text-light mb-4">Liên hệ với chúng tôi</h4>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>447 Lê Văn Việt, Thủ Đức, TP.HCM </p>
                     <p><i class="fa fa-phone-alt me-3"></i>096 968 0078</p>
-                    <p>
-                        <i class="fa fa-envelope me-3"></i>mainguyenlongvu0703@gmail.com
-                    </p>
+                    <p><i class="fa fa-envelope me-3"></i>mainguyenlongvu0703@gmail.com</p>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                @*<div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Quick Links</h4>
                     <a class="btn btn-link" href="">Thông tin về chúng tôi</a>
                     <a class="btn btn-link" href="">Tương tác với chúng tôi</a>
                     <a class="btn btn-link" href="">Dịch vụ của chúng tôi</a>
                     <a class="btn btn-link" href="">hỗ trợ</a>
-                </div>
+                </div>*@
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Bản tin</h4>
                     <p>Hãy nói cho chúng tôi biết vấn đề của bạn nhé!</p>
@@ -170,7 +182,8 @@
     </div>
     <!-- Footer End -->
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <br/>
+ @*    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a> *@
 
 
     <!-- JavaScript Libraries -->

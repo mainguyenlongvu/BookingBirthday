@@ -4,16 +4,22 @@
     {
         public int Id { get; set; }
         public string?Name { get; set; }
+        public string? Host_name { get; set; }
         public Double Price { get; set; }
         public string? Venue { get; set; }
         public string? Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
         public IFormFile? file { get; set; }
+        public string? Status { get; set; }
+
 
         //PromotionId
         public int? PromotionId { get; set; }
         public int UserId { get; set; }
+
+        public int category_id { get; set; }
+        public string? cateogry_name { get; set; }
 
     }
 }

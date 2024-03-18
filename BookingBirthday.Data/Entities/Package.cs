@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +10,13 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string? Host_name { get; set; }
         public double Price { get; set; }
         public string Venue { get; set; }
         public string Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
+        public string? Status { get; set; }
 
         // Foreign key properties
         public int? PromotionId { get; set; }
@@ -27,6 +29,9 @@ namespace BookingBirthday.Data.Entities
         // Collection navigation properties
         public List<Cart>? Carts { get; set; }
         public IList<CartPackage>? CartPackages { get; set; }
+        //Category
+        public int category_id { get; set; }
+        public Categories? Category { get; set; }
         public IList<BookingPackage>? BookingPackages { get; set; }
     }
 }
