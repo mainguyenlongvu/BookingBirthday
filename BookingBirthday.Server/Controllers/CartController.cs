@@ -158,7 +158,7 @@ namespace BookingBirthday.Server.Controllers
                     }
                     else
                     {
-                        TempData["Message"] = "Không được để trống ngày bắt đầu tiệc";
+                        TempData["Message"] = "Không được để trống thời gian tiệc diễn ra";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Cart");
                     }
@@ -169,11 +169,21 @@ namespace BookingBirthday.Server.Controllers
                     }
                     else
                     {
-                        TempData["Message"] = "Thời gian bắt đầu sai";
+                        TempData["Message"] = "Thời gian tiệc diễn ra sai";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Cart");
                     }
 
+                    if (request.Date_start <= DateTime.Now.AddYears(1))
+                    {
+                        donHang.Date_start = request.Date_start;
+                    }
+                    else
+                    {
+                       TempData["Message"] = "Thời gian tiệc diễn ra không thể vượt quá 1 năm từ ngày hiện tại";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Cart");
+                    }
 
                     donHang.Date_start = request.Date_start;
                     

@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Humanizer;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System.Diagnostics;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -32,7 +33,7 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult Login()
         {
             var clientId = _configuration["Authentication:Google:ClientId"];
-            var url = "https://localhost:7297/signin-google";
+            var url = "https://localhost:7297/Account/LoginWithGoogle";
             var response = GoogleAuth.GetAuthUrl(clientId, url);
             ViewBag.Response = response;
             return View();
@@ -96,19 +97,26 @@ namespace BookingBirthday.Server.Controllers
         {
             var clientId = _configuration["Authentication:Google:ClientId"];
             var clientSecret = _configuration["Authentication:Google:ClientSecret"];
-            var url = "https://localhost:7297/signin-google";
+            var url = "https://localhost:7297/Account/LoginWithGoogle";
             var token = await GoogleAuth.GetAuthAccessToken(code, clientId, clientSecret, url);
             var userProfile = await GoogleAuth.GetProfileResponseAsync(token.AccessToken.ToString());
-
-            var userProfile2 = await GetGoogleUserProfile(userProfile);
+            var userProfile2 = JsonConvert.DeserializeObject<UserLogin>(userProfile);
+            //var userProfile2 = await GetGoogleUserProfile(userProfile);
 
             // Sử dụng thông tin người dùng ở đây hoặc lưu vào cơ sở dữ liệu
             var userName = userProfile2.Name;
             var userEmail = userProfile2.Email;
+            var userPicture = userProfile2.Picture;
             var user = new User();
             user.Email = userEmail;
             user.Name = userName;
+            user.Password = "123";
             user.Status = "Active";
+            user.Role = "Guest";
+            user.Username = userEmail;
+            user.Phone = "";
+            user.Address = "";
+            user.Image_url = userPicture;
 
             var data = InsertForGoogle(user);
             if (data > 0)
@@ -116,8 +124,7 @@ namespace BookingBirthday.Server.Controllers
                 var userSession = new UserLogin();
                 userSession.Email = user.Email;
                 userSession.Name = user.Name;
-                userSession.UserId = data;
-                HttpContext.Session.SetString("username", user.Username!);
+                HttpContext.Session.SetString("username", user.Username);
                 HttpContext.Session.SetString("role", user.Role!);
                 HttpContext.Session.SetString("status", user.Status!);
                 HttpContext.Session.SetString("user_id", user.Id.ToString()!);
@@ -179,8 +186,13 @@ namespace BookingBirthday.Server.Controllers
         // POST: Users/Register
         public IActionResult Register()
         {
+            var clientId = _configuration["Authentication:Google:ClientId"];
+            var url = "https://localhost:7297/Account/RegisterWithGoogle";
+            var response = GoogleAuth.GetAuthUrl(clientId, url);
+            ViewBag.Response = response;
             return View();
         }
+
         [HttpPost]
         public IActionResult Register(RegisterModel userData)
         {
@@ -346,20 +358,5 @@ namespace BookingBirthday.Server.Controllers
                 Task.Run(() => System.IO.File.Delete(filePath));
             }
         }
-
-        //public long InsertForGoogle(User user)
-        //{
-        //    var data = _dbContext.Users.SingleOrDefault(x => x.Email == user.Email);
-        //    if (data == null)
-        //    {
-        //        _dbContext.Users.Add(user);
-        //        _dbContext.SaveChanges();
-        //        return user.Id;
-        //    }
-        //    else
-        //    {
-        //        return data.Id;
-        //    }
-        //}
     }
 }
