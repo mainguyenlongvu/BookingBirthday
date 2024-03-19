@@ -12,6 +12,19 @@ namespace BookingBirthday.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    category_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.category_id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Category_Requests",
                 columns: table => new
                 {
@@ -19,6 +32,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     guest_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     report = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     requester_id = table.Column<int>(type: "int", nullable: false),
@@ -176,11 +190,17 @@ namespace BookingBirthday.Data.Migrations
                     image_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PromotionId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    category_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Package", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Package_Categories_category_id",
+                        column: x => x.category_id,
+                        principalTable: "Categories",
+                        principalColumn: "category_id");
                     table.ForeignKey(
                         name: "FK_Package_Promotion_PromotionId",
                         column: x => x.PromotionId,
@@ -321,6 +341,11 @@ namespace BookingBirthday.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Package_category_id",
+                table: "Package",
+                column: "category_id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Package_PromotionId",
                 table: "Package",
                 column: "PromotionId");
@@ -356,7 +381,9 @@ namespace BookingBirthday.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_Phone",
                 table: "User",
-                column: "Phone");
+                column: "Phone",
+                unique: true,
+                filter: "[Phone] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -385,6 +412,9 @@ namespace BookingBirthday.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "RemainingPayment");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Promotion");

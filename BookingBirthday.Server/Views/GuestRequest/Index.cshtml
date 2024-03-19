@@ -39,6 +39,7 @@
                                         <th>Ngày yêu cầu</th>
                                         <th>Ghi chú của chủ tiệc</th>
                                         <th>Tên chủ tiệc</th>
+                                        <th>Mail chủ tiệc</th>
                                         <th>Trạng thái</th>
                                         <th></th>
                                     </tr>
@@ -60,6 +61,9 @@
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.host_name</label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">@item.mail</label>
                                             </td>
                                             <td>
                                                 @if (item.is_approved == -1)
@@ -95,9 +99,9 @@
                                                                         <label>Yêu cầu</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
                                                                         <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập yêu cầu"/>
-                                                                        <label>Tên chủ tiệc</label>
-                                                                        <p class="form-control">@item.host_name</p>
-                                                                        <input type="hidden" class="form-control" name="host_name" value="@item.host_name" required placeholder="Nhập tên chủ tiệc" />
+                                                                        <label>Mail chủ tiệc</label>
+                                                                        <p class="form-control">@item.mail</p>
+                                                                        <input type="hidden" class="form-control" name="mail" value="@item.mail" required placeholder="Nhập mail chủ tiệc" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -141,8 +145,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên chủ tiệc</label>
-                        <input type="text" class="form-control" name="host_name" required placeholder="Nhập tên chủ tiệc">
+                        <label>Mail chủ tiệc</label>
+                        <input type="text" class="form-control" name="mail" required placeholder="Nhập mail chủ tiệc">
                     </div>
                 </div>
                 <div class="modal-footer">

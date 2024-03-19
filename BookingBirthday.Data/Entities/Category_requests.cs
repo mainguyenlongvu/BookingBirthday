@@ -13,6 +13,7 @@ namespace BookingBirthday.Data.Entities
         public int category_request_id { get; set; }
         public string? category_name { get; set; }
         public string? host_name { get; set; }
+        public string? mail {  get; set; }
         public string? guest_name { get; set; }
         public string? report { get; set; }
         public int requester_id { get; set; }

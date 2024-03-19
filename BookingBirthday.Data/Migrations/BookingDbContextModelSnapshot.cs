@@ -4,7 +4,6 @@ using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240316090749_initial")]
-    partial class initial
+    partial class BookingDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,6 +163,22 @@ namespace BookingBirthday.Data.Migrations
                     b.ToTable("CartPackage", (string)null);
                 });
 
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Categories", b =>
+                {
+                    b.Property<int>("category_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("category_id"));
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("category_id");
+
+                    b.ToTable("Categories", (string)null);
+                });
+
             modelBuilder.Entity("BookingBirthday.Data.Entities.Category_requests", b =>
                 {
                     b.Property<int>("category_request_id")
@@ -200,6 +213,9 @@ namespace BookingBirthday.Data.Migrations
 
                     b.Property<bool>("is_viewed_by_owner")
                         .HasColumnType("bit");
+
+                    b.Property<string>("mail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("rejection_reason")
                         .HasColumnType("nvarchar(max)");
@@ -300,6 +316,9 @@ namespace BookingBirthday.Data.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("category_id")
+                        .HasColumnType("int");
+
                     b.Property<string>("image_url")
                         .HasColumnType("nvarchar(max)");
 
@@ -308,6 +327,8 @@ namespace BookingBirthday.Data.Migrations
                     b.HasIndex("PromotionId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("category_id");
 
                     b.ToTable("Package", (string)null);
                 });
@@ -443,7 +464,9 @@ namespace BookingBirthday.Data.Migrations
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
 
-                    b.HasIndex("Phone");
+                    b.HasIndex("Phone")
+                        .IsUnique()
+                        .HasFilter("[Phone] IS NOT NULL");
 
                     b.ToTable("User", (string)null);
                 });
@@ -540,6 +563,14 @@ namespace BookingBirthday.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookingBirthday.Data.Entities.Categories", "Category")
+                        .WithMany("Package")
+                        .HasForeignKey("category_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
                     b.Navigation("Promotion");
 
                     b.Navigation("User");
@@ -561,6 +592,11 @@ namespace BookingBirthday.Data.Migrations
                     b.Navigation("BookingPackages");
 
                     b.Navigation("Cart");
+                });
+
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Categories", b =>
+                {
+                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.DepositPayment", b =>
