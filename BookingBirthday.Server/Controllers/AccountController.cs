@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using GoogleAuthentication.Services;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using BookingBirthday.Data.Enums;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -26,7 +27,6 @@ namespace BookingBirthday.Server.Controllers
             _configuration = configuration;
         }
 
-        // POST: Users/Login
         public IActionResult Login()
         {
             var clientId = _configuration["Authentication:Google:ClientId"];
@@ -61,6 +61,9 @@ namespace BookingBirthday.Server.Controllers
                     HttpContext.Session.SetString("email", user.Email!);
                     HttpContext.Session.SetString("phone", user.Phone!);
                     HttpContext.Session.SetString("address", user.Address!);
+                    HttpContext.Session.SetString("date", user.DateOfBirth.ToString()!);
+                    HttpContext.Session.SetString("gender", user.Gender!);
+
                     if (user.Role == "Admin")
                     {
                         TempData["Message"] = "Chào mừng quản trị viên";
@@ -85,9 +88,7 @@ namespace BookingBirthday.Server.Controllers
                 TempData["Message"] = "Đăng nhập không thành công";
                 TempData["Success"] = false;
                 return View(loginData);
-                
             }
-            
         }
 
         public async Task<ActionResult> LoginWithGoogle(string code)
@@ -97,38 +98,45 @@ namespace BookingBirthday.Server.Controllers
             var url = "https://localhost:7297/Account/LoginWithGoogle";
             var token = await GoogleAuth.GetAuthAccessToken(code, clientId, clientSecret, url);
             var userProfile = await GoogleAuth.GetProfileResponseAsync(token.AccessToken.ToString());
-            var userProfile2 = JsonConvert.DeserializeObject<UserLogin>(userProfile);
-            //var userProfile2 = await GetGoogleUserProfile(userProfile);
+            var userData = JsonConvert.DeserializeObject<UserLogin>(userProfile);
 
-            // Sử dụng thông tin người dùng ở đây hoặc lưu vào cơ sở dữ liệu
-            var userName = userProfile2.Name;
-            var userEmail = userProfile2.Email;
-            var userPicture = userProfile2.Picture;
+            var userName = userData.Name;
+            var userEmail = userData.Email;
+            var userPicture = userData.Picture;
+
             var user = new User();
-            user.Email = userEmail;
             user.Name = userName;
-            user.Password = "123";
-            user.Status = "Active";
-            user.Role = "Guest";
+            user.Gender = "Nam";
+            user.DateOfBirth = DateTime.Now;
             user.Username = userEmail;
+            user.Email = userEmail;
+            user.Password = CreateMD5.MD5Hash("12345678");
             user.Phone = "";
             user.Address = "";
+            user.Role = "Guest";
+            user.Status = "Active";
             user.Image_url = userPicture;
 
             var data = InsertForGoogle(user);
             if (data > 0)
             {
-                var userSession = new UserLogin();
-                userSession.Email = user.Email;
-                userSession.Name = user.Name;
-                HttpContext.Session.SetString("username", user.Username);
+                if (user!.Status == "InActive")
+                {
+                    TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                    TempData["Success"] = false;
+                    return RedirectToAction("Login", "Account");
+                }
+
+                HttpContext.Session.SetString("username", user.Username!);
                 HttpContext.Session.SetString("role", user.Role!);
                 HttpContext.Session.SetString("status", user.Status!);
-                HttpContext.Session.SetString("user_id", user.Id.ToString()!);
+                HttpContext.Session.SetString("user_id", data.ToString());
                 HttpContext.Session.SetString("name", user.Name!);
                 HttpContext.Session.SetString("email", user.Email!);
                 HttpContext.Session.SetString("phone", user.Phone!);
                 HttpContext.Session.SetString("address", user.Address!);
+                HttpContext.Session.SetString("date", user.DateOfBirth.ToString()!);
+                HttpContext.Session.SetString("gender", user.Gender!);
             }
             if (user.Role == "Admin")
             {
@@ -146,26 +154,7 @@ namespace BookingBirthday.Server.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        private async Task<GoogleUserInfo> GetGoogleUserProfile(string accessToken)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-                var response = await client.GetAsync("https://www.googleapis.com/oauth2/v3/userinfo");
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var userProfile = JsonConvert.DeserializeObject<GoogleUserInfo>(content);
-                    return userProfile;
-                }
-                else
-                {
-                    // Xử lý lỗi khi gọi API
-                    throw new Exception("Failed to get user profile from Google API.");
-                }
-            }
-        }
-        public long InsertForGoogle(User user)
+        public int InsertForGoogle(User user)
         {
             var data = _dbContext.Users.SingleOrDefault(x => x.Email == user.Email);
             if (data == null)
@@ -180,13 +169,8 @@ namespace BookingBirthday.Server.Controllers
             }
         }
 
-        // POST: Users/Register
         public IActionResult Register()
         {
-            var clientId = _configuration["Authentication:Google:ClientId"];
-            var url = "https://localhost:7297/Account/RegisterWithGoogle";
-            var response = GoogleAuth.GetAuthUrl(clientId, url);
-            ViewBag.Response = response;
             return View();
         }
 
@@ -195,7 +179,6 @@ namespace BookingBirthday.Server.Controllers
         {
             try
             {
-                // Kiểm tra tài khoản
                 if (userData.Username.Length < 8)
                 {
                     TempData["Message"] = "Tài khoản phải chứa ít nhất 8 ký tự.";
@@ -203,7 +186,6 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                // Kiểm tra mật khẩu và mật khẩu xác nhận
                 if (userData.Password != userData.ConfirmPassword)
                 {
                     TempData["Message"] = "Mật khẩu xác nhận không đúng";
@@ -211,7 +193,6 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                // Kiểm tra mật khẩu
                 if (userData.Password.Length < 8)
                 {
                     TempData["Message"] = "Mật khẩu phải chứa ít nhất 8 ký tự.";
@@ -219,7 +200,6 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                // Kiểm tra số điện thoại
                 if (!Regex.IsMatch(userData.Phone, @"^(0[0-9]{9,10})$"))
                 {
                     TempData["Message"] = "Số điện thoại không hợp lệ.";
@@ -227,7 +207,6 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                // Kiểm tra email
                 if (!userData.Email.EndsWith("@gmail.com"))
                 {
                     TempData["Message"] = "Email phải là địa chỉ theo format XXX@gmail.com";
@@ -235,23 +214,25 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                var usr = _dbContext.Users.Where(x => x.Username == userData.Username || x.Email == userData.Email);
-                if (usr.Count() > 0)
+                if (userData.DateOfBirth > DateTime.Now)
                 {
-                    TempData["Message"] = "Tài khoản đã tồn tại";
+                    TempData["Message"] = "Ngày tháng năm sinh không hợp lệ.";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 var user = new User();
+                user.Name = userData.Name;
+                user.Gender = userData.Gender;
+                user.DateOfBirth = userData.DateOfBirth;
                 user.Username = userData.Username!;
-                user.Role = "Guest";
-                user.Status = "Active";
                 user.Password = CreateMD5.MD5Hash(userData.Password!);
                 user.Email = userData.Email!;
-                user.Address = userData.Address;
                 user.Phone = userData.Phone;
-                user.Name = userData.Name;
+                user.Address = userData.Address;
+                user.Role = "Guest";
+                user.Status = "Active";
+               
                 if (userData.file != null)
                 {
                     user.Image_url = UploadedFile(userData.file!);
@@ -274,14 +255,12 @@ namespace BookingBirthday.Server.Controllers
             }
         }
 
-
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
 
-        // POST: Users/Profile
         public IActionResult Profile()
         {
             if (HttpContext.Session.GetString("user_id") != null)
@@ -296,6 +275,7 @@ namespace BookingBirthday.Server.Controllers
             }
             return RedirectToAction("Login", "Account");
         }
+
         [HttpPost]
         public IActionResult UpdateProfile(RegisterModel userData)
         {
@@ -306,17 +286,22 @@ namespace BookingBirthday.Server.Controllers
 
                     var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
                     var email = HttpContext.Session.GetString("email");
-
                     if (email != userData.Email)
                     {
                         var usr = _dbContext.Users.Where(x => x.Email == userData.Email);
                         if (usr.Count() > 0)
                         {
-                            TempData["Message"] = "Tài khoản đã tồn tại";
+                            TempData["Message"] = "Tài khoản email đã tồn tại";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        } else if (!userData.Email.EndsWith("@gmail.com"))
+                        {
+                            TempData["Message"] = "Email phải là địa chỉ theo format XXX@gmail.com";
                             TempData["Success"] = false;
                             return RedirectToAction("Profile", "Account");
                         }
                     }
+
                     var user = _dbContext.Users.FirstOrDefault(x => x.Id == user_id);
                     if (user == null)
                     {
@@ -341,10 +326,43 @@ namespace BookingBirthday.Server.Controllers
                             return RedirectToAction("Profile", "Account");
                         }
                     }
+
+                    var phone = HttpContext.Session.GetString("phone");
+                    if (phone != userData.Phone)
+                    {
+                        var usr = _dbContext.Users.Where(x => x.Phone == userData.Phone);
+                        if (usr.Count() > 0)
+                        {
+                            TempData["Message"] = "Số điện thoại đã tồn tại";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        } else if (!Regex.IsMatch(userData.Phone, @"^(0[0-9]{9,10})$"))
+                        {
+                            TempData["Message"] = "Số điện thoại không hợp lệ";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        }
+                    }
+
+                    var date = HttpContext.Session.GetString("date");
+
+                    if (DateTime.Parse(date) != userData.DateOfBirth)
+                    {
+                        if (userData.DateOfBirth > DateTime.Now)
+                        {
+                            TempData["Message"] = "Ngày tháng năm sinh không hợp lệ.";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        }
+                    }
+
                     user.Email = userData.Email;
                     user.Address = userData.Address;
                     user.Phone = userData.Phone;
                     user.Name = userData.Name;
+                    user.DateOfBirth = userData.DateOfBirth;
+                    user.Gender = userData.Gender;
+
                     if (userData.file != null)
                     {
                         if (user.Image_url != "/imgProfile/avatar.png" && user.Image_url != null)
@@ -354,6 +372,7 @@ namespace BookingBirthday.Server.Controllers
                         }
                         user.Image_url = UploadedFile(userData.file!);
                     }
+
                     _dbContext.SaveChanges();
                     TempData["Message"] = "Cập nhật thông tin thành công";
                     TempData["Success"] = true;
@@ -383,6 +402,7 @@ namespace BookingBirthday.Server.Controllers
             }
             return "/imgProfile/" + uniqueFileName;
         }
+        
         public void DeleteImage(string fileName)
         {
             var filePath = Path.Combine(_imageContentFolder, fileName);

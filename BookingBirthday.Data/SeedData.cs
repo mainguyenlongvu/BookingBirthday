@@ -244,7 +244,7 @@ namespace BookingBirthday.Data
                     {
                         Id = userId++,
                         Name = userData[0],
-                        Gender = (Gender)Enum.Parse(typeof(Gender), userData[1]),
+                        //Gender = (Gender)Enum.Parse(typeof(Gender), userData[1]),
                         DateOfBirth = DateTime.Parse(userData[2]),
                         Username = userData[3],
                         Password = userData[4],

@@ -12,7 +12,7 @@ namespace BookingBirthday.Data.Entities
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public Gender Gender { get; set; }
+        public string Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
