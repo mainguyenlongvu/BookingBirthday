@@ -1,5 +1,7 @@
-﻿@model List<BookingBirthday.Data.Entities.Booking>
+﻿@model X.PagedList.IPagedList<BookingBirthday.Data.Entities.Booking>
 @using BookingBirthday.Server.Common;
+@using X.PagedList.Mvc.Core
+
 @{
     ViewData["Title"] = "QL_DonHang Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -116,6 +118,7 @@
                                 }
                             </table>
                         </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
 
                     }
                     else

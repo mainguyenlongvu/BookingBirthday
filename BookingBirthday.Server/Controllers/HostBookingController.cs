@@ -7,6 +7,7 @@ using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using BookingBirthday.Data.Enums;
 using BookingBirthday.Server.Common;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace BookingBirthday.Server.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
@@ -62,7 +63,10 @@ namespace BookingBirthday.Server.Controllers
                 BookingStatus = x.a.BookingStatus,
 
             }).ToListAsync();
-            return View(orders);
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<Booking> lst = new PagedList<Booking>(orders, pageNumber, pageSize);
+            return View(lst);
         }
         [HttpPost]
         public IActionResult Edit(int Id, string status)

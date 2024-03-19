@@ -1,6 +1,7 @@
 @using BookingBirthday.Data.EF
 @using BookingBirthday.Server.Common;
-@model List<BookingBirthday.Data.Entities.Booking>
+@model X.PagedList.IPagedList<BookingBirthday.Data.Entities.Booking>
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "View Orders Page";
@@ -127,6 +128,8 @@
                                 </tbody>
                             </table>
                         </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+
                     }
                     else
                     {

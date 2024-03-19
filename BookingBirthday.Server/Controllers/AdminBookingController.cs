@@ -3,6 +3,7 @@ using BookingBirthday.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -14,7 +15,7 @@ namespace BookingBirthday.Server.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var session = HttpContext.Session;
             List<Category_requests> category_request = null!;
@@ -31,7 +32,10 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).ToList();
-            return View(orders);
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<Booking> lst = new PagedList<Booking>(orders, pageNumber, pageSize);
+            return View(lst);
         }
     }
 }

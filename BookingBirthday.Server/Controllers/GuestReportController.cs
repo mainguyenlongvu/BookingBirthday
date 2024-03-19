@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -17,7 +18,7 @@ namespace BookingBirthday.Server.Controllers
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
@@ -40,7 +41,11 @@ namespace BookingBirthday.Server.Controllers
                     .Where(x => x.requester_id == user_id && x.category_name == null)
                     .OrderByDescending(x => x.created_at)
                     .ToListAsync();
-            return View(all_category_request);
+
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<Category_requests> lst = new PagedList<Category_requests>(all_category_request, pageNumber, pageSize);
+            return View(lst);
         }
         [HttpPost]
         public IActionResult Create(Category_requests request)
