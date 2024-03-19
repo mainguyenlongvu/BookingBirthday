@@ -59,6 +59,20 @@
                            margin-left: 0px;">Xác nhận mật khẩu</label>
                         <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" required>
                     </div>
+                    <div class="mb-3 col">
+                        <label class="form-label" style="margin-left: 0px;">Ngày sinh</label>
+                        <input type="date" class="form-control" id="DateOfBirth" name="DateOfBirth" pattern="\d{2}/\d{2}/\d{4}" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col">
+                        <label class="form-label" style="
+                           margin-left: 0px;">Giới tính</label>
+                        <select name="Gender" id="Gender" class="form-control" style="margin-left: 0px">
+                            <option value="Nam" selected>Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                    </div>
                     <div class="form-group mb-3 col">
                         <label class="form-label" style="
                            margin-left: 0px;">Ảnh đại diện</label>
@@ -70,9 +84,6 @@
                     Đăng ký
                 </button>
             </form>
-            <div class="social-container text-center">
-                <a href="@ViewBag.Response">Register By Google</a>
-            </div>
             <p class="text-center" style="
                margin-top: 20px;">Đã có tài khoản? <a href="/Account/Login">Đăng nhập</a></p>
         </div>

@@ -1,9 +1,6 @@
 ﻿using BookingBirthday.Data.Configurations;
 using BookingBirthday.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace BookingBirthday.Data.EF
 {

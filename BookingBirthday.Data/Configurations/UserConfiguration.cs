@@ -22,7 +22,7 @@ namespace BookingBirthday.Data.Configurations
 
             // Other properties
             builder.HasIndex(x => x.Name).IsUnique();
-            builder.Property(x => x.Gender).HasDefaultValue(Gender.Male);
+            builder.Property(x => x.Gender);
             builder.Property(x => x.DateOfBirth).IsRequired();
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
