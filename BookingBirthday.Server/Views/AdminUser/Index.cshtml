@@ -1,4 +1,5 @@
-﻿@model List<BookingBirthday.Data.Entities.User>
+﻿@model X.PagedList.IPagedList<BookingBirthday.Data.Entities.User>
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "QL_NguoiDung Page";
@@ -140,6 +141,7 @@
                                 }
                             </table>
                         </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
 
                     }
                     else

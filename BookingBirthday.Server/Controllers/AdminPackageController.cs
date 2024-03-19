@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -20,7 +21,7 @@ namespace BookingBirthday.Server.Controllers
             this.webHostEnvironment = webHostEnvironment;
             _imageContentFolder = Path.Combine(webHostEnvironment.WebRootPath, "imgPackage");
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var session = HttpContext.Session;
             List<Category_requests> category_request = null!;
@@ -56,7 +57,10 @@ namespace BookingBirthday.Server.Controllers
                     UserId = x.a.UserId,
                 }).ToList();
                 ViewBag.Categories = _dbContext.Categories.ToList();
-                return View(lstProducts);
+                int pageSize = 8;
+                int pageNumber = page == null || page < 0 ? 1 : page.Value;
+                PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
+                return View(lst);
             }
             return View();
         }

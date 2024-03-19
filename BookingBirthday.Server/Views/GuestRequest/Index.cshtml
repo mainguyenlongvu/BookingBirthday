@@ -1,5 +1,5 @@
-﻿@model List<BookingBirthday.Data.Entities.Category_requests>
-
+﻿@model X.PagedList.IPagedList<BookingBirthday.Data.Entities.Category_requests>
+@using X.PagedList.Mvc.Core
 @{
     ViewData["Title"] = "QL_YeuCau Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -98,7 +98,7 @@
                                                                     <div class="form-group">
                                                                         <label>Yêu cầu</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
-                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập yêu cầu"/>
+                                                                        <input type="text" class="form-control" name="category_name" value="@item.category_name" required placeholder="Nhập yêu cầu" />
                                                                         <label>Mail chủ tiệc</label>
                                                                         <p class="form-control">@item.mail</p>
                                                                         <input type="hidden" class="form-control" name="mail" value="@item.mail" required placeholder="Nhập mail chủ tiệc" />
@@ -118,6 +118,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
 
                     }
                     else

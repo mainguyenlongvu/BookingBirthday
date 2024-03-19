@@ -5,6 +5,7 @@ using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -16,7 +17,7 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var session = HttpContext.Session;
             List<Category_requests> category_request = null!;
@@ -33,7 +34,10 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var users = _dbContext.Users.OrderByDescending(x => x.Id).Where(x=> x.Role != "Admin").ToList();
-            return View(users);
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<User> lst = new PagedList<User>(users, pageNumber, pageSize);
+            return View(lst);
         }
         [HttpPost]
         public IActionResult Create(RegisterModel userData)

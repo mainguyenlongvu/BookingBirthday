@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -16,13 +17,17 @@ namespace BookingBirthday.Server.Controllers
         {
             _dbContext = dbContext;
         }
-        public IActionResult ViewBookings()
+        public IActionResult ViewBookings(int? page)
         {
 
             //Ràng điều kiện ở đây
 
             var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.UserId == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
-            return View(orders);
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<Booking> lst = new PagedList<Booking>(orders, pageNumber, pageSize);
+            return View(lst);
+
         }
         public IActionResult ViewBooking(int Id)
         {

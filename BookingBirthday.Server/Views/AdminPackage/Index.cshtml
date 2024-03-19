@@ -1,4 +1,5 @@
-﻿@model List<BookingBirthday.Server.Models.PackageModel>
+﻿@model X.PagedList.IPagedList<BookingBirthday.Server.Models.PackageModel>
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "QL_SanPham Page";
@@ -76,6 +77,8 @@
                                 }
                             </table>
                         </div>
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+
                     }
                     else
                     {
