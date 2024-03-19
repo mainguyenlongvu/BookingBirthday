@@ -2,10 +2,12 @@
 using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -18,7 +20,7 @@ namespace BookingBirthday.Server.Controllers
             _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var session = HttpContext.Session;
             var role = HttpContext.Session.GetString("role");
@@ -49,7 +51,9 @@ namespace BookingBirthday.Server.Controllers
                     session.SetString("notification", jsonNotification);
                 }
             }
-
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            //var lstsanpham = _dbContext.Packages.Include(x => x.Category).AsNoTracking().OrderBy(x => x.Id);
 
             var products = from a in _dbContext.Packages.Include(x => x.Category)
                            select new { a };
@@ -71,7 +75,8 @@ namespace BookingBirthday.Server.Controllers
                     cateogry_name = x.a.Category!.name,
                 }).ToList();
                 ViewBag.Categories = _dbContext.Categories.ToList();
-                return View(lstProducts);
+                PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
+                return View(lst);
             }
             return View();
         }

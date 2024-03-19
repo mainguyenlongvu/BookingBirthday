@@ -322,6 +322,7 @@ function changeSelectRequest(type) {
                 html += '<td><label style="width: auto">' + formatDate(value.created_at) + '</label></td>';
                 html += '<td><label style="width: auto">' + value.rejection_reason + '</label></td>';
                 html += '<td><label style="width: auto">' + value.host_name + '</label></td>';
+                html += '<td><label style="width: auto">' + value.mail + '</label></td>';
                 html += '<td>';
                 if (value.is_approved == -1) {
                     html += '<label style="width: auto">Yêu cầu bị từ chối</label>';
@@ -431,7 +432,7 @@ function changeSelectRequestHost(type) {
             modalHtml += '</div>';
             modalHtml += '<div class="modal-body">';
             modalHtml += '<div class="form-group">';
-            modalHtml += '<label>Tên sản phẩm</label>';
+            modalHtml += '<label>Yêu cầu</label>';
             modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
             modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
             modalHtml += '</div>';
@@ -466,15 +467,16 @@ function changeSelectReport(type) {
                 html += '<td>' + (index + 1) + '</td>';
                 html += '<td><label style="width: auto">' + value.report + '</label></td>';
                 html += '<td><label style="width: auto">' + value.host_name + '</label></td>';
+                html += '<td><label style="width: auto">' + value.mail + '</label></td>';
                 html += '<td><label style="width: auto">' + formatDate(value.created_at) + '</label></td>';
                 html += '<td><label style="width: auto">' + value.rejection_reason + '</label></td>';
                 html += '<td>';
                 if (value.is_approved == -1) {
-                    html += '<label style="width: auto">Yêu cầu bị từ chối</label>';
-                } else if (value.is_approved == 1) {
-                    html += '<label style="width: auto">Yêu cầu được duyệt</label>';
-                } else {
-                    html += '<label style="width: auto">Yêu cầu chờ duyệt</label>';
+                    html += '<label style="width: auto">Khiếu nại bị từ chối</label>';
+                } else if (value.is_approved == 1) {    
+                    html += '<label style="width: auto">Khiếu nại được duyệt</label>';
+                } else {                                
+                    html += '<label style="width: auto">Khiếu nại chờ duyệt</label>';
                 }
                 html += '</td>';
                 html += '<td>';
@@ -498,13 +500,13 @@ function changeSelectReport(type) {
                 modalHtml += '<div class="modal-content">';
                 modalHtml += '<form method="post" action="/GuestRequest/Edit">';
                 modalHtml += '<div class="modal-header">';
-                modalHtml += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói</h5>';
+                modalHtml += '<h5 class="modal-title" id="productModalLabel">Chỉnh sửa khiếu nại</h5>';
                 modalHtml += '</div>';
                 modalHtml += '<div class="modal-body">';
                 modalHtml += '<div class="form-group">';
-                modalHtml += '<label>Tên sản phẩm</label>';
+                modalHtml += '<label>Khiếu nại</label>';
                 modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
-                modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
+                modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập khiếu nại">';
                 /*modalHtml += '<input type="text" class="form-control" name="host_name" value="' + value.host_name + '" required placeholder="Nhập tên chủ tiệc">';*/
                 modalHtml += '</div>';
                 modalHtml += '</div>';
@@ -520,7 +522,7 @@ function changeSelectReport(type) {
                 $("#bodyRequest").append(modalHtml);
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-danger">Danh sách khiếu nại mới</p>';
         }
         $("#bodyRequest").html(html);
     });

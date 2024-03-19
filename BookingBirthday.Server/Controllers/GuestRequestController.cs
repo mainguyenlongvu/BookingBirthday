@@ -56,26 +56,26 @@ namespace BookingBirthday.Server.Controllers
             try
             {
                 var p = new Category_requests();
-                p.requester_id = user_id;
-                p.category_name = request.category_name;
-                p.created_at = DateTime.Now;
-                p.is_approved = 0;
-                p.host_name = request.host_name;
-                p.guest_name = HttpContext.Session.GetString("name")!;
-                p.is_deleted_by_admin = false;
-                p.is_deleted_by_owner = false;
-                p.is_viewed_by_admin = false;
-                p.is_viewed_by_owner = false;
-                p.rejection_reason = "";
+                var user = _dbContext.Users.FirstOrDefault(u => u.Email == request.mail);
+                
+                var userExists = _dbContext.Users.Any(x => x.Email == request.mail);
 
-
-                //rằng điều kiện có tên của Host vào đây
-
-                //
-                var userExists = _dbContext.Users.Any(x => x.Name == p.host_name);  
-
-                if (userExists)
+                if (userExists )
                 {
+                    p.requester_id = user_id;
+                    p.category_name = request.category_name;
+                    p.created_at = DateTime.Now;
+                    p.is_approved = 0;
+                    p.host_name = user!.Name;
+                    p.mail = request.mail;
+                    p.guest_name = HttpContext.Session.GetString("name")!;
+                    p.is_deleted_by_admin = false;
+                    p.is_deleted_by_owner = false;
+                    p.is_viewed_by_admin = false;
+                    p.is_viewed_by_owner = false;
+                    p.rejection_reason = "";
+
+
                     _dbContext.Category_Requests.Add(p);
                     _dbContext.SaveChanges();
                     TempData["Message"] = "Gửi yêu cầu mới thành công";
@@ -84,11 +84,13 @@ namespace BookingBirthday.Server.Controllers
                 }
                 else
                 {
-                    TempData["Message"] = "không có tên chủ tiệc này!";
+                    TempData["Message"] = "không có mail này!";
                     TempData["Success"] = false;
                     return RedirectToAction("Index");
                 }
-                
+                //rằng điều kiện có tên của Host vào đây
+
+            //
             }
             catch (Exception ex)
             {
@@ -110,7 +112,7 @@ namespace BookingBirthday.Server.Controllers
             try
             {
                 p.category_name = request.category_name;
-                p.host_name = request.host_name;
+                p.mail = request.mail;
                 _dbContext.SaveChanges();
                 TempData["Message"] = "Chỉnh sửa yêu cầu thêm mới danh mục thành công";
                 TempData["Success"] = true;

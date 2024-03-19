@@ -37,6 +37,7 @@
                                         <th>#</th>
                                         <th>Khiếu nại</th>
                                         <th>Người bị khiếu nại</th>
+                                        <th>Mail của người bị khiếu nại</th>
                                         <th>Ngày khiếu nại</th>
                                         <th>Ghi chú của quản trị viên</th>
                                         <th>Trạng thái</th>
@@ -54,6 +55,9 @@
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.host_name</label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">@item.mail</label>
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.created_at</label>
@@ -95,9 +99,9 @@
                                                                         <label>Khiếu nại</label>
                                                                         <input type="hidden" value="@item.category_request_id" name="category_request_id" />
                                                                         <input type="text" class="form-control" name="report" value="@item.report" required placeholder="Nhập nội dung" />
-                                                                        <label>Tên chủ tiệc cần khiếu nại</label>
-                                                                        <p class="form-control">@item.host_name</p>
-                                                                        <input type="hidden" class="form-control" name="host_name" value="@item.host_name" required placeholder="Nhập tên" />
+                                                                        <label>Mail của chủ tiệc cần khiếu nại</label>
+                                                                        <p class="form-control">@item.mail</p>
+                                                                        <input type="hidden" class="form-control" name="mail" value="@item.mail" required placeholder="Nhập mail" />
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
@@ -141,8 +145,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên chủ tiệc cần Khiếu nại</label>
-                        <input type="text" class="form-control" name="host_name" required placeholder="Nhập tên chủ tiệc cần khiếu nại">
+                        <label>Mail của chủ tiệc cần Khiếu nại</label>
+                        <input type="text" class="form-control" name="mail" required placeholder="Nhập mail của chủ tiệc cần khiếu nại">
                     </div>
                 </div>
                 <div class="modal-footer">
