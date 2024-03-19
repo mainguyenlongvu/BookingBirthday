@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240319091258_initial")]
+    [Migration("20240319133848_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -216,6 +216,9 @@ namespace BookingBirthday.Data.Migrations
 
                     b.Property<bool>("is_viewed_by_owner")
                         .HasColumnType("bit");
+
+                    b.Property<string>("mail")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("rejection_reason")
                         .HasColumnType("nvarchar(max)");
@@ -459,9 +462,7 @@ namespace BookingBirthday.Data.Migrations
 
                     b.HasIndex("Address");
 
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
+                    b.HasIndex("Name");
 
                     b.HasIndex("Phone")
                         .IsUnique()

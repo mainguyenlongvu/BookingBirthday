@@ -32,6 +32,7 @@ namespace BookingBirthday.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     guest_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     report = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     requester_id = table.Column<int>(type: "int", nullable: false),
@@ -373,9 +374,7 @@ namespace BookingBirthday.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_User_Name",
                 table: "User",
-                column: "Name",
-                unique: true,
-                filter: "[Name] IS NOT NULL");
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_Phone",
