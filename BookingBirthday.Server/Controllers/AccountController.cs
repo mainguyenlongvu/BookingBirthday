@@ -343,6 +343,7 @@ namespace BookingBirthday.Server.Controllers
                             return RedirectToAction("Profile", "Account");
                         }
                     }
+                    HttpContext.Session.SetString("phone", userData.Phone!);
 
                     var date = HttpContext.Session.GetString("date");
 
