@@ -1,9 +1,11 @@
 ﻿@model BookingBirthday.Server.Models.ProfileViewModel
+@using X.PagedList.Mvc.Core
 
 @{
     ViewData["Title"] = "ProfileCustomer Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 @await Html.PartialAsync("response")
 
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -17,16 +19,17 @@
         </div>
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
+                <!-- Hiển thị thông tin User -->
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
-                            @if(Model.User.Image_url== "")
+                            @if (!string.IsNullOrEmpty(Model.User?.Image_url))
                             {
-                                <img src="/imgProfile/avatar.png" class="card-img-top" alt="Avatar">
+                                <img src="@Model.User.Image_url" class="card-img-top" alt="Avatar">
                             }
                             else
                             {
-                                <img src="@Model.User.Image_url" class="card-img-top" alt="Avatar">
+                                <img src="/imgProfile/avatar.png" class="card-img-top" alt="Avatar">
                             }
                             <div class="card-body">
                                 <h5 class="card-title">@Model.User.Name</h5>
@@ -45,28 +48,69 @@
                         </div>
                     </div>
                 </div>
+                <!-- Kết thúc hiển thị thông tin User -->
+                <!-- Hiển thị danh sách Package -->
+                <div class="container-xxl py-5">
+                    <div class="container">
+                        <div class="row g-0 gx-5 align-items-end">
+                            <div class="col-lg-6">
+                                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                                    <h1 class="display-5 mb-3">Bữa tiệc liên quan</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="tab-1" class="tab-pane fade show p-0 active">
+                                <div class="row g-4" id="productListContainer">
+                                    @* @if (Model.PagedPackages.Count > 0)
+                                    {
+                                        foreach (var package in Model.PagedPackages)
+                                        {
+                                            <div class="row">
+                                                <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp">
+                                                    <div class="product-item">
+                                                        <div class="position-relative bg-light overflow-hidden mt-2">
+                                                            <img class="img-fluid w-100" src="@package.image_url" alt="">
+                                                        </div>
+                                                        <div class="text-center p-4">
+                                                            <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + package.Id)">@package.Name</a>
+                                                            <a class="d-block h5 mb-2" href="@("/Package/ProfileHost?UserId=" + package.UserId)">Chủ tiệc: @package.Host_name</a>
+                                                            <span class="text-primary me-1">@Convert.ToDouble(package.Price).ToString("#,##0") đồng</span>
+                                                        </div>
+                                                        <div class="d-flex border-top">
+                                                            <small class="w-50 text-center border-end py-2">
+                                                                <a class="text-body" href="@("/Package/Show?Id=" + package.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem sản phẩm</a>
+                                                            </small>
+                                                            <small class="w-50 text-center py-2">
+                                                                @if (ViewBag.Role != "Admin" && ViewBag.Role != "Host")
+                                                                {
+                                                                    <a class="text-body" asp-route="addcart" asp-route-productid="@package.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                                                                }
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>Không có gói nào</p>
+                                    } *@
+                                </div>
+                                @Html.Partial("PackageListOfHost", Model.PagedPackages)
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                @Html.PagedListPager(Model.PagedPackages, page => Url.Action("ProfileHost", new { UserId = Model.User.Id, page }))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Kết thúc hiển thị danh sách Package -->
             </div>
         </div>
     </div>
 </div>
-
-<div class="container-xxl py-5">
-    <div class="container">
-        <div class="row g-0 gx-5 align-items-end">
-            <div class="col-lg-6">
-                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Bữa tiệc liên quan</h1>
-                </div>
-            </div>
-
-        </div>
-        <div class="tab-content">
-            <div id="tab-1" class="tab-pane fade show p-0 active">
-                <div class="row g-4" id="productListContainer">
-                    @Html.Partial("PackageListOfHost", Model.Packages)
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Product End -->

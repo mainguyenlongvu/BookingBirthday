@@ -4,6 +4,7 @@ using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -82,25 +83,31 @@ namespace BookingBirthday.Server.Controllers
             return View(product);
         }
 
-        public IActionResult ProfileHost(int UserId)
+        public IActionResult ProfileHost(int UserId, int page = 1) // Giá trị mặc định cho page là 1
         {
             var user = _dbContext.Users.FirstOrDefault(x => x.Id == UserId);
             if (user == null)
             {
-                TempData["Message"] = "Tài khoản không tồn tại";
-                TempData["Success"] = false;
-                return RedirectToAction("Index");
+                // Xử lý trường hợp không tìm thấy user
             }
 
-            var packages = _dbContext.Packages.Where(p => p.UserId == UserId).ToList(); // Lấy danh sách package của user
+            // Truy vấn danh sách package
+            var packagesQuery = _dbContext.Packages.Where(p => p.UserId == UserId);
+
+            int pageSize = 1; // Hoặc bất kỳ giá trị nào bạn muốn
+            var pagedPackages = packagesQuery.OrderBy(p => p.Id) // Hoặc bất kỳ tiêu chí sắp xếp nào bạn muốn
+                .ToPagedList(page, pageSize);
 
             var viewModel = new ProfileViewModel
             {
                 User = user,
-                Packages = packages
+                PagedPackages = pagedPackages
             };
 
             return View(viewModel);
         }
+
+
     }
 }
+
