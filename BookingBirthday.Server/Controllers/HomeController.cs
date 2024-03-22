@@ -80,7 +80,7 @@ namespace BookingBirthday.Server.Controllers
             }
             return View();
         }
-        public IActionResult FilterProducts(int category_id)
+        public IActionResult FilterProducts(int category_id, int? page)
         {
             // Logic filter danh sách sản phẩm theo category
             var filteredProducts = from a in _dbContext.Packages.Include(x => x.Category)
@@ -90,28 +90,31 @@ namespace BookingBirthday.Server.Controllers
             {
                 filteredProducts = filteredProducts.Where(x => x.a.category_id == category_id);
             }
-            if (filteredProducts != null)
-            {
-                var lstProducts = filteredProducts.Select(x => new PackageModel()
-                {
-                    Id = x.a.Id,
-                    Name = x.a.Name,
-                    Detail = x.a.Detail,
-                    Venue = x.a.Venue,
-                    PromotionId = x.a.PromotionId,
-                    Price = x.a.Price,
-                    Note = x.a.Note,
-                    image_url = x.a.image_url,
-                    Status = x.a.Status,
-                    UserId = x.a.UserId,
-                    Host_name = x.a.Host_name,
-                    category_id = x.a.category_id,
 
-                }).ToList();
-                return PartialView("PackageList", lstProducts);
-            }
-            return PartialView("PackageList", null);
+            var lstProducts = filteredProducts.Select(x => new PackageModel()
+            {
+                Id = x.a.Id,
+                Name = x.a.Name,
+                Detail = x.a.Detail,
+                Venue = x.a.Venue,
+                PromotionId = x.a.PromotionId,
+                Price = x.a.Price,
+                Note = x.a.Note,
+                image_url = x.a.image_url,
+                Status = x.a.Status,
+                UserId = x.a.UserId,
+                Host_name = x.a.Host_name,
+                category_id = x.a.category_id,
+                cateogry_name = x.a.Category!.name
+            }).ToList();
+            int pageSize = 8;
+            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
+            
+                return PartialView("PackageList", lst);
+            
         }
+
 
         public IActionResult Search(string keyword)
         {

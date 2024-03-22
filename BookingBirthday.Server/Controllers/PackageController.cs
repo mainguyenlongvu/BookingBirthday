@@ -94,7 +94,7 @@ namespace BookingBirthday.Server.Controllers
             // Truy vấn danh sách package
             var packagesQuery = _dbContext.Packages.Where(p => p.UserId == UserId);
 
-            int pageSize = 1; // Hoặc bất kỳ giá trị nào bạn muốn
+            int pageSize = 4; // Hoặc bất kỳ giá trị nào bạn muốn
             var pagedPackages = packagesQuery.OrderBy(p => p.Id) // Hoặc bất kỳ tiêu chí sắp xếp nào bạn muốn
                 .ToPagedList(page, pageSize);
 
