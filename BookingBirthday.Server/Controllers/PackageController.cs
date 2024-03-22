@@ -20,27 +20,6 @@ namespace BookingBirthday.Server.Controllers
         _dbContext = dbContext;
     }
 
-    public IActionResult ProfileHost(int UserId)
-    {
-        var user = _dbContext.Users.FirstOrDefault(x => x.Id == UserId);
-        if (user == null)
-        {
-            TempData["Message"] = "Tài khoản không tồn tại";
-            TempData["Success"] = false;
-            return RedirectToAction("Index");
-        }
-
-        var packages = _dbContext.Packages.Where(p => p.UserId == UserId).ToList(); // Lấy danh sách package của user
-
-        var viewModel = new ProfileViewModel
-        {
-            User = user,
-            Packages = packages
-        };
-
-        return View(viewModel);
-    }
-
     public IActionResult Show(int id)
     {
         int userId;
