@@ -316,7 +316,7 @@ namespace BookingBirthday.Server.Controllers
                     message = "Link đặt lại mật khẩu đã được gửi đến email của bạn";
                 }
 
-                ViewBag.Message = message;
+                TempData["mgss"] = message;
                 return View();
             }
             else
