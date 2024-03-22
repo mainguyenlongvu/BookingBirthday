@@ -33,5 +33,6 @@ namespace BookingBirthday.Data.Entities
         public int category_id { get; set; }
         public Categories? Category { get; set; }
         public IList<BookingPackage>? BookingPackages { get; set; }
+        public IList<Rate> Rates { get; set; }
     }
 }

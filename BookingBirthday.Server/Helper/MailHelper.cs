@@ -1,20 +1,19 @@
-﻿using System.Configuration;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 
-namespace BookingBirthday.Application.Helper
+namespace BookingBirthday.Server.Helper
 {
     public class MailHelper
     {
         public void SendMail(string toEmailAddress, string subject, string content)
         {
-            var fromEmailAddress = ConfigurationManager.AppSettings["FromEmailAddress"].ToString();
-            var fromEmailDisplayName = ConfigurationManager.AppSettings["FromEmailDisplayName"].ToString();
-            var fromEmailPassword = ConfigurationManager.AppSettings["FromEmailPassword"].ToString();
-            var smtpHost = ConfigurationManager.AppSettings["SMTPHost"].ToString();
-            var smtpPort = ConfigurationManager.AppSettings["SMTPPort"].ToString();
+            var fromEmailAddress = "eraifood57@gmail.com";
+            var fromEmailDisplayName = "Booking Birthday";
+            var fromEmailPassword = "slxqxgslbqfzpwea";
+            var smtpHost = "smtp.gmail.com";
+            var smtpPort = "587";
 
-            bool enabledSsl = bool.Parse(ConfigurationManager.AppSettings["EnabledSSL"].ToString());
+            bool enabledSsl = true;
 
             string body = content;
             MailMessage message = new MailMessage(new MailAddress(fromEmailAddress, fromEmailDisplayName), new MailAddress(toEmailAddress));
