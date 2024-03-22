@@ -23,6 +23,7 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new RemainingPaymentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
+            modelBuilder.ApplyConfiguration(new RateConfiguration());
 
             // Generate data
             SeedData.Initialize(modelBuilder);
@@ -39,5 +40,6 @@ namespace BookingBirthday.Data.EF
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category_requests> Category_Requests { get; set; }
+        public DbSet<Rate> Rates { get; set; }
     }
 }

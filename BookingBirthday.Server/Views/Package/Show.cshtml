@@ -1,5 +1,4 @@
-﻿@model BookingBirthday.Server.Models.PackageModel
-@using Microsoft.AspNetCore.Http
+﻿@using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
 @{
@@ -7,6 +6,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var session = HttpContextAccessor.HttpContext!.Session;
     var role = session.GetString("role");
+    int user;
+    var userIdSession = session.GetString("user_id");
+    if (userIdSession == null)
+    {
+        user = 0;
+    }
+    else
+    {
+        user = int.Parse(userIdSession);
+    }
 }
 <div class="container-xxl py-5" style="margin-top: 100px">
     <div class="container">
@@ -30,7 +39,7 @@
                                 <label style="width: auto">
                                     <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
                                 </label>
-                                <br/>
+                                <br />
                                 <label>Địa Chỉ: @Model.Venue</label>
                                 <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>
                                 @if (role != "Admin" && role != "Host")
@@ -43,7 +52,7 @@
                                 @Html.Raw(Model.Detail)
                                 <div>
                                     <label>***Chú ý*** </label>
-                                    <br/>
+                                    <br />
                                     <label>@Model.Note</label>
                                 </div>
                             </div>
@@ -52,5 +61,154 @@
                 </div>
             </div>
         </div>
+        <div class="container">
+            <!-- Reviews -->
+            <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                <h2 class="display-5 mb-3">Rating</h2>
+            </div>
+            <div class="row">
+                <div class="container mb-5">
+                    <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="px-5 pt-3">
+                            <div class="p-b-30 m-lr-15-sm">
+                                <div class="text-center p-b-32">
+                                    @if (@ViewBag.AverageRate != null)
+                                    {
+                                        <div class="ratingStar d-flex justify-content-between">
+                                            <div class="text-danger">
+                                                <h3 class="mtext-108 cl13 p-r-20">
+                                                    <h3 class="mtext-108 cl13">
+                                                        Đánh giá trung bình:
+                                                        @String.Format("{0:0.0}", @ViewBag.AverageRate)
+                                                        <i class="zmdi zmdi-star"></i>
+                                                    </h3>
+                                                </h3>
+                                            </div>
+                                            <div>
+                                                @if (ViewBag.CountRateFiveStar != null)
+                                                {
+                                                    <h3 class="mtext-108 cl13">
+                                                        SL đánh giá 5
+                                                        <i class="zmdi zmdi-star"></i> :
+                                                        @ViewBag.CountRateFiveStar
+                                                    </h3>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <h3 style="color: #ee4d2d; font-size: 20px;">Chưa có đánh giá</h3>
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Avatar</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Tên người dùng</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Số sao <i class="zmdi zmdi-star"></i></h5>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-center">
+                                    <h5>Nội dung</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Thời gian</h5>
+                                </div>
+                            </div>
+                            <!-- Review -->
+                            @foreach (var item in ViewBag.Review)
+                            {
+                                if (item.Rate.Star > 0)
+                                {
+                                    <div class="row my-2">
+                                        <div class="col-2 d-flex align-items-center justify-content-center">
+                                            <img src="@item.User.Image_url" alt="AVATAR" style="width: 70px; border-radius: 50%;">
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center justify-content-center">
+                                            <div class="">
+                                                @item.User.Name
+                                            </div>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center justify-content-center">
+                                            <div class="">
+                                                @item.Rate.Star <i class="zmdi zmdi-star"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 d-flex align-items-center justify-content-center">
+                                            <div class="">
+                                                @item.Rate.Content
+                                            </div>
+                                        </div>
+                                        <div class="col-2 d-flex align-items-center justify-content-center">
+                                            <div class="">
+                                                @item.Rate.CreatedDate.ToString("dd/MM/yyyy HH:mm:ss")
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                            @if (user == 0)
+                            {
+                                <center><strong class="mtext-107 cl2">Bạn phải <a href="/Account/Login" class="href_style">đăng nhập</a> để sử dụng chức năng này</strong></center>
+                            }
+
+                            else if (@ViewBag.CustomerPurchased != 0 && user > 0)
+                            {
+                                using (Html.BeginForm("PackageReviews", "Package", FormMethod.Post, new { @class = "w-full" }))
+                                {
+                                    <h3 class="my-3">
+                                        Viết đánh giá
+                                    </h3>
+                                    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                                        <div class="flex-w flex-m p-t-23 p-b-23">
+                                            <span class="wrap-rating fs-18 cl11 pointer">
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
+                                                <input class="dis-none" type="number" name="rating" required>
+                                            </span>
+                                        </div>
+                                        <div class="form-floating my-3">
+                                            <input type="text" class="form-control" id="comment" name="Content" placeholder="Nội dung">
+                                            <input type="hidden" id="rating" name="rating" value="0" />
+                                            <label for="review">Nội dung</label>
+                                        </div>
+                                        <input data-val="true"
+                                               data-val-number="Trường ProductId phải là số."
+                                               data-val-required="Trường ProductId là bắt buộc."
+                                               id="productId"
+                                               name="ProductId"
+                                               type="hidden"
+                                               value="0" />
+                                        <button class="w-100 btn btn-lg btn-primary" type="submit">Gửi</button>
+                                    </form>
+                                }
+                            }
+                            else
+                            {
+                                <h5 class="my-3 text-danger text-center">
+                                    Hãy mua ít nhất một sản phẩm để đánh giá
+                                </h5>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    </section>
 </div>
+</div>
+
+
+

@@ -32,8 +32,15 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Role).IsRequired();
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.Image_url); // This should not be a primary key
+            builder.Property(x => x.ResetPasswordCode);
+            builder.HasIndex(x => x.RateId).IsUnique();
+            builder.Property(x => x.RateId).IsRequired(false);
 
-            // Relationships, if any
+            // 1:1 relationship with Rate
+            builder.HasOne(x => x.Rates)
+                .WithOne(x => x.Users)
+                .HasForeignKey<Rate>(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
