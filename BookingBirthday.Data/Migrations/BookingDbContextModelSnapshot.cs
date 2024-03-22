@@ -368,6 +368,40 @@ namespace BookingBirthday.Data.Migrations
                     b.ToTable("Promotion", (string)null);
                 });
 
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Rate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Star")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Rate", (string)null);
+                });
+
             modelBuilder.Entity("BookingBirthday.Data.Entities.RemainingPayment", b =>
                 {
                     b.Property<int>("Id")
@@ -443,6 +477,12 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("RateId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ResetPasswordCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -464,6 +504,10 @@ namespace BookingBirthday.Data.Migrations
                     b.HasIndex("Phone")
                         .IsUnique()
                         .HasFilter("[Phone] IS NOT NULL");
+
+                    b.HasIndex("RateId")
+                        .IsUnique()
+                        .HasFilter("[RateId] IS NOT NULL");
 
                     b.ToTable("User", (string)null);
                 });
@@ -584,6 +628,25 @@ namespace BookingBirthday.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BookingBirthday.Data.Entities.Rate", b =>
+                {
+                    b.HasOne("BookingBirthday.Data.Entities.Package", "Packages")
+                        .WithMany("Rates")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookingBirthday.Data.Entities.User", "Users")
+                        .WithOne("Rates")
+                        .HasForeignKey("BookingBirthday.Data.Entities.Rate", "UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Packages");
+
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("BookingBirthday.Data.Entities.Booking", b =>
                 {
                     b.Navigation("BookingPackages");
@@ -609,6 +672,8 @@ namespace BookingBirthday.Data.Migrations
                     b.Navigation("CartPackages");
 
                     b.Navigation("Carts");
+
+                    b.Navigation("Rates");
                 });
 
             modelBuilder.Entity("BookingBirthday.Data.Entities.Promotion", b =>
@@ -627,6 +692,8 @@ namespace BookingBirthday.Data.Migrations
                     b.Navigation("Bookings");
 
                     b.Navigation("Promotions");
+
+                    b.Navigation("Rates");
                 });
 #pragma warning restore 612, 618
         }

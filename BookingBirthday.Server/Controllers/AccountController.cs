@@ -8,6 +8,10 @@ using GoogleAuthentication.Services;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using BookingBirthday.Data.Enums;
+using BookingBirthday.Application.Helper;
+using System.Net.Mail;
+using Microsoft.AspNetCore.Http.Extensions;
+using BookingBirthday.Server.Helper;
 
 namespace BookingBirthday.Server.Controllers
 {
@@ -253,6 +257,134 @@ namespace BookingBirthday.Server.Controllers
                 TempData["Success"] = false;
                 return View(userData);
             }
+        }
+
+        [HttpPost]
+        public void SendVerificationLinkEmail(string email, string activationCode, string emailFor = "VerifyAccount")
+        {
+            var verifyUrl = $"/Account/{emailFor}/{activationCode}";
+            var link = new Uri(Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority) + verifyUrl;
+
+            string subject = "Đặt lại mật khẩu";
+            string body = $"Bạn vừa gửi link đặt lại mật khẩu. Hãy click vào link bên dưới để đặt lại: <br>" +
+                          $"<a href=\"{link}\">Đặt lại mật khẩu</a>";
+
+            new MailHelper().SendMail(email, "Đặt lại mật khẩu", body);
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false;
+            }
+            try
+            {
+                var addr = new MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(string email)
+        {
+
+            if (IsValidEmail(email))
+            {
+                string message = "";
+                var user = _dbContext.Users.SingleOrDefault(x => x.Email == email);
+
+                if (user != null)
+                {
+                    string resetCode = Guid.NewGuid().ToString();
+                    SendVerificationLinkEmail(user.Email, resetCode, "ResetPassword");
+                    user.ResetPasswordCode = resetCode;
+                    Update(user);
+                    Console.WriteLine(user);
+
+                    message = "Link đặt lại mật khẩu đã được gửi đến email của bạn";
+                }
+
+                ViewBag.Message = message;
+                return View();
+            }
+            else
+            {
+                TempData["mgss"] = "Email không hợp lệ";
+                return View();
+            }
+
+        }
+
+        private bool Update(User user)
+        {
+            try
+            {
+                var data = _dbContext.Users.Find(user.Id);
+                data.Name = user.Name;
+                data.Email = user.Email;
+                data.Password = user.Password;
+                data.ResetPasswordCode = user.ResetPasswordCode;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        [HttpGet("/Account/ResetPassword/{resetPass}")]
+        public ActionResult ResetPassword(string resetPass)
+        {
+            var user = _dbContext.Users.SingleOrDefault(x => x.ResetPasswordCode == resetPass);
+            if (user != null)
+            {
+                ResetPasswordModel model = new ResetPasswordModel();
+                model.ResetCode = resetPass;
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel model)
+        {
+            var message = "";
+            if (ModelState.IsValid)
+            {
+                var user = _dbContext.Users.SingleOrDefault(x => x.ResetPasswordCode == model.ResetCode);
+                if (user != null)
+                {
+                    user.Password = CreateMD5.MD5Hash(model.NewPassword);
+                    user.ResetPasswordCode = "";
+
+                    Update(user);
+                    message = "Cập nhập mật khẩu thành công";
+                    ViewBag.Message = message;
+                    return RedirectToAction("Login", "Account");
+                }
+            }
+            else
+            {
+                message = "Cập nhập mật khẩu thất bại";
+            }
+            ViewBag.Message = message;
+            return View(model);
         }
 
         public IActionResult Logout()

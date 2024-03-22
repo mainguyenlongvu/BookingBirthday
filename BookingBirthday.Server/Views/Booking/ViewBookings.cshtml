@@ -89,43 +89,12 @@
                                             <td>
                                                 @if (@item.BookingStatus == "Processing")
                                                 {
-                                                    <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data- userId="@item.UserId">Tất toán</a>
+                                                    <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
                                                 }
                                             </td>
                                         </tr>
                                     }
                                 </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>@stt</td>
-                                            <td style="white-space: normal;">@CreateMD5.MD5Hash(item.Id.ToString())</td>
-                                            <td>@item.Phone</td>
-                                            <td>@item.Address</td>
-                                            <td>@item.Date_order</td>
-                                            <td>@item.Date_start</td>
-                                            <td>@(item.Date_cancel != default(DateTime) ? item.Date_cancel.ToString() : "")</td>
-                                            <td>@Convert.ToDouble(item.Total).ToString("#,##0") đồng</td>
-                                            <td>@item.Note</td>
-                                            <td colspan="2">@item.Reason</td>
-                                            <td>@item.BookingStatus</td>
-                                            <td>
-                                                @if (item.BookingStatus == "Processing" || item.BookingStatus == "Accepted")
-                                                {
-                                                    <a class="btn btn-warning" onclick="huydonhang('@item.Id')">Hủy đơn</a>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.BookingStatus == "Processing")
-                                                {
-                                                    <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
-                                                }
-                                            </td>
-                                        </tr>
-                                        stt++;
-                                    }
-                                </tbody>
                             </table>
                         </div>
                         @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))

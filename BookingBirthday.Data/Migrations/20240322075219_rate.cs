@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookingBirthday.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class rate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -103,7 +103,9 @@ namespace BookingBirthday.Data.Migrations
                     Address = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Image_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -267,6 +269,34 @@ namespace BookingBirthday.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rate",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Star = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rate_Package_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rate_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartPackage",
                 columns: table => new
                 {
@@ -361,6 +391,17 @@ namespace BookingBirthday.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Rate_PackageId",
+                table: "Rate",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rate_UserId",
+                table: "Rate",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RemainingPayment_BookingId",
                 table: "RemainingPayment",
                 column: "BookingId",
@@ -382,6 +423,13 @@ namespace BookingBirthday.Data.Migrations
                 column: "Phone",
                 unique: true,
                 filter: "[Phone] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RateId",
+                table: "User",
+                column: "RateId",
+                unique: true,
+                filter: "[RateId] IS NOT NULL");
         }
 
         /// <inheritdoc />
@@ -395,6 +443,9 @@ namespace BookingBirthday.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Category_Requests");
+
+            migrationBuilder.DropTable(
+                name: "Rate");
 
             migrationBuilder.DropTable(
                 name: "Cart");
