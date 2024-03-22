@@ -10,12 +10,7 @@
     <form action="/Cart/CreatePaymentUrl" id="frmCreateOrder" method="POST">
         <input type="hidden" name="BookingId" value="@ViewData["BookingId"]">
         <div class="form-group">
-            <label for="ordertype">Danh mục</label>
-            <select name="OrderType" id="ordertype" class="form-control">
-                <option value="package">Gói Tiệc</option>
-                <option value="packageservice">Gói Tiệc & Dịch Vụ</option>
-                <option value="other">Khác</option>
-            </select>
+            <input type="hidden" name="OrderType" id="ordertype" value="@ViewData["BookingId"]">
         </div>
         <br />
         <div class="form-group">
@@ -49,7 +44,7 @@
         <br />
         <button type="submit" class="btn btn-primary" style="
                 margin-left: 10px;">
-            Thanh toán (Checkout)
+            Thanh toán cọc
         </button>
     </form>
 </div>
