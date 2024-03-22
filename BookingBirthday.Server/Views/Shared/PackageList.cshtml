@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BookingBirthday.Server.Models.PackageModel>
+﻿@model X.PagedList.IPagedList<BookingBirthday.Server.Models.PackageModel>
+@using X.PagedList.Mvc.Core
+
 @using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
 @using BookingBirthday.Data.EF
@@ -45,5 +47,5 @@
     }
 }
 else{
-    <p>Không có gói nào</p>
+    <p>Không có bữa tiệc nào</p>
 }
