@@ -1,0 +1,475 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace BookingBirthday.Data.Migrations
+{
+    /// <inheritdoc />
+    public partial class initial : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    category_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.category_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Category_Requests",
+                columns: table => new
+                {
+                    category_request_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    category_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    host_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    guest_name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    report = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    requester_id = table.Column<int>(type: "int", nullable: false),
+                    is_approved = table.Column<int>(type: "int", nullable: false),
+                    is_viewed_by_admin = table.Column<bool>(type: "bit", nullable: false),
+                    is_viewed_by_owner = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted_by_admin = table.Column<bool>(type: "bit", nullable: false),
+                    is_deleted_by_owner = table.Column<bool>(type: "bit", nullable: false),
+                    rejection_reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    created_at = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Category_Requests", x => x.category_request_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DepositPayment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DepositPayment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RemainingPayment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Success = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VnPayResponseCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RemainingPayment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Image_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RateId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Booking",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date_order = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date_start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Date_cancel = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true, defaultValue: "Processing"),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    DepositPaymentId = table.Column<int>(type: "int", nullable: true),
+                    RemainingPaymentId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Booking", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Booking_DepositPayment_DepositPaymentId",
+                        column: x => x.DepositPaymentId,
+                        principalTable: "DepositPayment",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Booking_RemainingPayment_RemainingPaymentId",
+                        column: x => x.RemainingPaymentId,
+                        principalTable: "RemainingPayment",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Booking_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Promotion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DiscountPercent = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Promotion_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Package",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Host_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false),
+                    Venue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Detail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    image_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromotionId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    category_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Package", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Package_Categories_category_id",
+                        column: x => x.category_id,
+                        principalTable: "Categories",
+                        principalColumn: "category_id");
+                    table.ForeignKey(
+                        name: "FK_Package_Promotion_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotion",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Package_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingPackage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingPackage", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookingPackage_Booking_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Booking",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_BookingPackage_Package_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    PackageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cart_Booking_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Booking",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cart_Package_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Package",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rate",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Star = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rate", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rate_Package_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rate_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartPackage",
+                columns: table => new
+                {
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    PackageId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartPackage", x => new { x.CartId, x.PackageId });
+                    table.ForeignKey(
+                        name: "FK_CartPackage_Cart_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Cart",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartPackage_Package_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Booking_DepositPaymentId",
+                table: "Booking",
+                column: "DepositPaymentId",
+                unique: true,
+                filter: "[DepositPaymentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Booking_RemainingPaymentId",
+                table: "Booking",
+                column: "RemainingPaymentId",
+                unique: true,
+                filter: "[RemainingPaymentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Booking_UserId",
+                table: "Booking",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookingPackage_BookingId",
+                table: "BookingPackage",
+                column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BookingPackage_PackageId",
+                table: "BookingPackage",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_BookingId",
+                table: "Cart",
+                column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_PackageId",
+                table: "Cart",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartPackage_PackageId",
+                table: "CartPackage",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DepositPayment_BookingId",
+                table: "DepositPayment",
+                column: "BookingId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Package_category_id",
+                table: "Package",
+                column: "category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Package_PromotionId",
+                table: "Package",
+                column: "PromotionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Package_UserId",
+                table: "Package",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Promotion_UserId",
+                table: "Promotion",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rate_PackageId",
+                table: "Rate",
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rate_UserId",
+                table: "Rate",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RemainingPayment_BookingId",
+                table: "RemainingPayment",
+                column: "BookingId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Address",
+                table: "User",
+                column: "Address");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Name",
+                table: "User",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Phone",
+                table: "User",
+                column: "Phone",
+                unique: true,
+                filter: "[Phone] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RateId",
+                table: "User",
+                column: "RateId",
+                unique: true,
+                filter: "[RateId] IS NOT NULL");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "BookingPackage");
+
+            migrationBuilder.DropTable(
+                name: "CartPackage");
+
+            migrationBuilder.DropTable(
+                name: "Category_Requests");
+
+            migrationBuilder.DropTable(
+                name: "Rate");
+
+            migrationBuilder.DropTable(
+                name: "Cart");
+
+            migrationBuilder.DropTable(
+                name: "Booking");
+
+            migrationBuilder.DropTable(
+                name: "Package");
+
+            migrationBuilder.DropTable(
+                name: "DepositPayment");
+
+            migrationBuilder.DropTable(
+                name: "RemainingPayment");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Promotion");
+
+            migrationBuilder.DropTable(
+                name: "User");
+        }
+    }
+}
