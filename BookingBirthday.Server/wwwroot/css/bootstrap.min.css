@@ -116,7 +116,7 @@ h4, .h4 {
 }
 
 h5, .h5 {
-    font-size: 1.25rem
+    font-size: 1.0rem
 }
 
 h6, .h6 {
@@ -541,8 +541,8 @@ progress {
     }
 
 .img-fluid {
-    height: 300px;
-    width: 300px;
+    height: 500px;
+    width: 500px;
 }
 
 .img-thumbnail {
