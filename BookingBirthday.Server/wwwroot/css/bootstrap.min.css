@@ -2116,7 +2116,6 @@ progress {
 .form-control:disabled, .form-control:read-only {
     background-color: #e9ecef;
     opacity: 1;
-    margin-left: 10px;
 }
 
 .form-control::file-selector-button {
