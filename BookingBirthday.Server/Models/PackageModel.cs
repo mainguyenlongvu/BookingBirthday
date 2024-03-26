@@ -12,6 +12,7 @@
         public string? image_url { get; set; }
         public IFormFile? file { get; set; }
         public string? Status { get; set; }
+        public bool HasRated { get; set; }
 
 
         //PromotionId

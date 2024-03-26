@@ -396,8 +396,7 @@ namespace BookingBirthday.Data.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rate", (string)null);
                 });
@@ -477,9 +476,6 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("RateId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ResetPasswordCode")
                         .HasColumnType("nvarchar(max)");
 
@@ -504,10 +500,6 @@ namespace BookingBirthday.Data.Migrations
                     b.HasIndex("Phone")
                         .IsUnique()
                         .HasFilter("[Phone] IS NOT NULL");
-
-                    b.HasIndex("RateId")
-                        .IsUnique()
-                        .HasFilter("[RateId] IS NOT NULL");
 
                     b.ToTable("User", (string)null);
                 });
@@ -637,8 +629,8 @@ namespace BookingBirthday.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BookingBirthday.Data.Entities.User", "Users")
-                        .WithOne("Rates")
-                        .HasForeignKey("BookingBirthday.Data.Entities.Rate", "UserId")
+                        .WithMany("Rates")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

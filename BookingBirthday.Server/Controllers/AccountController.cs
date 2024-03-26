@@ -183,9 +183,16 @@ namespace BookingBirthday.Server.Controllers
         {
             try
             {
-                if (userData.Username.Length < 8)
+                if (userData.Name.Length > 50)
                 {
-                    TempData["Message"] = "Tài khoản phải chứa ít nhất 8 ký tự.";
+                    TempData["Message"] = "Tên người dùng không được vượt quá 50 kí tự";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
+                if (userData.Username.Length < 8 || userData.Username.Length > 30)
+                {
+                    TempData["Message"] = "Tài khoản phải chứa từ 8 đến 30 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
@@ -197,16 +204,16 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                if (userData.Password.Length < 8)
+                if (userData.Password.Length < 8 || userData.Password.Length > 30)
                 {
-                    TempData["Message"] = "Mật khẩu phải chứa ít nhất 8 ký tự.";
+                    TempData["Message"] = "Mật khẩu phải chứa từ 8 đến 30 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (!Regex.IsMatch(userData.Phone, @"^(0[0-9]{9,10})$"))
                 {
-                    TempData["Message"] = "Số điện thoại không hợp lệ.";
+                    TempData["Message"] = "Số điện thoại không hợp lệ";
                     TempData["Success"] = false;
                     return View(userData);
                 }
@@ -218,9 +225,16 @@ namespace BookingBirthday.Server.Controllers
                     return View(userData);
                 }
 
-                if (userData.DateOfBirth > DateTime.Now)
+                if (userData.DateOfBirth > DateTime.Now || userData.DateOfBirth < DateTime.Now.AddYears(-100))
                 {
-                    TempData["Message"] = "Ngày tháng năm sinh không hợp lệ.";
+                    TempData["Message"] = "Ngày tháng năm sinh không hợp lệ";
+                    TempData["Success"] = false;
+                    return View(userData);
+                }
+
+                if (userData.Address.Length > 200)
+                {
+                    TempData["Message"] = "Địa chỉ không được vượt quá 200 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
@@ -484,6 +498,18 @@ namespace BookingBirthday.Server.Controllers
                         if (userData.DateOfBirth > DateTime.Now)
                         {
                             TempData["Message"] = "Ngày tháng năm sinh không hợp lệ.";
+                            TempData["Success"] = false;
+                            return RedirectToAction("Profile", "Account");
+                        }
+                    }
+
+                    var name = HttpContext.Session.GetString("name");
+
+                    if (name != null)
+                    {
+                        if (user.Name!.Length > 50)
+                        {
+                            TempData["Message"] = "Tên người dùng không được vượt quá 50 kí tự";
                             TempData["Success"] = false;
                             return RedirectToAction("Profile", "Account");
                         }

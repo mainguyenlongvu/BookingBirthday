@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "Detail Product Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -159,46 +160,49 @@
                             {
                                 <center><strong class="mtext-107 cl2">Bạn phải <a href="/Account/Login" class="href_style">đăng nhập</a> để sử dụng chức năng này</strong></center>
                             }
-
-                            else if (@ViewBag.CustomerPurchased != 0 && user > 0)
+                            else if (ViewBag.PackageRated == false)
                             {
-                                using (Html.BeginForm("PackageReviews", "Package", FormMethod.Post, new { @class = "w-full" }))
+                                if (@ViewBag.CustomerPurchased != 0 && user > 0)
                                 {
-                                    <h3 class="my-3">
-                                        Viết đánh giá
-                                    </h3>
-                                    <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
-                                        <div class="flex-w flex-m p-t-23 p-b-23">
-                                            <span class="wrap-rating fs-18 cl11 pointer">
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <input class="dis-none" type="number" name="rating" required>
-                                            </span>
-                                        </div>
-                                        <div class="form-floating my-3">
-                                            <input type="text" class="form-control" id="comment" name="Content" placeholder="Nội dung">
-                                            <input type="hidden" id="rating" name="rating" value="0" />
-                                            <label for="review">Nội dung</label>
-                                        </div>
-                                        <input data-val="true"
-                                               data-val-number="Trường ProductId phải là số."
-                                               data-val-required="Trường ProductId là bắt buộc."
-                                               id="productId"
-                                               name="ProductId"
-                                               type="hidden"
-                                               value="0" />
-                                        <button class="w-100 btn btn-lg btn-primary" type="submit">Gửi</button>
-                                    </form>
+                                    using (Html.BeginForm("PackageReviews", "Package", FormMethod.Post, new { @class = "w-full" }))
+                                    {
+                                        <h3 class="my-3">
+                                            Viết đánh giá
+                                        </h3>
+                                        <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                                            <div class="form-group">
+                                                <label for="rating">Đánh giá:</label>
+                                                <select class="form-control" id="rating" name="rating" required>
+                                                    <option value="">Chọn số sao...</option>
+                                                    <option value="1">1 sao</option>
+                                                    <option value="2">2 sao</option>
+                                                    <option value="3">3 sao</option>
+                                                    <option value="4">4 sao</option>
+                                                    <option value="5">5 sao</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-floating my-3">
+                                                <input type="text" class="form-control" id="comment" name="Content" placeholder="Nội dung">
+                                                <label for="review">Nội dung</label>
+                                            </div>
+                                            <input data-val="true"
+                                                   data-val-number="Trường ProductId phải là số."
+                                                   data-val-required="Trường ProductId là bắt buộc."
+                                                   id="productId"
+                                                   name="ProductId"
+                                                   type="hidden"
+                                                   value="0" />
+                                            <button class="w-100 btn btn-lg btn-primary" type="submit">Gửi</button>
+                                        </form>
+
+                                    }
                                 }
-                            }
-                            else if (role == "Guest")
-                            {
-                                <h5 class="my-3 text-danger text-center">
-                                    Hãy đặt gói tiệc này để đánh giá
-                                </h5>
+                                else if (role == "Guest")
+                                {
+                                    <h5 class="my-3 text-danger text-center">
+                                        Hãy đặt gói tiệc này để đánh giá
+                                    </h5>
+                                }
                             }
                         </div>
                     </div>
@@ -209,6 +213,3 @@
     </section>
 </div>
 </div>
-
-
-
