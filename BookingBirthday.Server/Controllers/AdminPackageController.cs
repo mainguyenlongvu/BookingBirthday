@@ -70,7 +70,7 @@ namespace BookingBirthday.Server.Controllers
             var product = _dbContext.Packages.SingleOrDefault(x => x.Name == productData.Name);
             if (product != null)
             {
-                TempData["Message"] = "Sản phẩm đã tồn tại";
+                TempData["Message"] = "Bữa tiệc đã tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
@@ -85,7 +85,7 @@ namespace BookingBirthday.Server.Controllers
                 p.image_url = UploadedFile(productData.file!);
                 _dbContext.Packages.Add(p);
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Thêm mới sản phẩm thành công";
+                TempData["Message"] = "Thêm mới bữa tiệc thành công";
                 TempData["Success"] = true;
                 return RedirectToAction("Index");
             }
@@ -102,7 +102,7 @@ namespace BookingBirthday.Server.Controllers
             var p = _dbContext.Packages.SingleOrDefault(x => x.Id == productData.Id);
             if (p == null)
             {
-                TempData["Message"] = "Sản phẩm không tồn tại";
+                TempData["Message"] = "Bữa tiệc không tồn tại";
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
@@ -124,7 +124,7 @@ namespace BookingBirthday.Server.Controllers
                     pa.image_url = UploadedFile(productData.file!);
                 }
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Chỉnh sửa thông tin sản phẩm thành công";
+                TempData["Message"] = "Chỉnh sửa thông tin bữa tiệc thành công";
                 TempData["Success"] = true;
                 return RedirectToAction("Index");
             }
@@ -150,12 +150,12 @@ namespace BookingBirthday.Server.Controllers
                     }
                     _dbContext.Packages.Remove(product);
                     _dbContext.SaveChanges();
-                    TempData["Message"] = "Xóa sản phẩm thành công";
+                    TempData["Message"] = "Xóa bữa tiệc thành công";
                     TempData["Success"] = true;
                 }
                 else
                 {
-                    TempData["Message"] = "Xóa sản phẩm không thành công";
+                    TempData["Message"] = "Xóa bữa tiệc không thành công";
                     TempData["Success"] = false;
                 }
                 return Ok();
