@@ -116,7 +116,7 @@ h4, .h4 {
 }
 
 h5, .h5 {
-    font-size: 1.25rem
+    font-size: 1.0rem
 }
 
 h6, .h6 {
@@ -286,7 +286,6 @@ thead, tbody, tfoot, tr, td, th {
 
 label {
     display: inline-block;
-    margin-left: 10px;
 }
 
 button {
@@ -475,8 +474,8 @@ progress {
 
 .display-5 {
     font-size: calc(1.425rem + 2.1vw);
-    font-weight: 700;
-    line-height: 1.2
+    font-weight: 500;
+    line-height: 1.0;
 }
 
 @media (min-width: 1200px) {
@@ -541,8 +540,8 @@ progress {
     }
 
 .img-fluid {
-    max-width: 100%;
-    height: auto
+    height: 500px;
+    width: 500px;
 }
 
 .img-thumbnail {
