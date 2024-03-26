@@ -42,7 +42,7 @@ namespace BookingBirthday.Server.Controllers
                                  User = u
                              };
 
-            var ratings = _dbContext.Rates.Where(r => r.PackageId == id).ToList();
+            var ratings = _dbContext.Rates.Where(r => r.PackageId == id && r.UserId == userId).ToList();
 
             if (ratings.Any())
             {

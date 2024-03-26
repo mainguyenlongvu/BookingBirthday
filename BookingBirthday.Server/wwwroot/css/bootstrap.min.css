@@ -468,7 +468,7 @@ progress {
 
 @media (min-width: 1200px) {
     .display-4 {
-        font-size: 3.5rem
+        font-size: 3.0rem
     }
 }
 
@@ -7870,7 +7870,8 @@ textarea.form-control-lg {
 }
 
 .rounded-3 {
-    border-radius: 0 !important
+    border-radius: 2rem;
+    width: 500px;
 }
 
 .rounded-circle {
