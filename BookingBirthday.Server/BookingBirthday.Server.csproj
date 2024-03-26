@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\imgPackage\" />
+    <Folder Include="wwwroot\FE_Admin\" />
   </ItemGroup>
 
 </Project>

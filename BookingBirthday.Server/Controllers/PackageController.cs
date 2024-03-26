@@ -175,7 +175,7 @@ namespace BookingBirthday.Server.Controllers
             }
             else
             {
-                TempData["Message"] = "Bạn đã đánh giá sản phẩm này rồi.";
+                TempData["Message"] = "Bạn đã đánh giá bữa tiệc này rồi.";
                 TempData["Success"] = false;
                 return Redirect($"/Package/Show?Id={packageId}");
             }

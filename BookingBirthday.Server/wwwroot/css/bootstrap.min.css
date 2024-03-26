@@ -116,7 +116,7 @@ h4, .h4 {
 }
 
 h5, .h5 {
-    font-size: 1.25rem
+    font-size: 1.0rem
 }
 
 h6, .h6 {
@@ -286,7 +286,6 @@ thead, tbody, tfoot, tr, td, th {
 
 label {
     display: inline-block;
-    margin-left: 10px;
 }
 
 button {
@@ -475,8 +474,8 @@ progress {
 
 .display-5 {
     font-size: calc(1.425rem + 2.1vw);
-    font-weight: 700;
-    line-height: 1.2
+    font-weight: 500;
+    line-height: 1.0;
 }
 
 @media (min-width: 1200px) {
@@ -541,8 +540,8 @@ progress {
     }
 
 .img-fluid {
-    max-width: 100%;
-    height: auto
+    height: 500px;
+    width: 500px;
 }
 
 .img-thumbnail {
@@ -2116,7 +2115,6 @@ progress {
 .form-control:disabled, .form-control:read-only {
     background-color: #e9ecef;
     opacity: 1;
-    margin-left: 10px;
 }
 
 .form-control::file-selector-button {
@@ -2225,8 +2223,7 @@ progress {
     }
 
 textarea.form-control {
-    min-height: calc(1.5em + .75rem + 2px);
-    margin-left: 10px;
+    min-height: calc(6em + 5rem + 2px);
 }
 
 textarea.form-control-sm {
