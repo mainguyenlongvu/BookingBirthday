@@ -23,8 +23,7 @@ namespace BookingBirthday.Data.Entities
         public string?  Role { get; set; }
         public string? Status { get; set; }
         public string? ResetPasswordCode { get; set; }
-        public int? RateId { get; set; }
-        public Rate? Rates { get; set; }
+        public IList<Rate> Rates { get; set; }
 
         public List<Booking>? Bookings { get; set; }
         public List<Promotion>? Promotions { get; set; }

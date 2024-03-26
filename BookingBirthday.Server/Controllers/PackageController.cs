@@ -41,10 +41,13 @@ namespace BookingBirthday.Server.Controllers
                                  Rate = r,
                                  User = u
                              };
+
             if (userId >= 0)
             {
-                var data = from booking in _dbContext.Bookings.ToList()
-                           where booking.UserId == userId && booking.BookingStatus == "Paid"
+                var data = from bookingPackage in _dbContext.BookingPackages.ToList()
+                           where bookingPackage.PackageId == id
+                           join booking in _dbContext.Bookings.ToList() on bookingPackage.BookingId equals booking.Id
+                           where booking.BookingStatus == "Paid"
                            select booking;
                 ViewBag.CustomerPurchased = data.Count();
             }
@@ -108,6 +111,8 @@ namespace BookingBirthday.Server.Controllers
                 p.UserId = package.UserId;
                 return View(p);
             }
+
+            ViewBag.PackageId = id;
 
             return View(package);
         }

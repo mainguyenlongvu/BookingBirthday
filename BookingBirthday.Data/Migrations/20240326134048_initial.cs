@@ -104,8 +104,7 @@ namespace BookingBirthday.Data.Migrations
                     Image_url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResetPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RateId = table.Column<int>(type: "int", nullable: true)
+                    ResetPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -398,8 +397,7 @@ namespace BookingBirthday.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Rate_UserId",
                 table: "Rate",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RemainingPayment_BookingId",
@@ -423,13 +421,6 @@ namespace BookingBirthday.Data.Migrations
                 column: "Phone",
                 unique: true,
                 filter: "[Phone] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_RateId",
-                table: "User",
-                column: "RateId",
-                unique: true,
-                filter: "[RateId] IS NOT NULL");
         }
 
         /// <inheritdoc />

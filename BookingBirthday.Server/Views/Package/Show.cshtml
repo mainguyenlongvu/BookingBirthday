@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "Detail Product Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,6 +17,7 @@
     {
         user = int.Parse(userIdSession);
     }
+    bool hasRated = _dbContext.Rates.Any(r => r.PackageId == int.Parse(ViewContext.RouteData.Values["id"].ToString()) && r.UserId == user);
 }
 <div class="container-xxl py-5" style="margin-top: 100px">
     <div class="container">
@@ -160,7 +162,7 @@
                                 <center><strong class="mtext-107 cl2">Bạn phải <a href="/Account/Login" class="href_style">đăng nhập</a> để sử dụng chức năng này</strong></center>
                             }
 
-                            else if (@ViewBag.CustomerPurchased != 0 && user > 0)
+                            else if (@ViewBag.CustomerPurchased != 0 && user > 0 && !hasRated)
                             {
                                 using (Html.BeginForm("PackageReviews", "Package", FormMethod.Post, new { @class = "w-full" }))
                                 {

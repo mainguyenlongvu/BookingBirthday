@@ -26,10 +26,16 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(x => x.UserId);
             builder.HasIndex(x => x.PackageId);
 
-            // 1:M relationship with Booking
+            // 1:M relationship with Package
             builder.HasOne<Package>(x => x.Packages)
                 .WithMany(x => x.Rates)
                 .HasForeignKey(x => x.PackageId);
+
+            // 1:M relationship with User
+            builder.HasOne<User>(x => x.Users)
+                .WithMany(x => x.Rates)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
