@@ -7871,7 +7871,7 @@ textarea.form-control-lg {
 
 .rounded-3 {
     border-radius: 2rem;
-    width: 500px;
+    width:auto;
 }
 
 .rounded-circle {
@@ -10228,7 +10228,9 @@ textarea.form-control-lg {
     }
 
     .pt-lg-5 {
-        padding-top: 3rem !important
+        padding-top: 3rem !important;
+        margin-bottom: 40px
+        
     }
 
     .pe-lg-0 {
