@@ -42,6 +42,17 @@ namespace BookingBirthday.Server.Controllers
                                  User = u
                              };
 
+            var ratings = _dbContext.Rates.Where(r => r.PackageId == id).ToList();
+
+            if (ratings.Any())
+            {
+                ViewBag.PackageRated = true;
+            }
+            else
+            {
+                ViewBag.PackageRated = false;
+            }
+
             if (userId >= 0)
             {
                 var data = from bookingPackage in _dbContext.BookingPackages.ToList()
