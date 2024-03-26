@@ -71,6 +71,23 @@
                 <div class="container mb-5">
                     <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
                         <div class="px-5 pt-3">
+                            <div class="row mt-3">
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Avatar</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Tên người dùng</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Số sao <i class="zmdi zmdi-star"></i></h5>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-center">
+                                    <h5>Nội dung</h5>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-center">
+                                    <h5>Thời gian</h5>
+                                </div>
+                            </div>
                             <div class="p-b-30 m-lr-15-sm">
                                 <div class="text-center p-b-32">
                                     @if (@ViewBag.AverageRate != null)
@@ -106,23 +123,7 @@
 
                             </div>
 
-                            <div class="row mt-3">
-                                <div class="col-2 d-flex align-items-center justify-content-center">
-                                    <h5>Avatar</h5>
-                                </div>
-                                <div class="col-2 d-flex align-items-center justify-content-center">
-                                    <h5>Tên người dùng</h5>
-                                </div>
-                                <div class="col-2 d-flex align-items-center justify-content-center">
-                                    <h5>Số sao <i class="zmdi zmdi-star"></i></h5>
-                                </div>
-                                <div class="col-4 d-flex align-items-center justify-content-center">
-                                    <h5>Nội dung</h5>
-                                </div>
-                                <div class="col-2 d-flex align-items-center justify-content-center">
-                                    <h5>Thời gian</h5>
-                                </div>
-                            </div>
+                         
                             <!-- Review -->
                             @foreach (var item in ViewBag.Review)
                             {
