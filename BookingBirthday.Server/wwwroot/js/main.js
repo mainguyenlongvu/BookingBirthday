@@ -141,7 +141,7 @@ function changeStatusOrder(order_id) {
     }
 }
 function xoaProduct(Id) {
-    if (confirm("Bạn muốn xóa sản phẩm?")) {
+    if (confirm("Bạn muốn xóa bữa tiệc?")) {
         $.ajax({
             url: "/HostPackage/Delete",
             type: "POST",
@@ -361,7 +361,7 @@ function changeSelectRequest(type) {
             modalHtml += '</div>';
             modalHtml += '<div class="modal-body">';
             modalHtml += '<div class="form-group">';
-            modalHtml += '<label>Tên sản phẩm</label>';
+            modalHtml += '<label>Yêu cầu</label>';
             modalHtml += '<input type="hidden" value="' + value.category_request_id + '" name="category_request_id" />';
             modalHtml += '<input type="text" class="form-control" name="category_name" value="' + value.category_name + '" required placeholder="Nhập yêu cầu">';
             modalHtml += '</div>';

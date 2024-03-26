@@ -191,7 +191,7 @@ public class HostPackageController : HostBaseController
             _dbContext.Packages.Add(p);
             _dbContext.SaveChanges();
 
-            TempData["Message"] = "Thêm mới sản phẩm thành công";
+            TempData["Message"] = "Thêm mới bữa tiệc thành công";
             TempData["Success"] = true;
             return RedirectToAction("Index");
         }
@@ -209,7 +209,7 @@ public class HostPackageController : HostBaseController
         var p = _dbContext.Packages.SingleOrDefault(x => x.Id == productData.Id);
         if (p == null)
         {
-            TempData["Message"] = "Sản phẩm không tồn tại";
+            TempData["Message"] = "Bữa tiệc không tồn tại";
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
@@ -230,7 +230,7 @@ public class HostPackageController : HostBaseController
                 p.image_url = UploadedFile(productData.file!);
             }
             _dbContext.SaveChanges();
-            TempData["Message"] = "Chỉnh sửa thông tin sản phẩm thành công";
+            TempData["Message"] = "Chỉnh sửa thông tin bữa tiệc thành công";
             TempData["Success"] = true;
             return RedirectToAction("Index");
         }
@@ -257,19 +257,19 @@ public class HostPackageController : HostBaseController
                 Console.WriteLine(product);
                 _dbContext.Packages.Remove(product);
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Xóa sản phẩm thành công";
+                TempData["Message"] = "Xóa bữa tiệc thành công";
                 TempData["Success"] = true;
             }
             else
             {
-                TempData["Message"] = "Xóa sản phẩm không thành công";
+                TempData["Message"] = "Xóa bữa tiệc không thành công";
                 TempData["Success"] = false;
             }
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["Message"] = "Đã xảy ra lỗi khi xóa sản phẩm: " + ex.Message;
+            TempData["Message"] = "Đã xảy ra lỗi khi xóa bữa tiệc: " + ex.Message;
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }

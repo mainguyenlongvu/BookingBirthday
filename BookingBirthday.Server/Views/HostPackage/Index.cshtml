@@ -22,7 +22,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Quản lí sản phẩm</h1>
+                    <h1 class="display-5 mb-3">Quản lí bữa tiệc</h1>
                 </div>
             </div>
         </div>
@@ -38,7 +38,7 @@
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên sản phẩm</th>
+                                    <th>Tên bữa tiệc</th>
                                     <th>Địa chỉ</th>
                                     <th>Mô tả</th>
                                     <th>Chú ý</th>
@@ -81,13 +81,13 @@
                                                     <div class="modal-content">
                                                         <form method="post" asp-action="Edit" asp-controller="HostPackage" enctype="multipart/form-data">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa sản phẩm</h5>
+                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa bữa tiệc</h5>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
-                                                                    <label>Tên sản phẩm</label>
+                                                                    <label>Tên bữa tiệc</label>
                                                                     <input type="hidden" value="@item.Id" name="Id" />
-                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên sản phẩm">
+                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên bữa tiệc">
                                                                 </div>
                                                                 
                                                                 <div class="form-group">
@@ -129,7 +129,7 @@
                     }
                     else
                     {
-                        <p class="alert alert-danger">Danh sách sản phẩm trống</p>
+                        <p class="alert alert-danger">Danh sách bữa tiệc trống</p>
                     }
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="modal-content">
             <form method="post" asp-action="Create" asp-controller="HostPackage" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Thêm mới sản phẩm</h5>
+                    <h5 class="modal-title" id="productModalLabel">Thêm mới bữa tiệc</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên sản phẩm</label>
-                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên sản phẩm">
+                        <label>Tên bữa tiệc</label>
+                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên bữa tiệc">
                     </div>
                     <div class="form-group">
                         <label>Địa chỉ</label>
