@@ -68,7 +68,7 @@
                                             <label style="width: auto">@item.Note</label>
                                         </td>
                                         <td>
-                                            <img style="width: 10%" src="@item.image_url" />
+                                            <img style="width:100%" src="@item.image_url" />
                                         </td>
                                         <td>
                                             <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0") đồng</label>
@@ -77,7 +77,14 @@
                                 }
                             </table>
                         </div>
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="pagination-item">
+                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                                </li>
+                            }
+                        </ul>
 
                     }
                     else

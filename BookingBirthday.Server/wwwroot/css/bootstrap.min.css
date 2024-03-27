@@ -91,7 +91,7 @@ h2, .h2 {
 
 @media (min-width: 1200px) {
     h2, .h2 {
-        font-size: 2rem
+        font-size: 3rem
     }
 }
 
@@ -468,7 +468,7 @@ progress {
 
 @media (min-width: 1200px) {
     .display-4 {
-        font-size: 3.5rem
+        font-size: 3.0rem
     }
 }
 
@@ -480,7 +480,7 @@ progress {
 
 @media (min-width: 1200px) {
     .display-5 {
-        font-size: 3rem
+        font-size: 2rem
     }
 }
 
@@ -6807,7 +6807,9 @@ textarea.form-control-lg {
 .border-5 {
     border-width: 5px !important
 }
-
+.w-10 {
+    width: 10% !important
+}
 .w-25 {
     width: 25% !important
 }
@@ -7870,7 +7872,8 @@ textarea.form-control-lg {
 }
 
 .rounded-3 {
-    border-radius: 0 !important
+    border-radius: 2rem;
+    width:auto;
 }
 
 .rounded-circle {
@@ -10227,7 +10230,9 @@ textarea.form-control-lg {
     }
 
     .pt-lg-5 {
-        padding-top: 3rem !important
+        padding-top: 3rem !important;
+        margin-bottom: 40px
+        
     }
 
     .pe-lg-0 {
@@ -11977,4 +11982,37 @@ textarea.form-control-lg {
     .d-print-none {
         display: none !important
     }
+}
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    min-width: 40px;
+    height: 30px;
+}
+
+.pagination-item {
+}
+
+.pagination-item--active .pagination-item_link {
+    color: var(--white-color);
+    background-color: var(--primary-color);
+}
+
+.pagination-item_link {
+    --height: 30px;
+    display: block;
+    text-decoration: none;
+    font-size: 1rem;
+    color: brown;
+    min-width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+.pagination-item_icon {
+}
 }

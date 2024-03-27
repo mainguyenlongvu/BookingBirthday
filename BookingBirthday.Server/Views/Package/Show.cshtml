@@ -36,7 +36,7 @@
                                 <img src="@Model.image_url" alt="@Model.Name" class="img-fluid">
                             </div>
                             <div class="col-md-6">
-                                <h2>@Model.Name</h2>
+                                <h3>@Model.Name</h3>
                                 <label style="width: auto">
                                     <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
                                 </label>
@@ -51,8 +51,8 @@
                                     <h2 class="display-5 mb-3">Mô Tả</h2>
                                 </div>
                                 @Html.Raw(Model.Detail)
-                                <div>
-                                    <label>***Chú ý*** </label>
+                                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                                    <h2 class="display-5 mb-3">Chú ý:</h2>
                                     <br />
                                     <label>@Model.Note</label>
                                 </div>
@@ -99,13 +99,10 @@
                                     }
                                     else
                                     {
-                                        <h3 style="color: #ee4d2d; font-size: 20px;">Chưa có đánh giá</h3>
+                                        <h3 style="color: #ee4d2d; font-size: 20px; margin-top: 20px; margin-bottom: 20px;">Chưa có đánh giá</h3>
                                     }
-
                                 </div>
-
                             </div>
-
                             <div class="row mt-3">
                                 <div class="col-2 d-flex align-items-center justify-content-center">
                                     <h5>Avatar</h5>
@@ -123,6 +120,7 @@
                                     <h5>Thời gian</h5>
                                 </div>
                             </div>
+                         
                             <!-- Review -->
                             @foreach (var item in ViewBag.Review)
                             {
@@ -171,8 +169,8 @@
                                         </h3>
                                         <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
                                             <div class="form-group">
-                                                <label for="rating">Đánh giá:</label>
-                                                <select class="form-control" id="rating" name="rating" required>
+                                                <label for="rating"></label>
+                                                <select class="form-control" style="width:150px" id="rating" name="rating" required>
                                                     <option value="">Chọn số sao...</option>
                                                     <option value="1">1 sao</option>
                                                     <option value="2">2 sao</option>
@@ -192,7 +190,7 @@
                                                    name="ProductId"
                                                    type="hidden"
                                                    value="0" />
-                                            <button class="w-100 btn btn-lg btn-primary" type="submit">Gửi</button>
+                                            <button class="w-10 btn btn-lg btn-primary" type="submit">Gửi</button>
                                         </form>
 
                                     }

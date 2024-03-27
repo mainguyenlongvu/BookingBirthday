@@ -2,7 +2,7 @@
 @using BookingBirthday.Server.Common;
 @model X.PagedList.IPagedList<BookingBirthday.Data.Entities.Booking>
 @using X.PagedList.Mvc.Core
-
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "View Orders Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -40,13 +40,26 @@
                                         <th>Ghi chú</th>
                                         <th colspan="2">Lý do hủy đơn của chủ tiệc</th>
                                         <th>Trạng thái</th>
+                                        @* <th>Đánh giá</th> *@
                                     </tr>
                                     @foreach (var item in Model)
                                     {
                                         <tr>
                                             <td>@(stt++)</td>
                                             <td>
-                                                <label style="width: auto">@CreateMD5Short.MD5Short(item.Id.ToString())</label>
+                                                @foreach (var package in _dbContext.BookingPackages)
+                                                    if (package.BookingId == item.Id)
+                                                    {
+                                                        @if (@item.BookingStatus == "Paid")
+                                                        {
+                                                            <label style="width: auto"> <a href="@("/Package/Show?Id="+ package.PackageId)">@CreateMD5Short.MD5Short(item.Id.ToString())</a> </label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label style="width: auto">@CreateMD5Short.MD5Short(item.Id.ToString())</label>
+                                                        }
+
+                                        }
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.Phone</label>
@@ -77,8 +90,24 @@
                                                 <label style="width: auto">@item.Reason</label>
                                             </td>
                                             <td>
-                                                <label style="width: auto">@item.BookingStatus</label>
+                                                @if (@item.BookingStatus == "Declined")
+                                                {
+                                                    <label style="width: auto">Hủy đơn</label>
+                                                }
+                                                @if (@item.BookingStatus == "Paid")
+                                                {
+                                                    <label style="width: auto">Đã thanh toán</label>
+                                                }
+                                                @if (@item.BookingStatus == "Processing")
+                                                {
+                                                    <label style="width: auto">Chờ xử lý</label>
+                                                }
+                                                @if (@item.BookingStatus == "Accepted")
+                                                {
+                                                    <label style="width: auto">Đã xác nhận</label>
+                                                }
                                             </td>
+                                            
                                             <td>
                                                 @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
                                                 @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
@@ -97,7 +126,14 @@
                                 </thead>
                             </table>
                         </div>
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="pagination-item">
+                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                                </li>
+                            }
+                        </ul>
                     }
                     else
                     {
