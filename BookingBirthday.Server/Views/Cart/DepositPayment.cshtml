@@ -6,13 +6,13 @@
     <h1 class="display-4">Thanh toán VnPay tại <a href="#">Booking Birthday</a></h1>
 </div>
 
-<div class="table-responsive container">
+<div class="table-responsive container d-flex justify-content-center">
     <form action="/Cart/CreatePaymentUrl" id="frmCreateOrder" method="POST">
         <input type="hidden" name="BookingId" value="@ViewData["BookingId"]">
         <div class="form-group">
             <input type="hidden" name="OrderType" id="ordertype" value="@ViewData["BookingId"]">
         </div>
-        <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+        <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg d-flex justify-content-center">
         <br />
         <div class="form-group">
             <label for="Name">Tên khách hàng</label>
@@ -44,10 +44,10 @@
         </div>
         <br />
         <button type="submit" class="btn btn-primary" style="width: 250px;
-                margin-left: 100px; margin-top: 10px;">
+                margin-top: 10px;">
             Thanh toán cọc
         </button>
         </div>
-
+        
     </form>
 </div>
