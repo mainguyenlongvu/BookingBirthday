@@ -207,15 +207,15 @@ namespace BookingBirthday.Server.Controllers
 
                     if (request.CartModels != null)
                     {
-                        foreach (var item in request.CartModels)
-                        {
-                            var chiTietDonHang = new BookingPackage();
-                            chiTietDonHang.BookingId = donHang.Id;
-                            chiTietDonHang.PackageId = item.Package!.Id;
-                            chiTietDonHang.Price = item.Package!.Price;
-                            await _appContext.AddAsync(chiTietDonHang);
-                            await _appContext.SaveChangesAsync();
-                        }
+                        //foreach (var item in request.CartModels)
+                        //{
+                        //    var chiTietDonHang = new BookingPackage();
+                        //    chiTietDonHang.BookingId = donHang.Id;
+                        //    chiTietDonHang.PackageId = item.Package!.Id;
+                        //    chiTietDonHang.Price = item.Package!.Price;
+                        //    await _appContext.AddAsync(chiTietDonHang);
+                        //    await _appContext.SaveChangesAsync();
+                        //}
 
                         TempData["Message"] = "Đặt thành công";
                         TempData["Success"] = true;

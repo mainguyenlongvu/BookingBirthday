@@ -29,39 +29,39 @@ namespace BookingBirthday.Server.Controllers
             return View(lst);
 
         }
-        public IActionResult ViewBooking(int Id)
-        {
-            var session = HttpContext.Session;
-            List<Category_requests> category_request = null!;
-            var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
+        //public IActionResult ViewBooking(int Id)
+        //{
+        //    var session = HttpContext.Session;
+        //    List<Category_requests> category_request = null!;
+        //    var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
 
-            if (category_request != null)
-                {
-                    var jsonNotification = JsonConvert.SerializeObject(category_request);
-                    session.SetString("notification", jsonNotification);
-                }
-            //}
+        //    if (category_request != null)
+        //        {
+        //            var jsonNotification = JsonConvert.SerializeObject(category_request);
+        //            session.SetString("notification", jsonNotification);
+        //        }
+        //    //}
 
 
-            var query = from a in _dbContext.BookingPackages
-                        join b in _dbContext.Bookings
-                        on a.BookingId equals b.Id
-                        where b.UserId == user_id && a.BookingId == Id
-                        select new { a };
-            if (query != null)
-            {
-                var data = query.Select(x => new BookingPackageModel()
-                {
-                    Booking_Package_Id = x.a.Id,
-                    Booking_id = Id,
-                    Package_Id = x.a.PackageId,
-                    Package_name = x.a.Package!.Name,
-                    price = x.a.Price,
-                }).ToList();
-                return Json (data);
-            }
-            return Json(null);
-        }
+        //    var query = from a in _dbContext.BookingPackages
+        //                from b in _dbContext.Bookings
+        //                on a.BookingId equals b.Id
+        //                where b.UserId == user_id && a.BookingId == Id
+        //                select new { a };
+        //    if (query != null)
+        //    {
+        //        var data = query.Select(x => new BookingPackageModel()
+        //        {
+        //            Booking_Package_Id = x.a.Id,
+        //            Booking_id = Id,
+        //            Package_Id = x.a.PackageId,
+        //            Package_name = x.a.Package!.Name,
+        //            price = x.a.Price,
+        //        }).ToList();
+        //        return Json (data);
+        //    }
+        //    return Json(null);
+        //}
         [HttpPost]
         public IActionResult HuyDon(int orderId)
         {

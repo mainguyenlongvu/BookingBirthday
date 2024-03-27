@@ -30,15 +30,15 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(x => x.PackageId);
 
             // Relationships
-            builder.HasOne(x => x.Booking)
-                .WithMany(b => b.Cart)
-                .HasForeignKey(x => x.BookingId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(x => x.Booking)
+            //    .WithMany(b => b.Cart)
+            //    .HasForeignKey(x => x.BookingId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(x => x.Package)
-                .WithMany(b => b.Carts)
-                .HasForeignKey(x => x.BookingId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //builder.HasOne(x => x.Package)
+            //    .WithMany(b => b.Carts)
+            //    .HasForeignKey(x => x.BookingId)
+            //    .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

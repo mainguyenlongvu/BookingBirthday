@@ -39,13 +39,11 @@ namespace BookingBirthday.Server.Controllers
             }
 
             var query = from a in _dbContext.Bookings
-                        join b in _dbContext.BookingPackages
-                        on a.Id equals b.BookingId
-                        join c in _dbContext.Packages
-                        on b.PackageId equals c.Id
+                        join b in _dbContext.Packages
+                        on a.PackageId equals b.Id
                         //join d in _dbContext.Users
                         //on c.UserId equals d.Id
-                        where c.UserId == user_id
+                        where b.UserId == user_id
                         select new { a };
             var orders = await query.OrderByDescending(x => x.a.Date_order).Select(x => new Booking
             {

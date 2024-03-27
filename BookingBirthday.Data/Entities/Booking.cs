@@ -23,9 +23,15 @@ namespace BookingBirthday.Data.Entities
         public String? BookingStatus { get; set; }
         public double Total { get; set; }
 
-        //UserId
+        //User
         public int UserId { get; set; }
         public User? User { get; set; }
+        //Location
+        public int LocationId { get; set; }
+        public Location Location { get; set; }
+        //Package
+        public int PackageId { get; set; }
+        public Package? Package { get; set; }
 
         //DepositPaymentId
         public int? DepositPaymentId { get; set; }
@@ -35,7 +41,5 @@ namespace BookingBirthday.Data.Entities
         public int? RemainingPaymentId { get; set; }
         public RemainingPayment? RemainingPayments { get; set; }
 
-        public List<Cart>? Cart { get; set; }
-        public List<BookingPackage>? BookingPackages { get; set; }
     }
 }

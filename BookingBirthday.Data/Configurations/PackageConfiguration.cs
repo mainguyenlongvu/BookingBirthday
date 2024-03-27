@@ -32,9 +32,7 @@ namespace BookingBirthday.Data.Configurations
             builder.HasIndex(p => p.UserId);
 
             // 1:M relationship with Promotion
-            builder.HasOne<Promotion>(x => x.Promotion)
-                .WithMany(x => x.Package)
-                .HasForeignKey(x => x.PromotionId);
+           
 
             builder.HasOne(x => x.Category)
               .WithMany(b => b.Package)

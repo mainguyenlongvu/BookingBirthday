@@ -31,10 +31,8 @@ namespace BookingBirthday.Data
             InitializePackage(modelBuilder);
             InitializeCart(modelBuilder);
             InitializeBooking(modelBuilder);
-            InitializePromotion(modelBuilder);
             InitializePayment(modelBuilder);
             InitializeCartPackage(modelBuilder);
-            InitializeBookingPackage(modelBuilder);
             InitializeUser(modelBuilder);
         }
 
@@ -62,7 +60,7 @@ namespace BookingBirthday.Data
                         PromotionId = string.IsNullOrEmpty(packageeData[4].Trim()) ? (int?)null : int.Parse(packageeData[4].Trim())
                     });
                 }
-                modelBuilder.Entity<Package>().HasData(package); ;
+                modelBuilder.Entity<Package>().HasData(package); 
             }
         }
 
@@ -114,36 +112,6 @@ namespace BookingBirthday.Data
                     });
                 }
                 modelBuilder.Entity<Booking>().HasData(booking);
-            }
-        }
-
-
-        public static void InitializePromotion(ModelBuilder modelBuilder)
-        {
-            var promotion = new List<Promotion>();
-
-            if (File.Exists(PROMOTION_FILE_PATH))
-            {
-                using StreamReader sr = new(PROMOTION_FILE_PATH);
-                int promotionId = 1;
-                string? promotionLine;
-
-                while ((promotionLine = sr.ReadLine()) != null)
-                {
-                    string[]? promotionData = promotionLine!.Split('|');
-
-                    promotion.Add(new Promotion
-                    {
-                        Id = promotionId++,
-                        Name = promotionData[0].Trim(),
-                        FromDate = DateTime.ParseExact(promotionData[1].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        ToDate = DateTime.ParseExact(promotionData[2].Trim(), "dd/MM/yyyy", CultureInfo.InvariantCulture),
-                        DiscountPercent = double.Parse(promotionData[3].Trim()),
-                        //Status = (int.Parse(promotionData[4].Trim()) == 0) ? Status.Active : Status.Inactive,
-                        //UserId = int.Parse(promotionData[5].Trim()),
-                    });
-                }
-                modelBuilder.Entity<Promotion>().HasData(promotion);
             }
         }
 
@@ -201,29 +169,7 @@ namespace BookingBirthday.Data
         }
 
 
-        public static void InitializeBookingPackage(ModelBuilder modelBuilder)
-        {
-            var bookingPackage = new List<BookingPackage>();
-
-            if (File.Exists(BOOKING_PACKAGE_FILE_PATH))
-            {
-                using StreamReader sr = new(BOOKING_PACKAGE_FILE_PATH);
-                string? bookingPackageLine;
-
-                while ((bookingPackageLine = sr.ReadLine()) != null)
-                {
-                    string[]? bookingPackageData = bookingPackageLine!.Split('|');
-
-                    bookingPackage.Add(new BookingPackage
-                    {
-                        BookingId = int.Parse(bookingPackageData[0].Trim()),
-                        PackageId = int.Parse(bookingPackageData[1].Trim())
-                    });
-                }
-                modelBuilder.Entity<BookingPackage>().HasData(bookingPackage);
-            }
-        }
-
+       
         public static void InitializeUser(ModelBuilder modelBuilder)
         {
             var users = new List<User>();

@@ -23,16 +23,20 @@ namespace BookingBirthday.Data.Entities
         public int UserId { get; set; }
 
         // Navigation properties
-        public Promotion? Promotion { get; set; }
         public User? User { get; set; }
+        public int AgeId { get; set; }
+        public Age Age { get; set; }
+        public int ThemeId { get; set; }
+        public Theme Theme { get; set; }
+        public int PackageTypeId { get; set; }
+        public PackageType PackageType { get; set; }
 
         // Collection navigation properties
-        public List<Cart>? Carts { get; set; }
+        //public List<Cart>? Carts { get; set; }
         public IList<CartPackage>? CartPackages { get; set; }
         //Category
         public int category_id { get; set; }
         public Categories? Category { get; set; }
-        public IList<BookingPackage>? BookingPackages { get; set; }
         public IList<Rate> Rates { get; set; }
     }
 }

@@ -47,12 +47,12 @@
                                         <tr>
                                             <td>@(stt++)</td>
                                             <td>
-                                                @foreach (var package in _dbContext.BookingPackages)
+                                                @* @foreach (var package in _dbContext.BookingPackages)
                                                 {
                                                     if (package.BookingId == item.Id)
                                                     {
                                                         <label style="width: auto"> <a href="@("/Package/Show?Id="+ package.PackageId)">@CreateMD5Short.MD5Short(item.Id.ToString())</a> </label>
-                                                }
+                                                } *@
                                         }
                                             </td>
                                             <td>
