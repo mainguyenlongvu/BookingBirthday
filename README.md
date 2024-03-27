@@ -1,4 +1,4 @@
-# ASP.NET Core project from TEDU
+# ASP.NET Core project
 ## Technologies
 - ASP.NET Core
 - Entity Framework Core

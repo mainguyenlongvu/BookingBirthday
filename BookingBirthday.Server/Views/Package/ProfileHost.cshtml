@@ -106,7 +106,15 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                @Html.PagedListPager(Model.PagedPackages, page => Url.Action("ProfileHost", new { UserId = Model.User.Id, page }))
+                                <ul class="pagination">
+                                    @for (int i = 1; i <= Model.PagedPackages.PageCount; i++)
+                                    {
+                                        <li class="pagination-item">
+                                            <a href="@Url.Action("ProfileHost", new { UserId = Model.User.Id ,page = i })" class="pagination-item_link">@i</a>
+                                        </li>
+                                    }
+                                </ul>
+                                @* @Html.PagedListPager(Model.PagedPackages, page => Url.Action("ProfileHost", new { UserId = Model.User.Id, page })) *@
                             </div>
                         </div>
                     </div>

@@ -120,7 +120,14 @@
                                 }
                             </table>
                         </div>
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="pagination-item">
+                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                                </li>
+                            }
+                        </ul>
 
                     }
                     else
