@@ -13,7 +13,8 @@ namespace BookingBirthday.Data.Entities
         public string Address { get; set; }
         public int AreaId { get; set; }
         public Area Area { get; set; }
-        public List<PackageLocation> packageLocations { get; set; }
-        public List<Package>? Package { get; set; }
+        public List<PackageLocation> PackageLocations { get; set; }
+        public List< Booking> Bookings { get; set; }
+
     }
 }

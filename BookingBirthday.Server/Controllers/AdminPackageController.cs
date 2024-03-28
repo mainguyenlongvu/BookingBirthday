@@ -45,18 +45,14 @@ namespace BookingBirthday.Server.Controllers
                     Id = x.a.Id,
                     Name = x.a.Name,
                     Detail = x.a.Detail,
-                    PromotionId = x.a.PromotionId,
                     Price = x.a.Price,
                     Note = x.a.Note,
                     Venue = x.a.Venue,
                     Host_name = x.a.Host_name,
                     image_url = x.a.image_url,
-                    category_id = x.a.category_id,
                     Status = x.a.Status,
-                    cateogry_name = x.a.Category.name,
                     UserId = x.a.UserId,
                 }).ToList();
-                ViewBag.Categories = _dbContext.Categories.ToList();
                 int pageSize = 8;
                 int pageNumber = page == null || page < 0 ? 1 : page.Value;
                 PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
@@ -79,7 +75,6 @@ namespace BookingBirthday.Server.Controllers
                 var p = new Package();
                 p.Name = productData.Name;
                 p.Detail = productData.Detail;
-                p.PromotionId = productData.PromotionId;
                 p.Price = productData.Price;
                 p.Venue = productData.Venue;
                 p.image_url = UploadedFile(productData.file!);
@@ -111,7 +106,6 @@ namespace BookingBirthday.Server.Controllers
                 var pa = new Package();
                 pa.Name = productData.Name;
                 pa.Detail = productData.Detail;
-                pa.PromotionId = productData.PromotionId;
                 pa.Price = productData.Price;
                 pa.Venue = productData.Venue;
                 if (productData.file != null)

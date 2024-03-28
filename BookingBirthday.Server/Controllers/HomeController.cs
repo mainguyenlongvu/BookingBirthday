@@ -55,7 +55,7 @@ namespace BookingBirthday.Server.Controllers
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
             //var lstsanpham = _dbContext.Packages.Include(x => x.Category).AsNoTracking().OrderBy(x => x.Id);
 
-            var products = from a in _dbContext.Packages.Include(x => x.Category)
+            var products = from a in _dbContext.Packages
                            select new { a };
             if (products != null)
             {
@@ -71,54 +71,48 @@ namespace BookingBirthday.Server.Controllers
                     Status = x.a.Status,
                     Host_name = x.a.Host_name,
                     UserId = x.a.UserId,
-                    category_id = x.a.category_id,
-                    cateogry_name = x.a.Category!.name,
                 }).ToList();
-                ViewBag.Categories = _dbContext.Categories.ToList();
                 PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
                 return View(lst);
             }
             return View();
         }
-        public IActionResult FilterProducts(int category_id, int? page)
-        {
-            // Logic filter danh sách sản phẩm theo category
-            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Category)
-                                   select new { a };
+        //public IActionResult FilterProducts(int category_id, int? page)
+        //{
+        //    // Logic filter danh sách sản phẩm theo category
+        //    var filteredProducts = from a in _dbContext.Packages
+        //                           select new { a };
 
-            if (category_id != 0)
-            {
-                filteredProducts = filteredProducts.Where(x => x.a.category_id == category_id);
-            }
+        //    if (category_id != 0)
+        //    {
+        //        filteredProducts = filteredProducts.Where(x => x.a.category_id == category_id);
+        //    }
 
-            var lstProducts = filteredProducts.Select(x => new PackageModel()
-            {
-                Id = x.a.Id,
-                Name = x.a.Name,
-                Detail = x.a.Detail,
-                Venue = x.a.Venue,
-                PromotionId = x.a.PromotionId,
-                Price = x.a.Price,
-                Note = x.a.Note,
-                image_url = x.a.image_url,
-                Status = x.a.Status,
-                UserId = x.a.UserId,
-                Host_name = x.a.Host_name,
-                category_id = x.a.category_id,
-                cateogry_name = x.a.Category!.name
-            }).ToList();
-            int pageSize = 8;
-            int pageNumber = page == null || page < 0 ? 1 : page.Value;
-            PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
+        //    var lstProducts = filteredProducts.Select(x => new PackageModel()
+        //    {
+        //        Id = x.a.Id,
+        //        Name = x.a.Name,
+        //        Detail = x.a.Detail,
+        //        Venue = x.a.Venue,
+        //        Price = x.a.Price,
+        //        Note = x.a.Note,
+        //        image_url = x.a.image_url,
+        //        Status = x.a.Status,
+        //        UserId = x.a.UserId,
+        //        Host_name = x.a.Host_name,
+        //    }).ToList();
+        //    int pageSize = 8;
+        //    int pageNumber = page == null || page < 0 ? 1 : page.Value;
+        //    PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
             
-                return PartialView("PackageList", lst);
+        //        return PartialView("PackageList", lst);
             
-        }
+        //}
 
 
         public IActionResult Search(string keyword)
         {
-            var filteredProducts = from a in _dbContext.Packages.Include(x => x.Category)
+            var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
 
             filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Venue.Contains(keyword) || x.a.Host_name!.Contains(keyword)) ;
@@ -130,15 +124,12 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     Venue = x.a.Venue,
-                    PromotionId = x.a.PromotionId,
                     Price = x.a.Price,
                     Note = x.a.Note,
                     image_url = x.a.image_url,
                     Host_name = x.a.Host_name,
                     Status = x.a.Status,
                     UserId = x.a.UserId,
-                    category_id = x.a.category_id,
-                    cateogry_name = x.a.Category!.name,
                 }).ToList();
                 return View(lstProducts);
             }

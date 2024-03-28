@@ -1,3 +1,0 @@
-﻿Admin | 0 | 01/01/2000 | admin |  123 | admin@gmail.com | 012345678 | abc | |  Admin |
-Guest | 0 | 01/01/2000 | guest | 123 | example123@gmail.com | 012345678 | abc | | Guest |
-Host | 0 | 01/01/2000 | host | 123 | demo5678@gmail.com | 012345678 | abc | | Host |

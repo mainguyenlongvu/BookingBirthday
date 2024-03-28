@@ -1,5 +1,4 @@
-﻿using BookingBirthday.Data.Enums;
-
+﻿
 namespace BookingBirthday.Server.Models
 {
     public class RegisterModel

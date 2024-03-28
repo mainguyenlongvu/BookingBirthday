@@ -49,14 +49,11 @@ public class HostPackageController : HostBaseController
                 Note = x.Note,
                 Venue = x.Venue,
                 Price = x.Price,
-                category_id = x.category_id,
-                cateogry_name = x.Category!.name,
                 image_url = x.image_url,
                 Host_name = x.Host_name,
                 Status = x.Status,
                 UserId = x.UserId
             }).ToList();
-            ViewBag.Categories = _dbContext.Categories.ToList();
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
             PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
@@ -96,7 +93,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 1,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,
@@ -113,7 +109,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 2,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,
@@ -130,7 +125,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 3,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,
@@ -147,7 +141,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 4,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,
@@ -164,7 +157,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 5,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,
@@ -181,7 +173,6 @@ public class HostPackageController : HostBaseController
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
-                    category_id = 6,
                     image_url = UploadedFile(productData.file!),
                     Status = "Active",
                     Host_name = HttpContext.Session.GetString("name")!,

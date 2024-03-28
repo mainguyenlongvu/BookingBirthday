@@ -106,7 +106,7 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            package = _dbContext.Packages.Include(x => x.Category).Where(x => x.Id == id).FirstOrDefault();
+            package = _dbContext.Packages.Where(x => x.Id == id).FirstOrDefault();
             if (package != null)
             {
                 var p = new PackageModel();

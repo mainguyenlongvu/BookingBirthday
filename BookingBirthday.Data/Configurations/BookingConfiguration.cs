@@ -1,5 +1,4 @@
 using BookingBirthday.Data.Entities;
-using BookingBirthday.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -26,22 +25,36 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Date_start).IsRequired();
             builder.Property(x => x.Date_cancel);
             builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
-            builder.Property(x => x.Address).IsRequired();
+            builder.Property(x => x.Address).IsRequired().IsUnicode();
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.Property(x => x.Note);
-            builder.Property(x => x.Reason);
-            builder.Property(x => x.DepositPaymentId).IsRequired(false);
-            builder.HasIndex(x => x.DepositPaymentId);
-            builder.Property(x => x.RemainingPaymentId).IsRequired(false);
-            builder.HasIndex(x => x.RemainingPaymentId);
+            builder.Property(x => x.Note).IsUnicode();
+            builder.Property(x => x.Reason).IsUnicode();
+            builder.Property(x => x.ChildName).IsUnicode();
+            builder.Property(x => x.ChildDateOfBirth).IsRequired();
+            builder.Property(x => x.Gender).IsRequired().IsUnicode();
+            builder.Property(x => x.ChildNumber).IsRequired();
+           
             builder.HasIndex(b => b.UserId);
+            builder.HasIndex(b => b.LocationId);
+            builder.HasIndex(b => b.PackageId);
 
             // 1:M relationship with User
             builder.HasOne(b => b.User)
                    .WithMany(u => u.Bookings)
-                   .HasForeignKey(b => b.UserId);
+                   .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
+            // 1:M relationship with Location
+            builder.HasOne(x => x.Location)
+            .WithMany(b => b.Bookings)
+            .HasForeignKey(x => x.LocationId)
+            .OnDelete(DeleteBehavior.NoAction);
+            // 1:M relationship with Package
+            builder.HasOne(x => x.Package)
+            .WithMany(b => b.Bookings)
+            .HasForeignKey(x => x.PackageId)
+            .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

@@ -14,28 +14,34 @@ namespace BookingBirthday.Data.EF
         {
             //Configure using Fluent API
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
-            modelBuilder.ApplyConfiguration(new CartConfiguration());
-            modelBuilder.ApplyConfiguration(new CartPackageConfiguration());
             modelBuilder.ApplyConfiguration(new PackageConfiguration());
-            modelBuilder.ApplyConfiguration(new DepositPaymentConfiguration());
-            modelBuilder.ApplyConfiguration(new RemainingPaymentConfiguration());
+            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoriesConfiguration());
             modelBuilder.ApplyConfiguration(new RateConfiguration());
 
+            modelBuilder.ApplyConfiguration(new AgeConfiguration());
+            modelBuilder.ApplyConfiguration(new AreaConfiguration());
+            modelBuilder.ApplyConfiguration(new LocationConfiguration());
+            modelBuilder.ApplyConfiguration(new PackageLocationConfiguration());
+            modelBuilder.ApplyConfiguration(new PackageTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ThemeConfiguration());
+
             // Generate data
-            SeedData.Initialize(modelBuilder);
         }
 
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Cart> Carts { get; set; }
-        public DbSet<Categories> Categories { get; set; }
-        public DbSet<CartPackage> CartPackages { get; set; }
         public DbSet<Package> Packages { get; set; }
-        public DbSet<DepositPayment> DepositPayments { get; set; }
-        public DbSet<RemainingPayment> RemainingPayments { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category_requests> Category_Requests { get; set; }
+        public DbSet<Age> Ages { get; set; }
+        public DbSet<Area> Areas { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<PackageLocation> PackageLocations { get; set; }
+        public DbSet<PackageType> PackageTypes { get; set; }
+        public DbSet<Theme> Themes { get; set; }
         public DbSet<Rate> Rates { get; set; }
+
+
     }
 }

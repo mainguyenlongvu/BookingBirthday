@@ -5,7 +5,6 @@ using static NuGet.Packaging.PackagingConstants;
 using System;
 using BookingBirthday.Data.EF;
 using Microsoft.EntityFrameworkCore;
-using BookingBirthday.Data.Enums;
 using BookingBirthday.Server.Common;
 using X.PagedList;
 

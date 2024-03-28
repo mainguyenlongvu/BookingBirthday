@@ -20,7 +20,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
-            builder.Property(x => x.Content);
+            builder.Property(x => x.Content).IsRequired().IsUnicode();
             builder.Property(x => x.Star).IsRequired();
             builder.Property(x => x.CreatedDate).IsRequired();
             builder.HasIndex(x => x.UserId);

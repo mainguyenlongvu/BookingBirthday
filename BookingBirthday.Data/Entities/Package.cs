@@ -19,7 +19,6 @@ namespace BookingBirthday.Data.Entities
         public string? Status { get; set; }
 
         // Foreign key properties
-        public int? PromotionId { get; set; }
         public int UserId { get; set; }
 
         // Navigation properties
@@ -30,13 +29,12 @@ namespace BookingBirthday.Data.Entities
         public Theme Theme { get; set; }
         public int PackageTypeId { get; set; }
         public PackageType PackageType { get; set; }
+        public List<Booking>Bookings { get; set; }
+        public List<PackageLocation> PackageLocations { get; set; }
 
         // Collection navigation properties
         //public List<Cart>? Carts { get; set; }
-        public IList<CartPackage>? CartPackages { get; set; }
         //Category
-        public int category_id { get; set; }
-        public Categories? Category { get; set; }
         public IList<Rate> Rates { get; set; }
     }
 }

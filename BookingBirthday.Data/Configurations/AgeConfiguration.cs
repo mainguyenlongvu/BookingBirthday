@@ -9,21 +9,22 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Configurations
 {
-    public class CategoriesConfiguration : IEntityTypeConfiguration<Categories>
+    public class AgeConfiguration : IEntityTypeConfiguration<Age>
     {
-        public void Configure(EntityTypeBuilder<Categories> builder)
+        public void Configure(EntityTypeBuilder<Age> builder)
         {
-            builder.ToTable("Categories");
+            builder.ToTable("Age");
 
             // Primary Key
-            builder.HasKey(x => x.category_id);
-            builder.Property(x => x.category_id).UseIdentityColumn();
-            builder.Property(x => x.name);
+            builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn();
 
             // Other properties
+            
+            builder.Property(x => x.Name).IsUnicode().IsRequired();
 
 
-          
+
         }
     }
 }

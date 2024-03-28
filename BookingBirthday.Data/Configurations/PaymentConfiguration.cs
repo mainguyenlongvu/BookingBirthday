@@ -1,7 +1,6 @@
 ﻿using BookingBirthday.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using BookingBirthday.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace BookingBirthday.Data.Configurations
 {
-    public class RemainingPaymentConfiguration : IEntityTypeConfiguration<RemainingPayment>
+    public class PaymentConfiguration : IEntityTypeConfiguration<Payment>
     {
-        public void Configure(EntityTypeBuilder<RemainingPayment> builder)
+        public void Configure(EntityTypeBuilder<Payment> builder)
         {
-            builder.ToTable("RemainingPayment");
+            builder.ToTable("Payment");
 
             // Primary Key
             builder.HasKey(x => x.Id);
@@ -27,12 +26,13 @@ namespace BookingBirthday.Data.Configurations
 			builder.Property(x => x.VnPayResponseCode).IsRequired();
 			builder.Property(x => x.OrderDescription).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
-			builder.HasIndex(x => x.BookingId).IsUnique();
+            builder.HasIndex(b => b.BookingId);
 
-            // 1:1 relationship with Booking
-            builder.HasOne(x => x.Booking)
-                .WithOne(x => x.RemainingPayments)
-                .HasForeignKey<Booking>(x => x.RemainingPaymentId);
+            // 1:M relationship with Booking
+            builder.HasOne(b => b.Booking)
+                   .WithMany(u => u.Payments)
+                   .HasForeignKey(b => b.BookingId)
+            .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
