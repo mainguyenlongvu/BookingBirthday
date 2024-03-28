@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Bootstrap v5.0.0 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
  * Copyright 2011-2021 Twitter, Inc.
@@ -2816,6 +2816,12 @@ textarea.form-control-lg {
 
 .form-check-inline .form-check-input ~ .invalid-feedback {
     margin-left: .5em
+}
+.custom-form-container {
+    margin-top: 100px;
+    background-color: #ffffff; /* Màu nền trắng */
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng mờ */
 }
 
 .was-validated .input-group .form-control:invalid, .input-group .form-control.is-invalid, .was-validated .input-group .form-select:invalid, .input-group .form-select.is-invalid {
