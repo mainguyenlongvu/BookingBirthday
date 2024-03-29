@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * Bootstrap v5.0.0 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors
  * Copyright 2011-2021 Twitter, Inc.
@@ -6,10 +6,16 @@
  */
 
 :root {
+    --primary: #0676ed;
+    --background: #222b45;
+    --warning: #f2a600;
+    --success: #12c99b;
+    --error: #e41749;
+    --dark: #151a30;
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
     --bs-purple: #6f42c1;
-    --bs-pink: #d63384;
+    --bs-orange: #d63384;
     --bs-red: #dc3545;
     --bs-orange: #fd7e14;
     --bs-yellow: #ffc107;
@@ -2860,9 +2866,9 @@ textarea.form-control-lg {
 }
 
 .btn-primary {
-    color: #000;
-    background-color: #3CB815;
-    border-color: #3CB815;
+    color: white;
+    background-color: #00a0f0;
+    border-color: #00a0f0;
 }
 
 
@@ -2891,7 +2897,7 @@ textarea.form-control-lg {
 
     .btn-primary:disabled, .btn-primary.disabled {
         color: #000;
-        background-color: #3CB815;
+        background-color:;
         border-color: #3CB815
     }
 
@@ -4382,7 +4388,7 @@ textarea.form-control-lg {
 
 .card-title {
     margin-bottom: .5rem;
-    text-align:center
+    text-align: center
 }
 
 .card-subtitle {
@@ -4776,18 +4782,18 @@ textarea.form-control-lg {
 }
 
 .alert {
-    position: relative;
-    padding: 1rem 1rem;
-    margin-bottom: 1rem;
+    position: fixed;
+    padding: 1rem 3rem;
     border: 1px solid transparent;
-    border-radius: 0
+    border-radius: 0;
+    margin-top: 6rem;
 }
 
 .alert-heading {
     color: inherit
 }
 
-.alert-link {
+.alert-link alert alert-danger {
     font-weight: 700
 }
 
@@ -4824,9 +4830,9 @@ textarea.form-control-lg {
     }
 
 .alert-success {
-    color: #0f5132;
-    background-color: #d1e7dd;
-    border-color: #badbcc
+    color: white;
+    background-color: limegreen;
+    border-color: limegreen;
 }
 
     .alert-success .alert-link {
@@ -4836,7 +4842,8 @@ textarea.form-control-lg {
 .alert-info {
     color: #055160;
     background-color: #cff4fc;
-    border-color: #b6effb
+    border-color: #b6effb;
+    z-index: 1
 }
 
     .alert-info .alert-link {
@@ -4844,9 +4851,19 @@ textarea.form-control-lg {
     }
 
 .alert-warning {
-    color: #664d03;
-    background-color: #fff3cd;
-    border-color: #ffecb5
+    position: fixed;
+    width: 300px;
+    color: white;
+    background-color: red;
+    padding: 1rem 3rem;
+    margin-top: 5rem;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left calc(1.075em + .1875rem) center;
+    background-size: 30px;
+    position: fixed;
 }
 
     .alert-warning .alert-link {
@@ -4854,9 +4871,13 @@ textarea.form-control-lg {
     }
 
 .alert-danger {
-    color: #842029;
-    background-color: #f8d7da;
-    border-color: #f5c2c7
+    color: white;
+    background-color: red;
+    border-color: red;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left calc(1.075em + .1875rem) center;
+    background-size: 30px;
 }
 
     .alert-danger .alert-link {
@@ -6807,9 +6828,11 @@ textarea.form-control-lg {
 .border-5 {
     border-width: 5px !important
 }
+
 .w-10 {
     width: 10% !important
 }
+
 .w-25 {
     width: 25% !important
 }
@@ -7756,7 +7779,7 @@ textarea.form-control-lg {
 }
 
 .text-light {
-    color: #F7F8FC !important
+    color: green !important
 }
 
 .text-dark {
@@ -7873,7 +7896,7 @@ textarea.form-control-lg {
 
 .rounded-3 {
     border-radius: 2rem;
-    width:auto;
+    width: auto;
 }
 
 .rounded-circle {
@@ -10232,7 +10255,6 @@ textarea.form-control-lg {
     .pt-lg-5 {
         padding-top: 3rem !important;
         margin-bottom: 40px
-        
     }
 
     .pe-lg-0 {
@@ -11983,6 +12005,7 @@ textarea.form-control-lg {
         display: none !important
     }
 }
+
 .pagination {
     display: flex;
     align-items: center;

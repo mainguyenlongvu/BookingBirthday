@@ -346,7 +346,7 @@ function changeSelectRequest(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
@@ -417,7 +417,7 @@ function changeSelectRequestHost(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
@@ -757,3 +757,9 @@ document.getElementById('selectLocation').onchange = function () {
 
 
 
+<<<<<<< HEAD
+=======
+setTimeout(function () {
+    $("#msgAlert").fadeOut("slow");
+}, 7000);
+>>>>>>> 461a235b7b37797b66374f3a62c3291bb727e34a

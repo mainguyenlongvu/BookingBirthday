@@ -1,19 +1,88 @@
 ﻿@model List<BookingBirthday.Server.Models.CartModel>
 
-@{
+    @{
     ViewData["Title"] = "Cart Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
-}
-@await Html.PartialAsync("response")
-
-<div class="container-xxl py-5" style="margin-top: 100px">
-    <div class="container">
-        <div class="row g-0 gx-5 align-items-end">
-            <div class="col-lg-6">
-                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Giỏ hàng</h1>
+    }
+    @await Html.PartialAsync("response")
+<style>
+    .background-image {
+        background-image: url('img/bookingbackground.png');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+    }
+</style>
+<div class="background-image">
+<div class="text-center" style="margin-top: 80px">
+    <h1 class="display-4" style="color: white">Điền thông tin đặt tiệc với chúng tôi tại <a href="#">Booking Birthday</a></h1>
+</div>
+<div class="table-responsive container d-flex justify-content-center">
+        <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg d-flex justify-content-center" style="background-color: white;">
+<form action="/Cart/CreateBookingUrl" id="frmCreateOrder" method="POST">
+        <div class="row" >
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                        Thông tin phụ huynh
+                    </label>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="parent_name">
+                            Họ và tên
+                        </label>
+                        <input class="form-input form-control" type="text" id="parent_name" name="parent_name" placeholder="Họ và tên">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="phone">
+                            Số điện thoại
+                        </label>
+                        <input class="form-input form-control" type="text" id="phone" name="phone" placeholder="Số điện thoại">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="email">
+                            Email
+                        </label>
+                        <input class="form-input form-control" type="text" id="email" name="email" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                        Thông tin của bé
+                    </label>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="kid_name">
+                            Họ và tên
+                        </label>
+                        <input class="form-input form-control" type="text" id="kid_name" name="kid_name" placeholder="Họ và tên">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="kid_birthday">
+                            Ngày sinh
+                        </label>
+                        <input class="form-input form-control" type="date" id="kid_birthday" name="kid_birthday" placeholder="Ngày sinh">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="center">
+                            Giới tính
+                        </label>
+                        <div class="mb-3 d-flex justify-content-start align-items-center gap-3">
+                            <div class="form-group">
+                                <input class="form-check-input" type="radio" name="gender" id="male">
+                                <label class="form-check-label" for="male">
+                                    Bé trai
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-check-input" type="radio" name="gender" id="female" checked="">
+                                <label class="form-check-label" for="female">
+                                    Bé gái
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+<<<<<<< HEAD
         </div>
         <div class="tab-content">
             <div id="tab-1" class="tab-pane fade show p-0 active">
@@ -143,8 +212,132 @@
                       <p class="alert alert-danger">Giỏ hàng trống</p>
                       <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
                     }
+=======
+            <div class="col-sm-12 col-md-6">
+                <div class="form-group">
+                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                        Thông tin đặt tiệc
+                    </label>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="center_code">
+                            Trung tâm Booking POM
+                        </label>
+                        <select class="form-select-input form-control" id="center" name="center_code">
+                            <option value="TW-PS002">
+                                tW Aeon Tân Phú
+                            </option>
+                            <option value="TW-PS003">
+                                tW Aeon Long Biên
+                            </option>
+                            <option value="TW-PS013">
+                                tW Aeon Bình Tân
+                            </option>
+                            <option value="TW-PS017">
+                                tW Nowzone
+                            </option>
+                            <option value="TW-PS023">
+                                tW CoopMart Buôn Ma Thuột
+                            </option>
+                            <option value="TW-PS028">
+                                tW LotteMart Cần Thơ
+                            </option>
+                            <option value="TW-PS037">
+                                tW The Estella HCM
+                            </option>
+                            <option value="TW-PS038">
+                                tW GigaMall PVĐ
+                            </option>
+                            <option value="TW-PS044">
+                                tW Crescent Mall
+                            </option>
+                            <option value="TW-PS063">
+                                tW Vinh Center
+                            </option>
+                            <option value="TW-PS069">
+                                tW Aeon Bình Dương
+                            </option>
+                            <option value="TW-PS073">
+                                tW Aeon Hà Đông
+                            </option>
+                            <option value="TW-PS084">
+                                tW Aeon Hải Phòng
+                            </option>
+                            <option value="TW-PS087">
+                                tW tiNiPark Thiso Mall Thủ Thiêm
+                            </option>
+                            <option value="TW-PS088">
+                                tW Nguyễn Thị Thập
+                            </option>
+                            <option value="TW-PS089">
+                                tW Lotte Tây Hồ
+                            </option>
+                        </select>
+                        <input type="hidden" id="center_name" name="center_name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue">
+                            Thời gian tổ chức
+                        </label>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 mb-3 mb-md-0">
+                                <input class="form-input form-control" type="date" id="date" name="date" placeholder="Ngày tổ chức">
+                            </div>
+                            <div class="col-sm-12 col-md-6 mb-sm-3 mb-md-0">
+                                <input class="form-input form-control" type="time" id="time" name="time" placeholder="Giờ tổ chức">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="number_of_passengers">
+                            Số lượng bé tham dự
+                        </label>
+                        <input class="form-input form-control" type="number" id="number_of_passengers" name="number_of_passengers" placeholder="Số lượng bé tham dự">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="theme">
+                            Gói tiệc (tùy chọn)
+                        </label>
+                        <select class="form-select-input form-control" id="theme" name="theme">
+                            <option value="basic">Basic</option>
+                            <option value="standard">Standard</option>
+                            <option value="premium">Premium</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-blue" for="comment">
+                            Chủ đề trang trí (tùy chọn)
+                        </label>
+                        <select class="form-select-input form-control" id="comment" name="comment">
+                            <option value="pikachu">Pikachu</option>
+                            <option value="doraemon">Doraemon</option>
+                            <option value="hello_kitty">Hello Kitty</option>
+                            <option value="minnie_mouse">Chuột Minnie</option>
+                            <option value="frozen">Frozen</option>
+                            <option value="mermaid">Tiên cá</option>
+                            <option value="unicorn">Kỳ lân</option>
+                            <option value="cup_head">Cup Head</option>
+                            <option value="minion">Minion</option>
+                            <option value="minecraft">Minecraft</option>
+                            <option value="roblox">Roblox</option>
+                            <option value="dino">Khủng long</option>
+                            <option value="avengers">Avengers</option>
+                            <option value="superman">Superman</option>
+                            <option value="spiderman">Spiderman</option>
+                            <option value="super_car">Super Car</option>
+                            <option value="contact">Liên hệ</option>
+                        </select>
+                    </div>
+>>>>>>> 461a235b7b37797b66374f3a62c3291bb727e34a
                 </div>
             </div>
+            <div class="form-group">
+                    <button class="btn btn-primary" style="width: 250px;
+                            margin-top: 10px; type="submit">
+                    Gửi ngay
+                </button>
+            </div>
         </div>
-    </div>
+        </form>
+</div>
+</div>
 </div>
