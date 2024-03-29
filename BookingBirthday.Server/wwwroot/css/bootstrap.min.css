@@ -4828,8 +4828,8 @@ textarea.form-control-lg {
 
 .alert-success {
     color: white;
-    background-color: #00a0f0;
-    border-color: #00a0f0
+    background-color: limegreen;
+    border-color: limegreen;
 }
 
     .alert-success .alert-link {
@@ -4839,7 +4839,7 @@ textarea.form-control-lg {
 .alert-info {
     color: #055160;
     background-color: #cff4fc;
-    border-color: #b6effb
+    border-color: #b6effb;
 }
 
     .alert-info .alert-link {
