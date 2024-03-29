@@ -51,7 +51,7 @@ namespace BookingBirthday.Server.Controllers
                 {
                     if (user!.Status == "InActive")
                     {
-                        TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                        TempData["Message"] = " Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
                         TempData["Success"] = false;
                         return View(loginData);
                     }
@@ -73,22 +73,22 @@ namespace BookingBirthday.Server.Controllers
                     }
                     else if (user.Role == "Host")
                     {
-                        TempData["Message"] = "Chào mừng chủ tiệc";
+                        TempData["Message"] = " Chào mừng chủ tiệc";
                     }
                     else
                     {
-                        TempData["Message"] = "Chào mừng khách hàng";
+                        TempData["Message"] = " Chào mừng khách hàng";
                     }
                     TempData["Success"] = true;
                     return RedirectToAction("Index", "Home");
                 }
-                TempData["Message"] = "Tài khoản không tồn tại";
+                TempData["Message"] = " Tài khoản không tồn tại";
                 TempData["Success"] = false;
                 return View(loginData);
             }
             catch(Exception ex)
             {
-                TempData["Message"] = "Đăng nhập không thành công";
+                TempData["Message"] = " Đăng nhập không thành công";
                 TempData["Success"] = false;
                 return View(loginData);
             }
@@ -125,7 +125,7 @@ namespace BookingBirthday.Server.Controllers
             {
                 if (user!.Status == "InActive")
                 {
-                    TempData["Message"] = "Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
+                    TempData["Message"] = " Tài khoản của bạn đã bị khóa, vui lòng liên hệ quản trị viên!";
                     TempData["Success"] = false;
                     return RedirectToAction("Login", "Account");
                 }
@@ -143,15 +143,15 @@ namespace BookingBirthday.Server.Controllers
             }
             if (user.Role == "Admin")
             {
-                TempData["Message"] = "Chào mừng quản trị viên";
+                TempData["Message"] = " Chào mừng quản trị viên";
             }
             else if (user.Role == "Host")
             {
-                TempData["Message"] = "Chào mừng chủ tiệc";
+                TempData["Message"] = " Chào mừng chủ tiệc";
             }
             else
             {
-                TempData["Message"] = "Chào mừng khách hàng";
+                TempData["Message"] = " Chào mừng khách hàng";
             }
             TempData["Success"] = true;
             return RedirectToAction("Index", "Home");
@@ -184,35 +184,35 @@ namespace BookingBirthday.Server.Controllers
             {
                 if (userData.Name.Length > 50)
                 {
-                    TempData["Message"] = "Tên người dùng không được vượt quá 50 kí tự";
+                    TempData["Message"] = " Tên người dùng không được vượt quá 50 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (userData.Username.Length < 8 || userData.Username.Length > 30)
                 {
-                    TempData["Message"] = "Tài khoản phải chứa từ 8 đến 30 kí tự";
+                    TempData["Message"] = " Tài khoản phải chứa từ 8 đến 30 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (userData.Password != userData.ConfirmPassword)
                 {
-                    TempData["Message"] = "Mật khẩu xác nhận không đúng";
+                    TempData["Message"] = " Mật khẩu xác nhận không đúng";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (userData.Password.Length < 8 || userData.Password.Length > 30)
                 {
-                    TempData["Message"] = "Mật khẩu phải chứa từ 8 đến 30 kí tự";
+                    TempData["Message"] = " Mật khẩu phải chứa từ 8 đến 30 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (!Regex.IsMatch(userData.Phone, @"^(0[0-9]{9,10})$"))
                 {
-                    TempData["Message"] = "Số điện thoại không hợp lệ";
+                    TempData["Message"] = " Số điện thoại không hợp lệ";
                     TempData["Success"] = false;
                     return View(userData);
                 }
@@ -226,14 +226,14 @@ namespace BookingBirthday.Server.Controllers
 
                 if (userData.DateOfBirth > DateTime.Now || userData.DateOfBirth < DateTime.Now.AddYears(-100))
                 {
-                    TempData["Message"] = "Ngày tháng năm sinh không hợp lệ";
+                    TempData["Message"] = " Ngày tháng năm sinh không hợp lệ";
                     TempData["Success"] = false;
                     return View(userData);
                 }
 
                 if (userData.Address.Length > 200)
                 {
-                    TempData["Message"] = "Địa chỉ không được vượt quá 200 kí tự";
+                    TempData["Message"] = " Địa chỉ không được vượt quá 200 kí tự";
                     TempData["Success"] = false;
                     return View(userData);
                 }
@@ -260,13 +260,13 @@ namespace BookingBirthday.Server.Controllers
                 }
                 _dbContext.Users.Add(user);
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Đăng kí thành công";
+                TempData["Message"] = " Đăng kí thành công";
                 TempData["Success"] = true;
                 return RedirectToAction("Login", "Account");
             }
             catch (Exception e)
             {
-                TempData["Message"] = "Lỗi tạo tài khoản";
+                TempData["Message"] = " Lỗi tạo tài khoản";
                 TempData["Success"] = false;
                 return View(userData);
             }
@@ -278,7 +278,7 @@ namespace BookingBirthday.Server.Controllers
             var verifyUrl = $"/Account/{emailFor}/{activationCode}";
             var link = new Uri(Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority) + verifyUrl;
 
-            string subject = "Đặt lại mật khẩu";
+            string subject = " Đặt lại mật khẩu";
             string body = $"Bạn vừa gửi link đặt lại mật khẩu. Hãy click vào link bên dưới để đặt lại: <br>" +
                           $"<a href=\"{link}\">Đặt lại mật khẩu</a>";
 
