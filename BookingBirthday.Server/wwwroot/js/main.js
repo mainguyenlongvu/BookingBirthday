@@ -346,7 +346,7 @@ function changeSelectRequest(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
@@ -417,7 +417,7 @@ function changeSelectRequestHost(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
