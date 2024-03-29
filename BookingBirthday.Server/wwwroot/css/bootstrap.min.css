@@ -6,6 +6,13 @@
  */
 
 :root {
+
+    --primary: #0676ed;
+    --background: #222b45;
+    --warning: #f2a600;
+    --success: #12c99b;
+    --error: #e41749;
+    --dark: #151a30;
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
     --bs-purple: #6f42c1;
@@ -4778,7 +4785,7 @@ textarea.form-control-lg {
 .alert {
     position: relative;
     padding: 1rem 1rem;
-    margin-bottom: 1rem;
+    margin-top: 5rem;
     border: 1px solid transparent;
     border-radius: 0
 }
@@ -4844,9 +4851,15 @@ textarea.form-control-lg {
     }
 
 .alert-warning {
-    color: #664d03;
-    background-color: #fff3cd;
-    border-color: #ffecb5
+    position: relative;
+
+padding: 1rem 1rem;
+
+margin-top: 5rem;
+
+border: 1px solid transparent;
+
+border-radius: 0
 }
 
     .alert-warning .alert-link {
