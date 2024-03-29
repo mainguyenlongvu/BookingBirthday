@@ -6,7 +6,6 @@
  */
 
 :root {
-
     --primary: #0676ed;
     --background: #222b45;
     --warning: #f2a600;
@@ -2898,10 +2897,7 @@ textarea.form-control-lg {
 
     .btn-primary:disabled, .btn-primary.disabled {
         color: #000;
-        background-color: 
-            
-            
-            ;
+        background-color:;
         border-color: #3CB815
     }
 
@@ -4392,7 +4388,7 @@ textarea.form-control-lg {
 
 .card-title {
     margin-bottom: .5rem;
-    text-align:center
+    text-align: center
 }
 
 .card-subtitle {
@@ -4797,7 +4793,7 @@ textarea.form-control-lg {
     color: inherit
 }
 
-.alert-link alert alert-danger{
+.alert-link alert alert-danger {
     font-weight: 700
 }
 
@@ -4854,15 +4850,16 @@ textarea.form-control-lg {
     }
 
 .alert-warning {
+    background-color: red;
     position: relative;
-
-padding: 1rem 1rem;
-
-margin-top: 5rem;
-
-border: 1px solid transparent;
-
-border-radius: 0
+    padding: 1rem 3rem;
+    margin-top: 5rem;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left calc(1.075em + .1875rem) center;
+    background-size: 20px;
 }
 
     .alert-warning .alert-link {
@@ -6827,9 +6824,11 @@ border-radius: 0
 .border-5 {
     border-width: 5px !important
 }
+
 .w-10 {
     width: 10% !important
 }
+
 .w-25 {
     width: 25% !important
 }
@@ -7893,7 +7892,7 @@ border-radius: 0
 
 .rounded-3 {
     border-radius: 2rem;
-    width:auto;
+    width: auto;
 }
 
 .rounded-circle {
@@ -10252,7 +10251,6 @@ border-radius: 0
     .pt-lg-5 {
         padding-top: 3rem !important;
         margin-bottom: 40px
-        
     }
 
     .pe-lg-0 {
@@ -12003,6 +12001,7 @@ border-radius: 0
         display: none !important
     }
 }
+
 .pagination {
     display: flex;
     align-items: center;
