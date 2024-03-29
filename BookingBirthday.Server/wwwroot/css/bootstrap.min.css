@@ -4781,16 +4781,16 @@ textarea.form-control-lg {
 .alert {
     position: relative;
     padding: 1rem 3rem;
-    margin-bottom: 1rem;
     border: 1px solid transparent;
-    border-radius: 0
+    border-radius: 0;
+    margin-top: 6rem;
 }
 
 .alert-heading {
     color: inherit
 }
 
-.alert-link {
+.alert-link alert alert-danger
     font-weight: 700
 }
 
