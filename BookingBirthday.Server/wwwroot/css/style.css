@@ -1,6 +1,8 @@
 ﻿/********** Template CSS **********/
 :root {
-    --primary: #3CB815;
+    --primary: 
+        
+        ;
     --secondary: #F65005;
     --light: #F7F8FC;
     --dark: #111111;
@@ -82,6 +84,7 @@
     align-items: center;
     justify-content: center;
     font-weight: normal;
+    background-color: #00a0f0;
 }
 
 
@@ -266,10 +269,12 @@
     color: var(--dark);
 }
 
-.nav-pills .nav-item .btn:hover,
-.nav-pills .nav-item .btn.active {
-    color: #FFFFFF;
-}
+    .nav-pills .nav-item .btn:hover,
+    .nav-pills .nav-item .btn.active {
+        color: #FFFFFF;
+        background-color: #00a0f0;
+        border-color: #00a0f0;
+    }
 
 .product-item {
     box-shadow: 0 0 45px rgba(0, 0, 0, .07);
