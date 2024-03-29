@@ -4782,7 +4782,7 @@ textarea.form-control-lg {
 }
 
 .alert {
-    position: relative;
+    position: fixed;
     padding: 1rem 3rem;
     border: 1px solid transparent;
     border-radius: 0;
@@ -4850,9 +4850,10 @@ textarea.form-control-lg {
     }
 
 .alert-warning {
+    position: fixed;
+    width: 300px;
     color: white;
     background-color: red;
-    position: relative;
     padding: 1rem 3rem;
     margin-top: 5rem;
     border: 1px solid transparent;
