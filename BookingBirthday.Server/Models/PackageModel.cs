@@ -1,9 +1,11 @@
-﻿namespace BookingBirthday.Server.Models
+﻿using BookingBirthday.Data.Entities;
+
+namespace BookingBirthday.Server.Models
 {
     public class PackageModel
     {
         public int Id { get; set; }
-        public string?Name { get; set; }
+        public string? Name { get; set; }
         public string? Host_name { get; set; }
         public Double Price { get; set; }
         public string? Venue { get; set; }
@@ -13,14 +15,16 @@
         public IFormFile? file { get; set; }
         public string? Status { get; set; }
         public bool HasRated { get; set; }
-
+        public string? Gender { get; set; }
+        public string Age { get; set; }
+        public string PackageType { get; set; }
 
         //PromotionId
-        public int? PromotionId { get; set; }
         public int UserId { get; set; }
+        public User? User { get; set; }
+        public int ThemeId { get; set; }
+        public Theme Theme { get; set; }
 
-        public int category_id { get; set; }
-        public string? cateogry_name { get; set; }
-
+        public List<string> selectedAddresses { get; set; }
     }
 }

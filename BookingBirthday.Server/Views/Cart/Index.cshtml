@@ -21,14 +21,12 @@
                     @if (Model.Count > 0) {
                       double total = 0;
                       int stt = 1;
-                        var Venue= "";
                         <div class="table-responsive card mt-2">
                           <table class="table table-hover">
                             <tr>
                               <th>#</th>
                               <th>Bữa tiệc</th>
                               <th>Giá</th>
-                              <th>Địa chỉ</th>
                               <th>Thành tiền</th>
                               <th></th>
                             </tr>
@@ -37,7 +35,6 @@
                             {
                                 var thanhtien =  cartitem.Package!.Price;
                                     total += thanhtien;
-                                     Venue = cartitem.Package.Venue;
                                     <tr>
                                    <td>@(stt++)</td>
                                    <td>
@@ -51,9 +48,7 @@
                                            <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
                                        </label>
                                    </td> *@
-                                        <td>
-                                            <label style="width: auto">@cartitem.Package.Venue</label>
-                                        </td>
+                                        
                                    <td>
                                        <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
                                    </td>
@@ -81,7 +76,6 @@
                             
                                 <form asp-action="AddOrder" asp-controller="Cart" method="post">
                                     <div class="col-md-4">
-                                    <input type="hidden" name="Address" value="@Venue" />
                                         <input type="hidden" name="Total" value="@total" />
                                         <div class="mb-3">
                                             <label class="form-label">Họ tên</label>

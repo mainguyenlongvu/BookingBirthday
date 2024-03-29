@@ -112,7 +112,6 @@ namespace BookingBirthday.Server.Controllers
                 var p = new PackageModel();
                 p.Id = package.Id;
                 p.Name = package.Name;
-                p.Venue = package.Venue;
                 p.Detail = package.Detail;
                 p.Note = package.Note;
                 p.Price = package.Price;

@@ -3,6 +3,7 @@ using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Controllers;
 using BookingBirthday.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using X.PagedList;
 
@@ -11,7 +12,7 @@ public class HostPackageController : HostBaseController
     private readonly BookingDbContext _dbContext;
     private readonly IWebHostEnvironment webHostEnvironment;
     private readonly string _imageContentFolder;
-    
+
 
     public HostPackageController(BookingDbContext dbContext, IWebHostEnvironment webHostEnvironment)
     {
@@ -37,23 +38,29 @@ public class HostPackageController : HostBaseController
             session.SetString("notification", jsonNotification);
         }
         var products = _dbContext.Packages
-                       .Where(x => x.UserId == user_id);
-                      
+                       .Where(x => x.UserId == user_id).ToList();
+        //var location = _dbContext.Locations.ToList();
+        //var area = _dbContext.Areas.ToList();
+        //var viewModel = new PackageModel
+        //{
+        //    Locations = location,
+        //    Areas = area,
+        //    Packages = products
+        //};
         if (products != null)
         {
-            var lstProducts = products.Where(x => x.UserId == user_id).OrderByDescending(x => x.Id).Select(x => new PackageModel()
+            var lstProducts = products.Where(x => x.UserId == user_id).OrderByDescending(x => x.Id).Where(x => x.Status == "Active").Select(x => new PackageModel()
             {
                 Id = x.Id,
                 Name = x.Name,
                 Detail = x.Detail,
                 Note = x.Note,
-                Venue = x.Venue,
                 Price = x.Price,
                 image_url = x.image_url,
                 Host_name = x.Host_name,
                 Status = x.Status,
                 UserId = x.UserId
-            }).ToList();
+            });
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
             PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
@@ -63,126 +70,64 @@ public class HostPackageController : HostBaseController
     }
 
     [HttpPost]
-    public IActionResult Create(PackageModel productData)
+    public IActionResult Create( PackageModel productData)
     {
         var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
         var product = _dbContext.Packages.FirstOrDefault(x => x.Name == productData.Name);
         if (product != null)
         {
-            TempData["Message"] = "Bữa tiệc đã tồn tại";
+            TempData["Message"] = "Gói tiệc đã tồn tại";
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
-        if (productData!.Price <500000)
+        if (productData!.Price > 1000000 || productData!.Price < 100000)
         {
-            TempData["Message"] = "Giá bữa tiệc phải trên 500k";
+            TempData["Message"] = "Giá gói tiệc phải nằm trong khoảng từ 100k đến 1 triệu";
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
         try
         {
-            var p = new Package();
-            // Giá từ 500k-1tr
-            if (productData.Price >= 500000 && productData.Price < 1000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
-            // Giá từ 1tr-2tr
-            if (productData.Price >= 1000000 && productData.Price < 2000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
-            // Giá từ 2tr-3tr
-            if (productData.Price >= 2000000 && productData.Price < 3000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
-            // Giá từ 3tr-4tr
-            if (productData.Price >= 3000000 && productData.Price < 4000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
-            // Giá từ 4tr-5tr
-            if (productData.Price >= 4000000 && productData.Price < 5000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
-            //Giá trên 5tr
-            if (productData.Price >= 5000000)
-            {
-                 p = new Package
-                {
-                    UserId = user_id,
-                    Name = productData.Name!,
-                    Venue = productData.Venue!,
-                    Detail = productData.Detail!,
-                    Note = productData.Note,
-                    Price = productData.Price,
-                    image_url = UploadedFile(productData.file!),
-                    Status = "Active",
-                    Host_name = HttpContext.Session.GetString("name")!,
-                };
-            }
+            var address = productData.selectedAddresses.ToList().First();
+            var location = _dbContext.Locations.FirstOrDefault(x => x.Address == address);
+            var area = _dbContext.Areas.FirstOrDefault(x => x.Id == location.AreaId);
 
+            var theme = _dbContext.Themes.FirstOrDefault(x => x.Id == productData.ThemeId);
+            
+            var p = new Package();
+            p = new Package
+            {
+                
+                UserId = user_id,
+                Name = "Gói tiệc " + productData.PackageType + " Chủ đề " + theme.Name + " " + area.Name,
+                Detail = productData.Detail!,
+                Note = productData.Note,
+                Price = productData.Price,
+                ThemeId = productData.ThemeId,
+                PackageType = productData.PackageType,
+                Age = productData.Age,
+                Gender = productData.Gender,
+                
+                image_url = UploadedFile(productData.file!),
+                Status = "Active",
+                Host_name = HttpContext.Session.GetString("name")!,
+            };
+                
             _dbContext.Packages.Add(p);
             _dbContext.SaveChanges();
+            foreach (string item in productData.selectedAddresses)
+            {
+                var locationId = _dbContext.Locations.FirstOrDefault(x => x.Address == item);
+                var packagelocation = new PackageLocation();
+                packagelocation.PackageId = p.Id;
+                packagelocation.LocationId = locationId.Id;
+                _dbContext.PackageLocations.Add(packagelocation);
+            }
+            _dbContext.SaveChanges();//lỗi ờ đây
+            
+            
 
-            TempData["Message"] = "Thêm mới bữa tiệc thành công";
+            TempData["Message"] = "Thêm mới gói tiệc thành công";
             TempData["Success"] = true;
             return RedirectToAction("Index");
         }
@@ -200,7 +145,7 @@ public class HostPackageController : HostBaseController
         var p = _dbContext.Packages.SingleOrDefault(x => x.Id == productData.Id);
         if (p == null)
         {
-            TempData["Message"] = "Bữa tiệc không tồn tại";
+            TempData["Message"] = "Gói tiệc không tồn tại";
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
@@ -210,7 +155,10 @@ public class HostPackageController : HostBaseController
             p.Detail = productData.Detail;
             p.Note = productData.Note;
             p.Price = productData.Price;
-            p.Venue = productData.Venue;
+            p.Age = productData.Age;
+            p.PackageType = productData.PackageType;
+            p.ThemeId = productData.ThemeId;
+
             if (productData.file != null)
             {
                 if (p.image_url != "/imgPackage/" && p.image_url != null)
@@ -221,7 +169,7 @@ public class HostPackageController : HostBaseController
                 p.image_url = UploadedFile(productData.file!);
             }
             _dbContext.SaveChanges();
-            TempData["Message"] = "Chỉnh sửa thông tin bữa tiệc thành công";
+            TempData["Message"] = "Chỉnh sửa thông tin gói tiệc thành công";
             TempData["Success"] = true;
             return RedirectToAction("Index");
         }
@@ -240,27 +188,28 @@ public class HostPackageController : HostBaseController
             var product = _dbContext.Packages.Find(Id);
             if (product != null)
             {
-                if (product.image_url != "/imgPackage/" && product.image_url != null)
-                {
-                    var n = product.image_url!.Remove(0, 12);
-                    DeleteImage(n);
-                }
-                Console.WriteLine(product);
-                _dbContext.Packages.Remove(product);
+                product.Status = "InActive";
+                //if (product.image_url != "/imgPackage/" && product.image_url != null)
+                //{
+                //    var n = product.image_url!.Remove(0, 12);
+                //    DeleteImage(n);
+                //}
+                //Console.WriteLine(product);
+                //_dbContext.Packages.Remove(product);
                 _dbContext.SaveChanges();
-                TempData["Message"] = "Xóa bữa tiệc thành công";
+                TempData["Message"] = "Xóa gói tiệc thành công";
                 TempData["Success"] = true;
             }
             else
             {
-                TempData["Message"] = "Xóa bữa tiệc không thành công";
+                TempData["Message"] = "Xóa gói tiệc không thành công";
                 TempData["Success"] = false;
             }
             return RedirectToAction("Index");
         }
         catch (Exception ex)
         {
-            TempData["Message"] = "Đã xảy ra lỗi khi xóa bữa tiệc: " + ex.Message;
+            TempData["Message"] = "Đã xảy ra lỗi khi xóa gói tiệc: " + ex.Message;
             TempData["Success"] = false;
             return RedirectToAction("Index");
         }
@@ -288,5 +237,31 @@ public class HostPackageController : HostBaseController
             Task.Run(() => System.IO.File.Delete(filePath));
         }
     }
+
+    public async Task<IActionResult> GetLocationsByAreaId(int areaId)
+    {
+        var locations = await _dbContext.Locations
+                                       .Where(l => l.AreaId == areaId)
+                                       .Select(l => new { l.Name })
+                                       .Distinct()
+                                       .ToListAsync();
+
+        return Json(locations);
+    }
+
+    public async Task<IActionResult> GetAddressesByLocationNameAndAreaId(string locationName, int areaId)
+    {
+        var addresses = await _dbContext.Locations
+                                       .Where(l => l.Name == locationName && l.AreaId == areaId)
+                                       .Select(l => new { l.Id, l.Address })
+                                       .ToListAsync();
+
+        return Json(addresses);
+    }
+
+
+
+
+
 }
 

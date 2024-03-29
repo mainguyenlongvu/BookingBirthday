@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using GoogleAuthentication.Services;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using BookingBirthday.Application.Helper;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Http.Extensions;
 using BookingBirthday.Server.Helper;

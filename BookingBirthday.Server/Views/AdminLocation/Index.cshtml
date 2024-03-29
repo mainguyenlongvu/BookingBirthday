@@ -1,0 +1,165 @@
+﻿@model X.PagedList.IPagedList<BookingBirthday.Data.Entities.Location>
+@using X.PagedList.Mvc.Core
+@inject IHttpContextAccessor HttpContextAccessor
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
+@{
+    ViewData["Title"] = "QL_DiaDiem Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@await Html.PartialAsync("response")
+
+<div class="container-xxl py-5" style="margin-top: 100px">
+    <div class="container">
+        <div class="row g-0 gx-5 align-items-end">
+            <div class="col-lg-6">
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <h1 class="display-5 mb-3">Quản lí địa điểm</h1>
+                </div>
+            </div>
+        </div>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane fade show p-0 active">
+                <div class="row g-4">
+                    <a class="btn btn-primary" onclick="openAdd()">Thêm mới</a>
+                    @if (Model.Count > 0)
+                    {
+                        int stt = 1;
+
+                        <div class="table-responsive card mt-2">
+                            <table class="table table-hover">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Tên địa điểm</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td>@(stt++)</td>
+                                        <td>
+                                            <label style="width: auto">@item.Name</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Address</label>
+                                        </td>
+                                        <td>
+                                            @if (@item.Status == "Active")
+                                            {
+                                                <label style="width: auto">Hợp tác</label>
+                                            }
+                                            else if (@item.Status == "InActive")
+                                            {
+                                                <label style="width: auto">Ngừng hợp tác</label>
+                                            }
+                                        </td>
+
+                                        <td>
+                                            @* <a class="btn btn-primary" onclick="xoaUser(@item.Id)">Xóa</a> *@
+
+                                            <a class="btn btn-success" onclick="openUpdate(@item.Id)">Sửa</a>
+                                            <div class="modal fade" id="@("update"+item.Id)" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <form method="post" asp-action="Edit" asp-controller="AdminLocation">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa thông tin địa điểm</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <label>Tên địa điểm</label>
+                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên địa điểm">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Địa chỉ</label>
+                                                                    <input type="text" class="form-control" name="Address" value="@item.Address" required placeholder="Nhập địa chỉ">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Trạng thái</label>
+                                                                    <select name="Status" class="form-control">
+                                                                        <option value="Active" selected="@(item.Status == "Active")">Hợp tác</option>
+                                                                        <option value="InActive" selected="@(item.Status == "InActive")">Ngừng hợp tác</option>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" onclick="closeUpdate(@item.Id)" class="btn btn-secondary">Đóng</button>
+                                                                <button type="submit" class="btn btn-success">Sửa</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="pagination-item">
+                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                                </li>
+                            }
+                        </ul>
+
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Danh sách địa điểm trống</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form method="post" asp-action="Create" asp-controller="AdminLocation">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Thêm mới địa chỉ</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Khu vực</label>
+                        <select id="selectArea">
+                            <option value="">Chọn khu vực</option>
+                            @{
+                                var find = _dbContext.Areas.ToList();
+                            }
+                            @foreach (var area in find)
+                            {
+                                <option value="@area.Id">@area.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tên địa điểm</label>
+                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên địa điểm">
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ</label>
+                        <input class="form-control" name="Address" required placeholder="Nhập địa chỉ">/>
+                    </div>
+                    <div class="form-group">
+                        <label>Trạng thái</label>
+                        <select name="Status" class="form-control">
+                            <option value="Active">Hợp tác</option>
+                            <option value="InActive">Ngừng hợp tác</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeAdd()" class="btn btn-secondary">Đóng</button>
+                    <button type="submit" class="btn btn-success">Thêm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

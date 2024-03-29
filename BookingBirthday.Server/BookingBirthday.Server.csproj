@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BookingBirthday.Application\BookingBirthday.Application.csproj" />
     <ProjectReference Include="..\Bookingbirthday.Data\BookingBirthday.Data.csproj" />
   </ItemGroup>
 
