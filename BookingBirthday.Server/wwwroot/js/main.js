@@ -757,9 +757,9 @@ document.getElementById('selectLocation').onchange = function () {
 
 
 
-<<<<<<< HEAD
-=======
-setTimeout(function () {
-    $("#msgAlert").fadeOut("slow");
-}, 7000);
->>>>>>> 461a235b7b37797b66374f3a62c3291bb727e34a
+//<<<<<<< HEAD
+//=======
+//setTimeout(function () {
+//    $("#msgAlert").fadeOut("slow");
+//}, 7000);
+//>>>>>>> 461a235b7b37797b66374f3a62c3291bb727e34a
