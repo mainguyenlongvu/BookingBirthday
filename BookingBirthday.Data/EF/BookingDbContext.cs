@@ -19,11 +19,9 @@ namespace BookingBirthday.Data.EF
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RateConfiguration());
 
-            modelBuilder.ApplyConfiguration(new AgeConfiguration());
             modelBuilder.ApplyConfiguration(new AreaConfiguration());
             modelBuilder.ApplyConfiguration(new LocationConfiguration());
             modelBuilder.ApplyConfiguration(new PackageLocationConfiguration());
-            modelBuilder.ApplyConfiguration(new PackageTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ThemeConfiguration());
 
             // Generate data
@@ -34,11 +32,9 @@ namespace BookingBirthday.Data.EF
         public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category_requests> Category_Requests { get; set; }
-        public DbSet<Age> Ages { get; set; }
         public DbSet<Area> Areas { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<PackageLocation> PackageLocations { get; set; }
-        public DbSet<PackageType> PackageTypes { get; set; }
         public DbSet<Theme> Themes { get; set; }
         public DbSet<Rate> Rates { get; set; }
 

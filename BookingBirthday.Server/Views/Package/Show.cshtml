@@ -43,7 +43,7 @@
                                 <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>
                                 @if (role != "Admin" && role != "Host")
                                 {
-                                    <a class="text-body" class="btn btn-primary" asp-route="addcart" asp-route-productid="@Model.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Thêm vào giỏ hàng</a>
+                                    <a class="text-body" class="btn btn-primary" asp-route="addcart" asp-route-productid="@Model.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Đặt tiệc</a>
                                 }
                                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
                                     <h2 class="display-5 mb-3">Mô Tả</h2>

@@ -346,7 +346,7 @@ function changeSelectRequest(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
@@ -417,7 +417,7 @@ function changeSelectRequestHost(type) {
                 html += '</tr>';
             });
         } else {
-            html += '<p class="alert alert-danger">Danh sách yêu cầu mới</p>';
+            html += '<p class="alert alert-warning">Danh sách yêu cầu mới</p>';
         }
         $("#bodyRequest").html(html);
 
@@ -656,7 +656,110 @@ function TuChoiReport(category_request_id) {
         }
     });
 }
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('selectArea').onchange = function () {
+        var areaId = this.value;
+        document.getElementById("checkboxOptions").innerHTML = '';
+        fetch(`/HostPackage/GetLocationsByAreaId?areaId=${areaId}`)
+            .then(response => response.json())
+            .then(data => {
+                var select = document.getElementById("selectLocation");
+                select.innerHTML = '<option value="">Chọn địa điểm</option>';
+                data.forEach(function (item) {
+                    var option = new Option(item.name, item.name); // Sử dụng Name làm value để truy vấn sau này
+                    select.add(option);
+                });
+            }).catch(error => console.error('Error:', error));
+    };
+});
 
-setTimeout(function () {
-    $("#msgAlert").fadeOut("slow");
-}, 10000);
+document.getElementById('selectLocation').onchange = function () {
+    var locationName = this.value;
+    var areaId = document.getElementById('selectArea').value; // Lấy AreaId từ dropdown selectArea
+    fetch(`/HostPackage/GetAddressesByLocationNameAndAreaId?locationName=${encodeURIComponent(locationName)}&areaId=${areaId}`)
+        .then(response => response.json())
+        .then(data => {
+            var checkboxesDiv = document.getElementById("checkboxOptions");
+            checkboxesDiv.innerHTML = ''; // Xóa các checkbox cũ
+            data.forEach(function (item) {
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = 'address-' + item.id;
+                checkbox.value = item.address;
+                checkbox.name = 'selectedAddresses[]';
+
+                var label = document.createElement('label');
+                label.htmlFor = 'address-' + item.id;
+                label.textContent = item.address;
+
+                checkboxesDiv.appendChild(checkbox);
+                checkboxesDiv.appendChild(label);
+                checkboxesDiv.appendChild(document.createElement('br'));
+            });
+        }).catch(error => console.error('Error:', error));
+};
+
+//document.getElementById('createPackageForm').addEventListener('submit', function (event) {
+//    event.preventDefault(); // Ngăn chặn gửi biểu mẫu mặc định
+
+//    var formData = new FormData(this); // Tạo đối tượng FormData từ biểu mẫu
+
+//    // Thu thập dữ liệu từ các checkbox được chọn và thêm chúng vào một mảng
+//    var selectedCheckboxes = document.querySelectorAll('input[name="selectedAddresses[]"]:checked');
+//    var selectedAddresses = [];
+//    selectedCheckboxes.forEach(function (checkbox) {
+//        selectedAddresses.push(checkbox.value);
+//    });
+
+//    // Xây dựng một đối tượng chứa dữ liệu biểu mẫu
+//    var packageData = {
+//        Price: parseInt(formData.get('Price')),
+//        Detail: formData.get('Detail'),
+//        Age: formData.get('Age'),
+//        ThemeId: parseInt(formData.get('ThemeId')),
+//        PackageType: formData.get('PackageType'),
+//        Note: formData.get('Note'),
+//        Gender: formData.get('Gender'),
+//        file: formData.append('file', document.getElementById('fileInput').files[0]),
+//        SelectedAddresses: selectedAddresses
+//    };
+
+
+//    // Gửi dữ liệu biểu mẫu dưới dạng JSON
+//    fetch(`/HostPackage/Create`, {
+//        method: 'POST',
+//        headers: {
+//            'Content-Type': 'application/json'
+//        },
+//        body: JSON.stringify(packageData)
+//    })
+//        .then(response => {
+//            if (!response.ok) {
+//                throw new Error('Network response was not ok');
+//            }
+//            return response.json();
+//        })
+//        .then(data => {
+//            // Xử lý kết quả trả về từ controller nếu cần
+//            console.log(data);
+//        })
+//        .catch(error => {
+//            console.error('Error:', error);
+//        });
+//});
+
+
+
+
+
+
+
+
+
+
+//<<<<<<< HEAD
+//=======
+//setTimeout(function () {
+//    $("#msgAlert").fadeOut("slow");
+//}, 7000);
+//>>>>>>> 461a235b7b37797b66374f3a62c3291bb727e34a

@@ -114,7 +114,7 @@ namespace BookingBirthday.Server.Controllers
             var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
 
-            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Host_name!.Contains(keyword)) ;
+            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword)  || x.a.Host_name!.Contains(keyword)) ;
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()

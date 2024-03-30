@@ -28,8 +28,6 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Host_name).IsRequired();
             builder.Property(x => x.Status).IsRequired();
             builder.HasIndex(p => p.UserId);
-            builder.HasIndex(b => b.AgeId);
-            builder.HasIndex(b => b.PackageTypeId);
             builder.HasIndex(b => b.ThemeId);
 
          
@@ -38,16 +36,8 @@ namespace BookingBirthday.Data.Configurations
               .WithMany(b => b.Packages)
               .HasForeignKey(x => x.UserId)
               .OnDelete(DeleteBehavior.NoAction);
-            // 1:M relationship with Age
-            builder.HasOne(x => x.Age)
-              .WithMany(b => b.Package)
-              .HasForeignKey(x => x.AgeId)
-              .OnDelete(DeleteBehavior.NoAction);
-            // 1:M relationship with PackageType
-            builder.HasOne(x => x.PackageType)
-              .WithMany(b => b.Package)
-              .HasForeignKey(x => x.PackageTypeId)
-              .OnDelete(DeleteBehavior.NoAction);
+           
+            
             // 1:M relationship with Theme
             builder.HasOne(x => x.Theme)
               .WithMany(b => b.Package)

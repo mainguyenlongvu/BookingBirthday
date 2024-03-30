@@ -15,6 +15,9 @@ namespace BookingBirthday.Data.Entities
         public string Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
+        public string? Gender { get; set; }
+        public string Age {get; set; }
+        public string PackageType { get; set; }
         public string? Status { get; set; }
 
         // Foreign key properties
@@ -22,12 +25,8 @@ namespace BookingBirthday.Data.Entities
 
         // Navigation properties
         public User? User { get; set; }
-        public int AgeId { get; set; }
-        public Age Age { get; set; }
         public int ThemeId { get; set; }
         public Theme Theme { get; set; }
-        public int PackageTypeId { get; set; }
-        public PackageType PackageType { get; set; }
         public List<Booking>Bookings { get; set; }
         public List<PackageLocation> PackageLocations { get; set; }
         public IList<Rate> Rates { get; set; }

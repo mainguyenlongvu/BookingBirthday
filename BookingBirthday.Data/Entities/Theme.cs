@@ -11,6 +11,7 @@ namespace BookingBirthday.Data.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public int UserId { get; set; }
+        public string Status { get; set; }
         public User User { get; set; }
         public List<Package>? Package { get; set; }
     }

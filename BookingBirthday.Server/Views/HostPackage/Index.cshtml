@@ -1,6 +1,10 @@
 ﻿@model X.PagedList.IPagedList<BookingBirthday.Server.Models.PackageModel>
+@using Newtonsoft.Json
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @using X.PagedList.Mvc.Core
-
+@inject IHttpContextAccessor HttpContextAccessor
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "QL_SanPham Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,6 +19,7 @@
                 productDescription.textContent = productDescription.textContent.slice(0, 750) + "...";
             }
         }
+
     </script>
 }
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -116,14 +121,14 @@
                                 }
                             </table>
                         </div>
-                        <ul class="pagination">
-                            @for (int i = 1; i <= Model.PageCount; i++)
-                            {
-                                <li class="pagination-item">
-                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
-                                </li>
-                            }
-                        </ul>
+                        @* <ul class="pagination">
+                    @for (int i = 1; i <= Model.Packages.PageCount; i++)
+                    {
+                    <li class="pagination-item">
+                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                    </li>
+                    }
+                    </ul> *@
 
                     }
                     else
@@ -142,32 +147,87 @@
         <div class="modal-content">
             <form method="post" asp-action="Create" asp-controller="HostPackage" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productModalLabel">Thêm mới bữa tiệc</h5>
+                    <h5 class="modal-title" id="productModalLabel">Thêm mới gói tiệc</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Tên bữa tiệc</label>
-                        <input type="text" class="form-control" name="Name" required placeholder="Nhập tên bữa tiệc">
+                        <label>Tên gói tiệc</label>
+                        <input type="number" min="0" class="form-control" required placeholder="Tên gói tiệc được in từ loại gói, chủ đề và khu vực " readonly />
                     </div>
                     <div class="form-group">
-                        <label>Địa chỉ</label>
-                        <input class="form-control" name="Venue" placeholder="Nhập địa chỉ" required />
+                        <label>Giá</label>
+                        <input class="form-control" name="Price" placeholder="Nhập giá gói/người" required />
                     </div>
                     <div class="form-group">
                         <label>Mô tả</label>
                         <textarea class="form-control" name="Detail" placeholder="Nhập mô tả" required></textarea>
                     </div>
                     <div class="form-group">
+                        <label>Độ tuổi</label>
+                        <select name="Age" class="form-control">
+                            <option value="0 - 5" >0 - 5</option>
+                            <option value="6 - 10" >6 - 10</option>
+                            <option value="11 - 14" >11 - 14</option>
+                            <option value="15 - 17" >15 - 17</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Chủ đề</label>
+                        @{
+                            var theme = _dbContext.Themes.ToList();
+                        }
+                        <select name="ThemeId" class="form-control">
+                            @foreach (var item in theme)
+                            {
+                                <option value="@item.Id" selected="@(item.Name)">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Thể loại</label>
+                        <select name="PackageType" class="form-control">
+                            <option value="Cơ bản">Cơ bản</option>
+                            <option value="Cao cấp">Cao cấp</option>
+                            <option value="Đặc biệt">Đặc biệt</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính phù hợp</label>
+                        <select name="Gender" class="form-control">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Name & Nữ">Name & Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="selectArea">
+                            <option value="">Chọn khu vực</option>
+                            @{
+                                var find = _dbContext.Areas.ToList();
+                            }
+                            @foreach (var area in find)
+                            {
+                                <option value="@area.Id">@area.Name</option>
+                            }
+                        </select>
+
+                        <select id="selectLocation">
+                            <option value="">Chọn địa điểm</option>
+                            <!-- Các option cho Location sẽ được thêm vào đây -->
+                        </select>
+
+                        <div id="checkboxOptions">
+                            <!-- Các checkbox cho Address sẽ được thêm vào đây -->
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label>Chú ý</label>
                         <textarea class="form-control" name="Note" placeholder="Nhập chú ý" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label>Giá</label>
-                        <input class="form-control" name="Price" placeholder="Nhập giá" required type="number" min="0" />
-                    </div>
+
                     <div class="form-group">
                         <label>Hình ảnh</label>
-                        <input class="form-control" name="file" type="file" required />
+                        <input id="fileInput" class="form-control" name="file" type="file" required />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -178,3 +238,6 @@
         </div>
     </div>
 </div>
+
+
+
