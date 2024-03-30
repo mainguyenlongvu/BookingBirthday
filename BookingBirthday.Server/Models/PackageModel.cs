@@ -25,5 +25,6 @@ namespace BookingBirthday.Server.Models
         public Theme Theme { get; set; }
 
         public List<string> selectedAddresses { get; set; }
+        public List<PackageLocation> PackageLocations { get; set; }
     }
 }
