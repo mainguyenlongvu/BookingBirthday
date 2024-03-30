@@ -12,40 +12,14 @@ namespace BookingBirthday.Server.Services
 		{
 			_configuration = configuration;
 		}
-		public string CreateDepositPaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
-		{
-			var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
-			var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
-			var tick = bookingId.ToString();
-			var pay = new VnPayLibrary();
-			var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
-			pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
-			pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
-			pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
-			pay.AddRequestData("vnp_Amount", ((int)model.Amount * 100).ToString());
-			pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
-			pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
-			pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
-			pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-			pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.Description} {model.Amount}");
-            pay.AddRequestData("vnp_OrderType", model.OrderType);
-            pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
-			pay.AddRequestData("vnp_TxnRef", tick);
-
-			var paymentUrl =
-				pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
-
-            return paymentUrl;
-		}
-
-        public string CreateRemainingPaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
+        public string CreatePaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
         {
             var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
             var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
-            var tick = DateTime.Now.Ticks.ToString();
+            var tick = bookingId.ToString();
             var pay = new VnPayLibrary();
-            var urlCallBack = _configuration["RemainingPaymentCallBack:ReturnUrl"];
+            var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
             pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
             pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
@@ -55,8 +29,8 @@ namespace BookingBirthday.Server.Services
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", bookingId.ToString());
-            pay.AddRequestData("vnp_OrderType", bookingId.ToString());
+            pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.Description} {model.Amount}");
+            pay.AddRequestData("vnp_OrderType", model.OrderType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);
 
@@ -66,20 +40,82 @@ namespace BookingBirthday.Server.Services
             return paymentUrl;
         }
 
-        public PaymentResponseModel DepositPaymentExecute(IQueryCollection collections)
-		{
-			var pay = new VnPayLibrary();
-			var response = pay.GetFullDepositResponseData(collections, _configuration["Vnpay:HashSecret"]);
+  //      public string CreateDepositPaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
+		//{
+		//	var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
+		//	var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
+		//	var tick = bookingId.ToString();
+		//	var pay = new VnPayLibrary();
+		//	var urlCallBack = _configuration["PaymentCallBack:ReturnUrl"];
 
-			return response;
-		}
+		//	pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
+		//	pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
+		//	pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
+		//	pay.AddRequestData("vnp_Amount", ((int)model.Amount * 100).ToString());
+		//	pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
+		//	pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
+		//	pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
+		//	pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
+		//	pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.Description} {model.Amount}");
+  //          pay.AddRequestData("vnp_OrderType", model.OrderType);
+  //          pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
+		//	pay.AddRequestData("vnp_TxnRef", tick);
 
-        public PaymentResponseModel RemainingPaymentExecute(IQueryCollection collections)
+		//	var paymentUrl =
+		//		pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
+
+  //          return paymentUrl;
+		//}
+
+  //      public string CreateRemainingPaymentUrl(int bookingId, PaymentInformationModel model, HttpContext context)
+  //      {
+  //          var timeZoneById = TimeZoneInfo.FindSystemTimeZoneById(_configuration["TimeZoneId"]);
+  //          var timeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneById);
+  //          var tick = DateTime.Now.Ticks.ToString();
+  //          var pay = new VnPayLibrary();
+  //          var urlCallBack = _configuration["RemainingPaymentCallBack:ReturnUrl"];
+
+  //          pay.AddRequestData("vnp_Version", _configuration["Vnpay:Version"]);
+  //          pay.AddRequestData("vnp_Command", _configuration["Vnpay:Command"]);
+  //          pay.AddRequestData("vnp_TmnCode", _configuration["Vnpay:TmnCode"]);
+  //          pay.AddRequestData("vnp_Amount", ((int)model.Amount * 100).ToString());
+  //          pay.AddRequestData("vnp_CreateDate", timeNow.ToString("yyyyMMddHHmmss"));
+  //          pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
+  //          pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
+  //          pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
+  //          pay.AddRequestData("vnp_OrderInfo", bookingId.ToString());
+  //          pay.AddRequestData("vnp_OrderType", bookingId.ToString());
+  //          pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
+  //          pay.AddRequestData("vnp_TxnRef", tick);
+
+  //          var paymentUrl =
+  //              pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
+
+  //          return paymentUrl;
+  //      }
+
+        public PaymentResponseModel PaymentExecute(IQueryCollection collections)
         {
             var pay = new VnPayLibrary();
-            var response = pay.GetFullRemainingResponseData(collections, _configuration["Vnpay:HashSecret"]);
+            var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"]);
 
             return response;
         }
+
+        //      public PaymentResponseModel DepositPaymentExecute(IQueryCollection collections)
+        //{
+        //	var pay = new VnPayLibrary();
+        //	var response = pay.GetFullDepositResponseData(collections, _configuration["Vnpay:HashSecret"]);
+
+        //	return response;
+        //}
+
+        //      public PaymentResponseModel RemainingPaymentExecute(IQueryCollection collections)
+        //      {
+        //          var pay = new VnPayLibrary();
+        //          var response = pay.GetFullRemainingResponseData(collections, _configuration["Vnpay:HashSecret"]);
+
+        //          return response;
+        //      }
     }
 }

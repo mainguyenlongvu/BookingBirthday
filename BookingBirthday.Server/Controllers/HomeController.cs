@@ -65,7 +65,6 @@ namespace BookingBirthday.Server.Controllers
                     Name = x.a.Name,
                     Detail = x.a.Detail,
                     Price = x.a.Price,
-                    Venue = x.a.Venue,
                     Note = x.a.Note,
                     image_url = x.a.image_url,
                     Status = x.a.Status,
@@ -115,7 +114,7 @@ namespace BookingBirthday.Server.Controllers
             var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
 
-            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Venue.Contains(keyword) || x.a.Host_name!.Contains(keyword)) ;
+            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Host_name!.Contains(keyword)) ;
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -123,7 +122,6 @@ namespace BookingBirthday.Server.Controllers
                     Id = x.a.Id,
                     Name = x.a.Name,
                     Detail = x.a.Detail,
-                    Venue = x.a.Venue,
                     Price = x.a.Price,
                     Note = x.a.Note,
                     image_url = x.a.image_url,

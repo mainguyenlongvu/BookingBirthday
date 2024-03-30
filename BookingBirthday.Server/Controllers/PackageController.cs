@@ -53,15 +53,13 @@ namespace BookingBirthday.Server.Controllers
                 ViewBag.PackageRated = false;
             }
 
-            //if (userId >= 0)
-            //{
-            //    var data = from bookingPackage in _dbContext.BookingPackages.ToList()
-            //               where bookingPackage.PackageId == id
-            //               join booking in _dbContext.Bookings.ToList() on bookingPackage.BookingId equals booking.Id
-            //               where booking.BookingStatus == "Paid"
-            //               select booking;
-            //    ViewBag.CustomerPurchased = data.Count();
-            //}
+            if (userId >= 0)
+            {
+                var data = from booking in _dbContext.Bookings
+                           where booking.PackageId == id && booking.BookingStatus == "Paid"
+                           select booking;
+                ViewBag.CustomerPurchased = data.Count();
+            }
 
             HttpContext.Session.SetString("package_id", package.Id.ToString());
             ViewBag.CountRate = CountRate(id);
@@ -112,7 +110,6 @@ namespace BookingBirthday.Server.Controllers
                 var p = new PackageModel();
                 p.Id = package.Id;
                 p.Name = package.Name;
-                p.Venue = package.Venue;
                 p.Detail = package.Detail;
                 p.Note = package.Note;
                 p.Price = package.Price;

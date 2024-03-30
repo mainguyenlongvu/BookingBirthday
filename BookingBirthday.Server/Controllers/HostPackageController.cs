@@ -47,7 +47,6 @@ public class HostPackageController : HostBaseController
                 Name = x.Name,
                 Detail = x.Detail,
                 Note = x.Note,
-                Venue = x.Venue,
                 Price = x.Price,
                 image_url = x.image_url,
                 Host_name = x.Host_name,
@@ -89,7 +88,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -105,7 +103,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -121,7 +118,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -137,7 +133,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -153,7 +148,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -169,7 +163,6 @@ public class HostPackageController : HostBaseController
                 {
                     UserId = user_id,
                     Name = productData.Name!,
-                    Venue = productData.Venue!,
                     Detail = productData.Detail!,
                     Note = productData.Note,
                     Price = productData.Price,
@@ -210,7 +203,6 @@ public class HostPackageController : HostBaseController
             p.Detail = productData.Detail;
             p.Note = productData.Note;
             p.Price = productData.Price;
-            p.Venue = productData.Venue;
             if (productData.file != null)
             {
                 if (p.image_url != "/imgPackage/" && p.image_url != null)

@@ -12,7 +12,6 @@ namespace BookingBirthday.Data.Entities
         public string Name { get; set; }
         public string? Host_name { get; set; }
         public double Price { get; set; }
-        public string Venue { get; set; }
         public string Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
@@ -31,10 +30,6 @@ namespace BookingBirthday.Data.Entities
         public PackageType PackageType { get; set; }
         public List<Booking>Bookings { get; set; }
         public List<PackageLocation> PackageLocations { get; set; }
-
-        // Collection navigation properties
-        //public List<Cart>? Carts { get; set; }
-        //Category
         public IList<Rate> Rates { get; set; }
     }
 }

@@ -47,7 +47,6 @@ namespace BookingBirthday.Server.Controllers
                     Detail = x.a.Detail,
                     Price = x.a.Price,
                     Note = x.a.Note,
-                    Venue = x.a.Venue,
                     Host_name = x.a.Host_name,
                     image_url = x.a.image_url,
                     Status = x.a.Status,
@@ -76,7 +75,6 @@ namespace BookingBirthday.Server.Controllers
                 p.Name = productData.Name;
                 p.Detail = productData.Detail;
                 p.Price = productData.Price;
-                p.Venue = productData.Venue;
                 p.image_url = UploadedFile(productData.file!);
                 _dbContext.Packages.Add(p);
                 _dbContext.SaveChanges();
@@ -107,7 +105,6 @@ namespace BookingBirthday.Server.Controllers
                 pa.Name = productData.Name;
                 pa.Detail = productData.Detail;
                 pa.Price = productData.Price;
-                pa.Venue = productData.Venue;
                 if (productData.file != null)
                 {
                     if (pa.image_url != "/imgPackage/" && pa.image_url != null)
