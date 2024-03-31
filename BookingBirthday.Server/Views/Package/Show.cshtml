@@ -40,8 +40,6 @@
                                 <label style="width: auto">
                                     <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
                                 </label>
-                                <br />
-                                <label>Địa Chỉ: @Model.Venue</label>
                                 <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>
                                 @if (role != "Admin" && role != "Host")
                                 {

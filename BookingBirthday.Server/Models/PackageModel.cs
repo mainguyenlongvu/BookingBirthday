@@ -7,8 +7,7 @@ namespace BookingBirthday.Server.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Host_name { get; set; }
-        public Double Price { get; set; }
-        public string? Venue { get; set; }
+        public double Price { get; set; }
         public string? Detail { get; set; }
         public string Note { get; set; }
         public string? image_url { get; set; }
@@ -26,5 +25,6 @@ namespace BookingBirthday.Server.Models
         public Theme Theme { get; set; }
 
         public List<string> selectedAddresses { get; set; }
+        public List<PackageLocation> PackageLocations { get; set; }
     }
 }

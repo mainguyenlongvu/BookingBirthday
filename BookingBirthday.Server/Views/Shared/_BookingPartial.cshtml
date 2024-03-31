@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext!.Session;
+    string jsonbooking = session.GetString(BookingBirthday.Server.Controllers.BookingController.BOOKINGKEY)!;
+    if (jsonbooking != null)
+    {
+        var booking = JsonConvert.DeserializeObject<BookingBirthday.Server.Models.PackageModel>(jsonbooking);
+        <a href="/Booking" class="nav-item nav-link"><i class="fa fa-gift" aria-hidden="true"></i></a>
+
+    }
+    else
+    {
+        <a href="/Booking" class="nav-item nav-link"><i class="fa fa-gift" aria-hidden="true"></i></a>
+    }
+}

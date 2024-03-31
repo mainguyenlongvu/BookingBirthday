@@ -29,10 +29,6 @@ namespace BookingBirthday.Data.Entities
         public Theme Theme { get; set; }
         public List<Booking>Bookings { get; set; }
         public List<PackageLocation> PackageLocations { get; set; }
-
-        // Collection navigation properties
-        //public List<Cart>? Carts { get; set; }
-        //Category
         public IList<Rate> Rates { get; set; }
     }
 }

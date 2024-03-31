@@ -104,6 +104,7 @@
                             {
                                 var thanhtien =  cartitem.Package!.Price;
                                     total += thanhtien;
+                                     @* Venue = cartitem.Package.Venue; *@
                                     <tr>
                                    <td>@(stt++)</td>
                                    <td>
@@ -117,7 +118,9 @@
                                            <input asp-for="@cartitem.Quantity" id="@($"quantity-{cartitem.Package.Id}")" type="number" min="1"/>
                                        </label>
                                    </td> *@
-                                        
+                                        <td>
+                                            @* <label style="width: auto">@cartitem.Package.Venue</label> *@
+                                        </td>
                                    <td>
                                        <label style="width: auto">@Convert.ToDouble(thanhtien).ToString("#,##0") đồng</label>
                                    </td>

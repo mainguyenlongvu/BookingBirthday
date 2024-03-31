@@ -1,0 +1,197 @@
+﻿@model BookingBirthday.Server.Models.PackageModel
+@{
+    ViewData["Title"] = "Booking Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .background-image {
+        background-image: url('img/bookingbackground.png');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+    }
+</style>
+@await Html.PartialAsync("response")
+<div class="background-image">
+    <div class="text-center" style="margin-top: 75px">
+        <h1 class="display-4" style="color: white; padding-top: 35px;">Điền thông tin đặt tiệc với chúng tôi tại <a href="#">Booking Birthday</a></h1>
+    </div>
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="tab-content">
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        double total = Model.Price;
+                        <div class="col-4 p-5" style="background-color: #b89c74; border-top-left-radius: 20px; border-bottom-left-radius: 20px;">
+                            <h1 class="display-5 fw-bold">@Model.Name</h1>
+                            <p class="col-md-8 fs-4"><i class="zmdi zmdi-star"></i> Độ tuổi: @Model.Age</p>
+                            <p class="col-md-8 fs-4"><i class="zmdi zmdi-star"></i> Giới tính: @Model.Gender</p>
+                            <div d-flex justify-content-center>
+                                <a href="@("/Package/Show?Id=" + Model.Id)">
+                                    <button class="btn btn-primary" style="width: 250px; margin-top: 10px;" type="submit">
+                                        <i class="fa fa-eye"></i> Xem chi tiết
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            @if (Context.Session.GetString("username") != null && Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
+                            {
+                                <div class="table-responsive container d-flex justify-content-center px-0">
+                                    <div class="row p-4 align-items-center shadow-lg d-flex justify-content-center" style="background-color: white; border-top-right-radius: 20px; border-bottom-right-radius: 20px;">
+                                        <form asp-action="AddBooking" asp-controller="Booking" method="post">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                                                            Thông tin phụ huynh
+                                                        </label>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="parent_name">
+                                                                Họ và tên
+                                                            </label>
+                                                            <input class="form-input form-control" type="text" id="parent_name" name="parent_name" placeholder="Họ và tên">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="phone">
+                                                                Số điện thoại
+                                                            </label>
+                                                            <input class="form-input form-control" type="text" id="phone" name="phone" placeholder="Số điện thoại">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="email">
+                                                                Email
+                                                            </label>
+                                                            <input class="form-input form-control" type="text" id="email" name="email" placeholder="Email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                                                            Thông tin của bé
+                                                        </label>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="kid_name">
+                                                                Họ và tên
+                                                            </label>
+                                                            <input class="form-input form-control" type="text" id="kid_name" name="kid_name" placeholder="Họ và tên">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="kid_birthday">
+                                                                Ngày sinh
+                                                            </label>
+                                                            <input class="form-input form-control" type="date" id="kid_birthday" name="kid_birthday" placeholder="Ngày sinh">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="center">
+                                                                Giới tính
+                                                            </label>
+                                                            <div class="mb-3 d-flex justify-content-start align-items-center gap-3">
+                                                                <div class="form-group">
+                                                                    <input class="form-check-input" type="radio" name="gender" id="male">
+                                                                    <label class="form-check-label" for="male">
+                                                                        Bé trai
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <input class="form-check-input" type="radio" name="gender" id="female" checked="">
+                                                                    <label class="form-check-label" for="female">
+                                                                        Bé gái
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-title text-orange" style="color:orange; font-size: 20px">
+                                                            Thông tin đặt tiệc
+                                                        </label>
+                                                        <div class="mb-3">
+                                                            @if (Model.PackageLocations != null && Model.PackageLocations.Count > 0)
+                                                            {
+                                                                var uniqueLocationNames = Model.PackageLocations
+                                                                .Where(pl => pl.Location != null)
+                                                                .Select(pl => pl.Location.Name)
+                                                                .Distinct();
+
+                                                                foreach (var locationName in uniqueLocationNames)
+                                                                {
+                                                                    <label class="form-label text-blue" for="center_code">Địa điểm tổ chức: @locationName</label>
+                                                                    <br>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <p>No package location names available.</p>
+                                                            }
+                                                            <select class="form-select-input form-control" id="center" name="center_code">
+                                                                @if (Model.PackageLocations != null && Model.PackageLocations.Count > 0)
+                                                                {
+                                                                    foreach (var packageLocation in Model.PackageLocations)
+                                                                    {
+                                                                        if (packageLocation.Location != null)
+                                                                        {
+                                                                            <option value="#">
+                                                                                @packageLocation.Location.Address
+                                                                            </option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>No package location addresses available.</p>
+                                                                }
+                                                            </select>
+                                                            <input type="hidden" id="center_name" name="center_name">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue">
+                                                                Thời gian tổ chức
+                                                            </label>
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6 mb-3 mb-md-0">
+                                                                    <input class="form-input form-control" type="date" id="date" name="date" placeholder="Ngày tổ chức">
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6 mb-sm-3 mb-md-0">
+                                                                    <input class="form-input form-control" type="time" id="time" name="time" placeholder="Giờ tổ chức">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="number_of_passengers">
+                                                                Số lượng bé tham dự
+                                                            </label>
+                                                            <input class="form-input form-control" type="number" id="number_of_passengers" name="number_of_passengers" placeholder="Số lượng bé tham dự">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary" style="width: 250px;
+                                                    margin-top: 10px; type="submit">
+                                                        Gửi ngay
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="/Account/Login" class="btn btn-success">Đăng nhập để thanh toán</a>
+                                <a href="/" class="btn btn-success">Tiếp tục mua hàng</a>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="alert alert-danger">Hãy chọn một gói tiệc</p>
+                        <a href="/" class="btn btn-success">Quay về</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
