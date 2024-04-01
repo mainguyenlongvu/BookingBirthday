@@ -656,7 +656,7 @@ function TuChoiReport(category_request_id) {
         }
     });
 }
-document.addEventListener('DOMContentLoaded', function () {
+
     document.getElementById('selectArea').onchange = function () {
         var areaId = this.value;
         document.getElementById("checkboxOptions").innerHTML = '';
@@ -671,7 +671,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }).catch(error => console.error('Error:', error));
     };
-});
+
 
 document.getElementById('selectLocation').onchange = function () {
     var locationName = this.value;
@@ -698,6 +698,49 @@ document.getElementById('selectLocation').onchange = function () {
             });
         }).catch(error => console.error('Error:', error));
 };
+
+document.getElementById('selectAreaEdit').onchange = function () {
+    var areaId = this.value;
+    document.getElementById("checkboxOptionsEdit").innerHTML = '';
+    fetch(`/HostPackage/GetLocationsByAreaId?areaId=${areaId}`)
+        .then(response => response.json())
+        .then(data => {
+            var select = document.getElementById("selectLocationEdit");
+            select.innerHTML = '<option value="">Chọn địa điểm</option>';
+            data.forEach(function (item) {
+                var option = new Option(item.name, item.name); // Sử dụng Name làm value để truy vấn sau này
+                select.add(option);
+            });
+        }).catch(error => console.error('Error:', error));
+};
+
+
+document.getElementById('selectLocationEdit').onchange = function () {
+    var locationName = this.value;
+    var areaId = document.getElementById('selectAreaEdit').value; // Lấy AreaId từ dropdown selectArea
+    fetch(`/HostPackage/GetAddressesByLocationNameAndAreaId?locationName=${encodeURIComponent(locationName)}&areaId=${areaId}`)
+        .then(response => response.json())
+        .then(data => {
+            var checkboxesDiv = document.getElementById("checkboxOptionsEdit");
+            checkboxesDiv.innerHTML = ''; // Xóa các checkbox cũ
+            data.forEach(function (item) {
+                var checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = 'address-' + item.id;
+                checkbox.value = item.address;
+                checkbox.name = 'selectedAddresses[]';
+
+                var label = document.createElement('label');
+                label.htmlFor = 'address-' + item.id;
+                label.textContent = item.address;
+
+                checkboxesDiv.appendChild(checkbox);
+                checkboxesDiv.appendChild(label);
+                checkboxesDiv.appendChild(document.createElement('br'));
+            });
+        }).catch(error => console.error('Error:', error));
+};
+
 
 //document.getElementById('createPackageForm').addEventListener('submit', function (event) {
 //    event.preventDefault(); // Ngăn chặn gửi biểu mẫu mặc định

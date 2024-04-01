@@ -73,13 +73,6 @@ public class HostPackageController : HostBaseController
     public IActionResult Create( PackageModel productData)
     {
         var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-        var product = _dbContext.Packages.FirstOrDefault(x => x.Name == productData.Name);
-        if (product != null)
-        {
-            TempData["Message"] = "Gói tiệc đã tồn tại";
-            TempData["Success"] = false;
-            return RedirectToAction("Index");
-        }
         if (productData!.Price > 1000000 || productData!.Price < 100000)
         {
             TempData["Message"] = "Giá gói tiệc phải nằm trong khoảng từ 100k đến 1 triệu";
@@ -91,9 +84,15 @@ public class HostPackageController : HostBaseController
             var address = productData.selectedAddresses.ToList().First();
             var location = _dbContext.Locations.FirstOrDefault(x => x.Address == address);
             var area = _dbContext.Areas.FirstOrDefault(x => x.Id == location.AreaId);
-
             var theme = _dbContext.Themes.FirstOrDefault(x => x.Id == productData.ThemeId);
-            
+            var product = "Gói tiệc " + productData.PackageType + " Chủ đề " + theme.Name + " " + area.Name;
+            var check = _dbContext.Locations.FirstOrDefault(x => x.Address == product);
+            if (check != null)
+            {
+                TempData["Message"] = "Gói tiệc đã tồn tại";
+                TempData["Success"] = false;
+                return RedirectToAction("Index");
+            }
             var p = new Package();
             p = new Package
             {
@@ -151,13 +150,22 @@ public class HostPackageController : HostBaseController
         }
         try
         {
-            p.Name = productData.Name;
+            var address = productData.selectedAddresses.ToList().First();
+            var location = _dbContext.Locations.FirstOrDefault(x => x.Address == address);
+            var area = _dbContext.Areas.FirstOrDefault(x => x.Id == location.AreaId);
+            var theme = _dbContext.Themes.FirstOrDefault(x => x.Id == productData.ThemeId);
+            if(productData.selectedAddresses.Count != null)
+            {
+                p.Name = "Gói tiệc " + productData.PackageType + " Chủ đề " + theme.Name + " " + area.Name;
+            }
             p.Detail = productData.Detail;
             p.Note = productData.Note;
             p.Price = productData.Price;
             p.Age = productData.Age;
             p.PackageType = productData.PackageType;
             p.ThemeId = productData.ThemeId;
+            p.Gender = productData.Gender;
+            p.Detail = productData.Detail;
 
             if (productData.file != null)
             {
@@ -169,6 +177,29 @@ public class HostPackageController : HostBaseController
                 p.image_url = UploadedFile(productData.file!);
             }
             _dbContext.SaveChanges();
+
+            if (productData.selectedAddresses.Count != null)
+            {
+                var remove = _dbContext.PackageLocations.Where(x => x.PackageId == productData.Id).ToList();
+                foreach( var item in remove)
+                {
+                    _dbContext.PackageLocations.Remove(item);
+                }
+            }
+            _dbContext.SaveChanges();
+
+
+
+            foreach (string item in productData.selectedAddresses)
+            {
+                var locationId = _dbContext.Locations.FirstOrDefault(x => x.Address == item);
+                var packagelocation = new PackageLocation();
+                packagelocation.PackageId = productData.Id;
+                packagelocation.LocationId = locationId.Id;
+                _dbContext.PackageLocations.Add(packagelocation);
+            }
+            _dbContext.SaveChanges();//lỗi ờ đây
+
             TempData["Message"] = "Chỉnh sửa thông tin gói tiệc thành công";
             TempData["Success"] = true;
             return RedirectToAction("Index");

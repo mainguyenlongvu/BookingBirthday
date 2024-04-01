@@ -1,4 +1,5 @@
 ﻿@model X.PagedList.IPagedList<BookingBirthday.Server.Models.PackageModel>
+@using BookingBirthday.Data.Entities
 @using Newtonsoft.Json
 @using System.Text.Json
 @using System.Text.Json.Serialization
@@ -8,6 +9,8 @@
 @{
     ViewData["Title"] = "QL_SanPham Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = HttpContextAccessor.HttpContext!.Session;
+    int userid = int.Parse( session.GetString("user_id"));
 }
 @await Html.PartialAsync("response")
 @section Scripts {
@@ -44,7 +47,6 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Tên bữa tiệc</th>
-                                    <th>Địa chỉ</th>
                                     <th>Mô tả</th>
                                     <th>Chú ý</th>
                                     <th>Hình ảnh</th>
@@ -59,6 +61,7 @@
                                         <td>
                                             <label style="width: auto">@item.Name</label>
                                         </td>
+                                        
                                         <td>
                                             <label style="width: auto">
                                                 <span class="Detail">@Html.Raw(item.Detail)</span>
@@ -83,29 +86,110 @@
                                                     <div class="modal-content">
                                                         <form method="post" asp-action="Edit" asp-controller="HostPackage" enctype="multipart/form-data">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa bữa tiệc</h5>
+                                                                <h5 class="modal-title" id="productModalLabel">Chỉnh sửa gói tiệc</h5>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div class="form-group">
                                                                     <label>Tên bữa tiệc</label>
                                                                     <input type="hidden" value="@item.Id" name="Id" />
-                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" required placeholder="Nhập tên bữa tiệc">
+                                                                    <input type="text" class="form-control" name="Name" value="@item.Name" readonly>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label>Giá</label>
+                                                                    <input class="form-control" name="Price" value="@item.Price" placeholder="Nhập giá gói/người" required />
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Mô tả</label>
                                                                     <input class="form-control" name="Detail" value="@item.Detail" placeholder="Nhập mô tả" required />
                                                                 </div>
                                                                 <div class="form-group">
+                                                                    <label>Độ tuổi</label>
+                                                                    <select name="Age" class="form-control">
+                                                                        <option value="0 - 5" selected="@(item.Age == "0 - 5")">0 - 5</option>
+                                                                        <option value="6 - 10" selected="@(item.Age == "6 - 10")">6 - 10</option>
+                                                                        <option value="11 - 14" selected="@(item.Age == "11 - 14")">11 - 14</option>
+                                                                        <option value="15 - 17" selected="@(item.Age == "15 - 17")">15 - 17</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Chủ đề</label>
+                                                                    @{
+                                                                        var themeA = _dbContext.Themes.Where(x => x.UserId == userid).ToList();
+                                                                    }
+                                                                    <select name="ThemeId" class="form-control">
+                                                                        @foreach (var items in themeA)
+                                                                        {
+                                                                            <option value="@items.Id" selected="@(items.Id == item.ThemeId)">@items.Name</option>
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Thể loại</label>
+                                                                    <select name="PackageType" class="form-control">
+                                                                        <option value="Cơ bản" selected="@(item.PackageType == "Cơ bản")">Cơ bản</option>
+                                                                        <option value="Cao cấp" selected="@(item.PackageType == "Cao cấp")">Cao cấp</option>
+                                                                        <option value="Đặc biệt" selected="@(item.PackageType == "Đặc biệt")">Đặc biệt</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>Giới tính phù hợp</label>
+                                                                    <select name="Gender" class="form-control">
+                                                                        <option value="Nam" selected="@(item.Gender == "Cơ bản")">Nam</option>
+                                                                        <option value="Nữ">Nữ</option>
+                                                                        <option value="Name & Nữ">Name & Nữ</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <select id="selectAreaEdit">
+                                                                        @* <option value="">Chọn khu vực</option> *@
+                                                                        @{
+                                                                            var areas = _dbContext.Areas.ToList();
+                                                                            var findpackageloction = _dbContext.PackageLocations.FirstOrDefault(x => x.PackageId == item.Id);
+                                                                            var findlocation = _dbContext.Locations.FirstOrDefault(x => x.Id == findpackageloction.LocationId);
+                                                                            var findarea = _dbContext.Areas.FirstOrDefault(x => x.Id == findlocation.AreaId);
+                                                                            var listpackagelocation = _dbContext.PackageLocations.Where(x => x.PackageId == item.Id).ToList();
+                                                                            List<Location> locations = new List<Location>();
+                                                                            foreach (var packagelocation in listpackagelocation)
+                                                                            {
+                                                                                // Thực hiện truy vấn để lấy đối tượng Location cụ thể
+                                                                                var check = _dbContext.Locations.FirstOrDefault(x => x.Id == packagelocation.LocationId);
+                                                                                if (check != null)
+                                                                                {
+                                                                                    locations.Add(check);
+                                                                                }
+                                                                            }
+                                                                            
+                                                                        }
+                                                                        @foreach (var a in areas)
+                                                                        {
+                                                                            <option value="@a.Id" selected="@(a.Id == findarea.Id)">@a.Name</option>
+                                                                        }
+                                                                    </select>
+
+                                                                    <select id="selectLocationEdit">
+                                                                        <option value="@(findlocation.Id)">@(findlocation.Name)</option>
+                                                                        <!-- Các option cho Location sẽ được thêm vào đây -->
+
+                                                                    </select>
+
+                                                                    <div id="checkboxOptionsEdit">
+                                                                        <!-- Các checkbox cho Address sẽ được thêm vào đây -->
+                                                                        @foreach (var list in locations)
+                                                                        {
+                                                                            <input type="checkbox" id="@("checkbox_" + list.Id)" name="selectedAddresses" value="@list.Address" checked />
+                                                                            <label for="@("checkbox_" + list.Id)">@list.Address</label>
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
                                                                     <label>Chú ý</label>
                                                                     <input type="text" class="form-control" name="Note" value="@item.Note" required placeholder="Nhập chú ý">
                                                                 </div>
-                                                                <div class="form-group">
-                                                                    <label>Giá</label>
-                                                                    <input class="form-control" name="Price" value="@item.Price" placeholder="Nhập giá" required type="number" min="0" />
-                                                                </div>
+                                                                
                                                                 <div class="form-group">
                                                                     <label>Hình ảnh</label>
-                                                                    <input class="form-control" name="file" type="file" />
+                                                                    <input class="form-control" name="file" type="file" required />
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
