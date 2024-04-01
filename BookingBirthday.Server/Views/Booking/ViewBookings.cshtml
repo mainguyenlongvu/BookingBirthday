@@ -59,9 +59,6 @@
                                                 <label style="width: auto">@item.Phone</label>
                                             </td>
                                             <td>
-                                                <label style="width: auto">@item.Address</label>
-                                            </td>
-                                            <td>
                                                 <label style="width: auto">@item.Date_order</label>
                                             </td>
                                             <td>
@@ -168,6 +165,6 @@
         var BookingId = remainingPaymentBtn.getAttribute("data-bookingId");
         var userId = remainingPaymentBtn.getAttribute("data-userId");
         // Redirect to the RemainingPayment page with bookingId and userId parameters
-        window.location.href = "/Cart/RemainingPayment?bookingId=" + BookingId + "&userId=" + userId;
+        window.location.href = "/Booking/Payment?bookingId=" + BookingId + "&userId=" + userId;
     });
 </script>

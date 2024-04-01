@@ -1,7 +1,48 @@
 ﻿@model BookingBirthday.Server.Models.PackageModel
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Booking Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var session = HttpContextAccessor.HttpContext!.Session;
+    var name = session.GetString("name");
+    var phone = session.GetString("phone");
+    var email = session.GetString("email");
+}
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#LocationAddress').change(function () {
+                var selectedAddress = $(this).find('option:selected').text();
+                $('#LocationAddress').val(selectedAddress);
+            });
+        });
+        $(document).ready(function () {
+            $('#ChildNumber').change(function () {
+                var childNumber = parseInt($(this).val());
+                if (childNumber <= 0) {
+                    alert('Number of children must be greater than 0.');
+                    $(this).val(0); // Reset to 0 if invalid value entered
+                }
+            });
+        });
+        $(document).ready(function () {
+            $('#ChildNumber').on('input', function () {
+                var childNumber = parseInt($(this).val());
+                if (childNumber < 0) {
+                    childNumber = 0; // Set to 0 if negative value entered
+                }
+                var totalPrice = @Model.Price * childNumber; // Calculate total price
+                var formattedTotalPrice = totalPrice.toLocaleString('vi-VN'); // Format total price
+                $('#Total').val(totalPrice); // Display formatted total in the hidden input
+
+                // Update the total display
+                $('#totalDisplay').text(formattedTotalPrice + ' đồng');
+
+                // Show the total display div
+                $('#totalDisplay').show();
+            });
+        });
+    </script>
 }
 <style>
     .background-image {
@@ -27,6 +68,7 @@
                             <h1 class="display-5 fw-bold">@Model.Name</h1>
                             <p class="col-md-8 fs-4"><i class="zmdi zmdi-star"></i> Độ tuổi: @Model.Age</p>
                             <p class="col-md-8 fs-4"><i class="zmdi zmdi-star"></i> Giới tính: @Model.Gender</p>
+                            <p class="col-md-8 fs-4"><i class="zmdi zmdi-star"></i> Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng/bé</p>
                             <div d-flex justify-content-center>
                                 <a href="@("/Package/Show?Id=" + Model.Id)">
                                     <button class="btn btn-primary" style="width: 250px; margin-top: 10px;" type="submit">
@@ -48,22 +90,37 @@
                                                             Thông tin phụ huynh
                                                         </label>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="parent_name">
+                                                            <label class="form-label text-blue" for="Name">
                                                                 Họ và tên
                                                             </label>
-                                                            <input class="form-input form-control" type="text" id="parent_name" name="parent_name" placeholder="Họ và tên">
+                                                            <input class="form-control"
+                                                                   id="Name"
+                                                                   name="Name"
+                                                                   type="text"
+                                                                   value="@name"
+                                                                   readonly>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="phone">
+                                                            <label class="form-label text-blue" for="Phone">
                                                                 Số điện thoại
                                                             </label>
-                                                            <input class="form-input form-control" type="text" id="phone" name="phone" placeholder="Số điện thoại">
+                                                            <input class="form-control"
+                                                                   id="Phone"
+                                                                   name="Phone"
+                                                                   type="text"
+                                                                   value="@phone"
+                                                                   required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="email">
+                                                            <label class="form-label text-blue" for="Email">
                                                                 Email
                                                             </label>
-                                                            <input class="form-input form-control" type="text" id="email" name="email" placeholder="Email">
+                                                            <input class="form-control"
+                                                                   id="Email"
+                                                                   name="Email"
+                                                                   type="text"
+                                                                   value="@email"
+                                                                   required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -71,32 +128,32 @@
                                                             Thông tin của bé
                                                         </label>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="kid_name">
+                                                            <label class="form-label text-blue" for="ChildName">
                                                                 Họ và tên
                                                             </label>
-                                                            <input class="form-input form-control" type="text" id="kid_name" name="kid_name" placeholder="Họ và tên">
+                                                            <input class="form-input form-control" type="text" id="ChildName" name="ChildName" placeholder="Họ và tên" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="kid_birthday">
+                                                            <label class="form-label text-blue" for="ChildDateOfBirth">
                                                                 Ngày sinh
                                                             </label>
-                                                            <input class="form-input form-control" type="date" id="kid_birthday" name="kid_birthday" placeholder="Ngày sinh">
+                                                            <input class="form-input form-control" type="date" id="ChildDateOfBirth" name="ChildDateOfBirth" placeholder="Ngày sinh" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="center">
+                                                            <label class="form-label text-blue" for="ChildGender">
                                                                 Giới tính
                                                             </label>
                                                             <div class="mb-3 d-flex justify-content-start align-items-center gap-3">
                                                                 <div class="form-group">
-                                                                    <input class="form-check-input" type="radio" name="gender" id="male">
-                                                                    <label class="form-check-label" for="male">
-                                                                        Bé trai
+                                                                    <input class="form-check-input" type="radio" name="ChildGender" id="Nam" value="Nam">
+                                                                    <label class="form-check-label" for="Nam">
+                                                                        Nam
                                                                     </label>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <input class="form-check-input" type="radio" name="gender" id="female" checked="">
-                                                                    <label class="form-check-label" for="female">
-                                                                        Bé gái
+                                                                    <input class="form-check-input" type="radio" name="ChildGender" id="Nữ" value="Nữ" checked="">
+                                                                    <label class="form-check-label" for="Nữ">
+                                                                        Nữ
                                                                     </label>
                                                                 </div>
                                                             </div>
@@ -108,32 +165,35 @@
                                                         <label class="form-title text-orange" style="color:orange; font-size: 20px">
                                                             Thông tin đặt tiệc
                                                         </label>
+                                                        <input type="hidden" id="LocationName" name="LocationName" value="">
+                                                        <input type="hidden" id="LocationAddress" name="LocationAddress" value="">
                                                         <div class="mb-3">
-                                                            @if (Model.PackageLocations != null && Model.PackageLocations.Count > 0)
+                                                            @if (Model != null && Model.PackageLocations != null && Model.PackageLocations.Any())
                                                             {
-                                                                var uniqueLocationNames = Model.PackageLocations
-                                                                .Where(pl => pl.Location != null)
-                                                                .Select(pl => pl.Location.Name)
-                                                                .Distinct();
-
-                                                                foreach (var locationName in uniqueLocationNames)
+                                                                var targetPackageId = Model.Id;
+                                                                var packageLocation = Model.PackageLocations.FirstOrDefault(pl => pl.PackageId == targetPackageId);
+                                                                if (packageLocation != null && packageLocation.Location != null)
                                                                 {
-                                                                    <label class="form-label text-blue" for="center_code">Địa điểm tổ chức: @locationName</label>
+                                                                    <label class="form-label text-blue" for="LocationName">Địa điểm tổ chức: @packageLocation.Location.Name</label>
                                                                     <br>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p>Không có địa điểm tổ chức nào cho gói tiệc này</p>
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                                <p>No package location names available.</p>
+                                                                <p>Thông tin gói tiệc không tồn tại</p>
                                                             }
-                                                            <select class="form-select-input form-control" id="center" name="center_code">
+                                                            <select class="form-select-input form-control" id="LocationId" name="LocationId">
                                                                 @if (Model.PackageLocations != null && Model.PackageLocations.Count > 0)
                                                                 {
                                                                     foreach (var packageLocation in Model.PackageLocations)
                                                                     {
                                                                         if (packageLocation.Location != null)
                                                                         {
-                                                                            <option value="#">
+                                                                            <option value="@packageLocation.Location.Id">
                                                                                 @packageLocation.Location.Address
                                                                             </option>
                                                                         }
@@ -141,39 +201,43 @@
                                                                 }
                                                                 else
                                                                 {
-                                                                    <p>No package location addresses available.</p>
+                                                                    <p>Địa chỉ tổ chức không tồn tại</p>
                                                                 }
                                                             </select>
-                                                            <input type="hidden" id="center_name" name="center_name">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label class="form-label text-blue">
                                                                 Thời gian tổ chức
                                                             </label>
-                                                            <div class="row">
-                                                                <div class="col-sm-12 col-md-6 mb-3 mb-md-0">
-                                                                    <input class="form-input form-control" type="date" id="date" name="date" placeholder="Ngày tổ chức">
-                                                                </div>
-                                                                <div class="col-sm-12 col-md-6 mb-sm-3 mb-md-0">
-                                                                    <input class="form-input form-control" type="time" id="time" name="time" placeholder="Giờ tổ chức">
-                                                                </div>
-                                                            </div>
+                                                            <input style="width: auto;" class="form-input form-control" type="datetime-local" id="Date_start" name="Date_start" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label class="form-label text-blue" for="number_of_passengers">
+                                                            <label class="form-label text-blue" for="ChildNumber">
                                                                 Số lượng bé tham dự
                                                             </label>
-                                                            <input class="form-input form-control" type="number" id="number_of_passengers" name="number_of_passengers" placeholder="Số lượng bé tham dự">
+                                                            <input class="form-input form-control" type="number" id="ChildNumber" name="ChildNumber" min="0" value="0">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="Note">
+                                                                Ghi chú
+                                                            </label>
+                                                            <input class="form-input form-control" type="text" id="Note" name="Note" placeholder="Ghi chú" value="">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="Total">
+                                                                Tổng tiền: <span id="totalDisplay" style="color: red"></span>
+                                                            </label>
+                                                            <input type="hidden" id="Total" name="Total" value="">
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <button class="btn btn-primary" style="width: 250px;
-                                                    margin-top: 10px; type="submit">
+                                                    <button class="btn btn-primary" style="width: 250px; margin-top: 10px;" type="submit">
                                                         Gửi ngay
                                                     </button>
                                                 </div>
                                             </div>
+                                            <input type="hidden" id="PackageId" name="PackageId" value="@Model.Id">
                                         </form>
                                     </div>
                                 </div>
