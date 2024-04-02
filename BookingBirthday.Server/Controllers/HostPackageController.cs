@@ -284,7 +284,7 @@ public class HostPackageController : HostBaseController
     public async Task<IActionResult> GetAddressesByLocationsAndAreaId([FromBody] LocationRequestModel request)
     {
         var addresses = await _dbContext.Locations
-                                       .Where(l => request.LocationNames.Contains(l.Name) && l.AreaId == request.AreaId)
+                                       .Where(l => request.LocationNames.Contains(l.Name) && l.AreaId == request.AreaId).OrderBy(l=>l.Name)
                                        .Select(l => new { l.Id, l.Address })
                                        .ToListAsync();
 
