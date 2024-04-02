@@ -52,7 +52,7 @@ namespace BookingBirthday.Server.Controllers
                 Email = x.a.Email,
                 Note = x.a.Note,
                 Reason = x.a.Reason,
-                Address = x.a.Address,
+                //Address = x.a.Address,
                 Date_order = x.a.Date_order,
                 Date_start = x.a.Date_start,
                 Date_cancel = x.a.Date_cancel,

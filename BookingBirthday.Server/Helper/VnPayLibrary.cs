@@ -109,15 +109,14 @@ public class VnPayLibrary
             }
         }
 
-        var bookingId = Convert.ToInt64(vnPay.GetResponseData("vnp_TxnRef"));
+        var bookingId = Convert.ToInt64(vnPay.GetResponseData("vnp_OrderInfo"));
         var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
         var vnpResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
         var vnpSecureHash =
-            collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value; //hash của dữ liệu trả về
-        var orderInfo = vnPay.GetResponseData("vnp_OrderInfo");
+            collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value;
         var amount = Convert.ToDouble(vnPay.GetResponseData("vnp_Amount"));
         var checkSignature =
-            vnPay.ValidateSignature(vnpSecureHash, hashSecret); //check Signature
+            vnPay.ValidateSignature(vnpSecureHash, hashSecret);
 
         if (!checkSignature)
             return new PaymentResponseModel()
@@ -128,7 +127,6 @@ public class VnPayLibrary
         return new PaymentResponseModel()
         {
             Success = true,
-            OrderDescription = orderInfo,
             BookingId = bookingId.ToString(),
             PaymentId = vnPayTranId.ToString(),
             Token = vnpSecureHash,

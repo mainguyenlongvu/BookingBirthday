@@ -23,9 +23,8 @@ namespace BookingBirthday.Data.Configurations
             // Other properties
             builder.Property(x => x.Date_order).IsRequired();
             builder.Property(x => x.Date_start).IsRequired();
-            builder.Property(x => x.Date_cancel);
-            builder.Property(x => x.BookingStatus).HasDefaultValue("Processing");
-            builder.Property(x => x.Address).IsRequired().IsUnicode();
+            builder.Property(x => x.Date_cancel).IsRequired(false);
+            builder.Property(x => x.BookingStatus).IsRequired(false);
             builder.Property(x => x.Total).IsRequired();
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
@@ -33,7 +32,7 @@ namespace BookingBirthday.Data.Configurations
             builder.Property(x => x.Reason).IsUnicode();
             builder.Property(x => x.ChildName).IsUnicode();
             builder.Property(x => x.ChildDateOfBirth).IsRequired();
-            builder.Property(x => x.Gender).IsRequired().IsUnicode();
+            builder.Property(x => x.ChildGender).IsRequired().IsUnicode();
             builder.Property(x => x.ChildNumber).IsRequired();
            
             builder.HasIndex(b => b.UserId);

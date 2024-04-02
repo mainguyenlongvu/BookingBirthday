@@ -218,7 +218,7 @@ namespace BookingBirthday.Server.Controllers
 
                 if (!userData.Email.EndsWith("@gmail.com"))
                 {
-                    TempData["Message"] = "Email phải là địa chỉ theo format XXX@gmail.com";
+                    TempData["Message"] = " Email phải là địa chỉ theo định dạng XXX@gmail.com";
                     TempData["Success"] = false;
                     return View(userData);
                 }
