@@ -9,40 +9,44 @@
     var email = session.GetString("email");
 }
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#LocationAddress').change(function () {
-                var selectedAddress = $(this).find('option:selected').text();
-                $('#LocationAddress').val(selectedAddress);
+    @if (Model != null)
+    {
+        <script>
+            $(document).ready(function () {
+                $('#LocationAddress').change(function () {
+                    var selectedAddress = $(this).find('option:selected').text();
+                    $('#LocationAddress').val(selectedAddress);
+                });
             });
-        });
-        $(document).ready(function () {
-            $('#ChildNumber').change(function () {
-                var childNumber = parseInt($(this).val());
-                if (childNumber <= 0) {
-                    alert('Number of children must be greater than 0.');
-                    $(this).val(0); // Reset to 0 if invalid value entered
-                }
+            $(document).ready(function () {
+                $('#ChildNumber').change(function () {
+                    var childNumber = parseInt($(this).val());
+                    if (childNumber <= 0) {
+                        alert('Number of children must be greater than 0.');
+                        $(this).val(0); // Reset to 0 if invalid value entered
+                    }
+                });
             });
-        });
-        $(document).ready(function () {
-            $('#ChildNumber').on('input', function () {
-                var childNumber = parseInt($(this).val());
-                if (childNumber < 0) {
-                    childNumber = 0; // Set to 0 if negative value entered
-                }
-                var totalPrice = @Model.Price * childNumber; // Calculate total price
-                var formattedTotalPrice = totalPrice.toLocaleString('vi-VN'); // Format total price
-                $('#Total').val(totalPrice); // Display formatted total in the hidden input
+            $(document).ready(function () {
+                $('#ChildNumber').on('input', function () {
+                    var childNumber = parseInt($(this).val());
+                    if (childNumber < 0) {
+                        childNumber = 0; // Set to 0 if negative value entered
+                    }
 
-                // Update the total display
-                $('#totalDisplay').text(formattedTotalPrice + ' đồng');
+                    var totalPrice = @Model.Price * childNumber; // Calculate total price
+                    var formattedTotalPrice = totalPrice.toLocaleString('vi-VN'); // Format total price
+                    $('#Total').val(totalPrice); // Display formatted total in the hidden input
 
-                // Show the total display div
-                $('#totalDisplay').show();
+                    // Update the total display
+                    $('#totalDisplay').text(formattedTotalPrice + ' đồng');
+
+                    // Show the total display div
+                    $('#totalDisplay').show();
+                });
             });
-        });
-    </script>
+        </script>
+    }
 }
 <style>
     .background-image {
