@@ -802,7 +802,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => response.json())
                 .then(data => {
                     var addressOptions = document.getElementById("addressOptionsCreate");
-                    addressOptions.innerHTML = ''; // Xóa các checkbox cũ
+                    // Xóa các checkbox đã được lọc trước đó
+                    addressOptions.innerHTML = '';
+
                     data.forEach(function (item) {
                         var checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
@@ -821,9 +823,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     // Hiển thị Checkbox Group sau khi đã có dữ liệu
                     document.getElementById('checkboxAddressCreate').style.display = 'block';
                 }).catch(error => console.error('Error:', error));
+        } else {
+            // Nếu không có location nào được chọn, xóa tất cả các checkbox
+            var addressOptions = document.getElementById("addressOptionsCreate");
+            addressOptions.innerHTML = '';
+            // Ẩn Checkbox Group
+            document.getElementById('checkboxAddressCreate').style.display = 'none';
         }
     };
 });
+
 
 
 
