@@ -10,7 +10,7 @@
     ViewData["Title"] = "QL_SanPham Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var session = HttpContextAccessor.HttpContext!.Session;
-    int userid = int.Parse( session.GetString("user_id"));
+    int userid = int.Parse(session.GetString("user_id"));
 }
 @await Html.PartialAsync("response")
 @section Scripts {
@@ -61,7 +61,7 @@
                                         <td>
                                             <label style="width: auto">@item.Name</label>
                                         </td>
-                                        
+
                                         <td>
                                             <label style="width: auto">
                                                 <span class="Detail">@Html.Raw(item.Detail)</span>
@@ -159,7 +159,7 @@
                                                                                     locations.Add(check);
                                                                                 }
                                                                             }
-                                                                            
+
                                                                         }
                                                                         @foreach (var a in areas)
                                                                         {
@@ -186,7 +186,7 @@
                                                                     <label>Chú ý</label>
                                                                     <input type="text" class="form-control" name="Note" value="@item.Note" required placeholder="Nhập chú ý">
                                                                 </div>
-                                                                
+
                                                                 <div class="form-group">
                                                                     <label>Hình ảnh</label>
                                                                     <input class="form-control" name="file" type="file" required />
@@ -249,10 +249,10 @@
                     <div class="form-group">
                         <label>Độ tuổi</label>
                         <select name="Age" class="form-control">
-                            <option value="0 - 5" >0 - 5</option>
-                            <option value="6 - 10" >6 - 10</option>
-                            <option value="11 - 14" >11 - 14</option>
-                            <option value="15 - 17" >15 - 17</option>
+                            <option value="0 - 5">0 - 5</option>
+                            <option value="6 - 10">6 - 10</option>
+                            <option value="11 - 14">11 - 14</option>
+                            <option value="15 - 17">15 - 17</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -284,24 +284,31 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <select id="selectArea">
+                        <!-- Dropdown 1 - Hiển thị các Area -->
+                        <select id="selectAreaCreate">
                             <option value="">Chọn khu vực</option>
-                            @{
-                                var find = _dbContext.Areas.ToList();
-                            }
-                            @foreach (var area in find)
+                            @foreach (var area in _dbContext.Areas.ToList())
                             {
                                 <option value="@area.Id">@area.Name</option>
                             }
                         </select>
 
-                        <select id="selectLocation">
-                            <option value="">Chọn địa điểm</option>
-                            <!-- Các option cho Location sẽ được thêm vào đây -->
-                        </select>
+                        <!-- Checkbox 2 - Hiển thị các Location -->
+                        <div id="checkboxLocationCreate" style="display: none;">
+                            <label for="selectLocationCreate">Chọn địa điểm:</label>
+                            <br>
+                            <div id="locationOptionsCreate">
+                                <!-- Các checkbox cho Location sẽ được thêm vào đây -->
+                            </div>
+                        </div>
 
-                        <div id="checkboxOptions">
-                            <!-- Các checkbox cho Address sẽ được thêm vào đây -->
+                        <!-- Checkbox Group - Hiển thị các Address của Location -->
+                        <div id="checkboxAddressCreate" style="display: none;">
+                            <label for="selectedAddresses">Chọn địa chỉ:</label>
+                            <br>
+                            <div id="addressOptionsCreate">
+                                <!-- Các checkbox cho địa chỉ sẽ được thêm vào đây -->
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
