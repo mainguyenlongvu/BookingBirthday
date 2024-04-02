@@ -658,54 +658,54 @@ function TuChoiReport(category_request_id) {
 }
 
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Code JavaScript của bạn ở đây
-    document.getElementById('selectArea').onchange = function () {
-        var areaId = this.value;
-        document.getElementById("checkboxOptions").innerHTML = '';
-        fetch(`/HostPackage/GetLocationsByAreaId?areaId=${areaId}`)
-            .then(response => response.json())
-            .then(data => {
-                var select = document.getElementById("selectLocation");
-                select.innerHTML = '<option value="">Chọn địa điểm</option>';
-                data.forEach(function (item) {
-                    var option = new Option(item.name, item.name); // Sử dụng Name làm value để truy vấn sau này
-                    select.add(option);
-                });
-            }).catch(error => console.error('Error:', error));
-    };
+//document.addEventListener("DOMContentLoaded", function () {
+//    // Code JavaScript của bạn ở đây
+//    document.getElementById('selectArea').onchange = function () {
+//        var areaId = this.value;
+//        document.getElementById("checkboxOptions").innerHTML = '';
+//        fetch(`/HostPackage/GetLocationsByAreaId?areaId=${areaId}`)
+//            .then(response => response.json())
+//            .then(data => {
+//                var select = document.getElementById("selectLocation");
+//                select.innerHTML = '<option value="">Chọn địa điểm</option>';
+//                data.forEach(function (item) {
+//                    var option = new Option(item.name, item.name); // Sử dụng Name làm value để truy vấn sau này
+//                    select.add(option);
+//                });
+//            }).catch(error => console.error('Error:', error));
+//    };
 
-});
+//});
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Code JavaScript của bạn ở đây
-    document.getElementById('selectLocation').onchange = function () {
-        var locationName = this.value;
-        var areaId = document.getElementById('selectArea').value; // Lấy AreaId từ dropdown selectArea
-        fetch(`/HostPackage/GetAddressesByLocationNameAndAreaId?locationName=${encodeURIComponent(locationName)}&areaId=${areaId}`)
-            .then(response => response.json())
-            .then(data => {
-                var checkboxesDiv = document.getElementById("checkboxOptions");
-                checkboxesDiv.innerHTML = ''; // Xóa các checkbox cũ
-                data.forEach(function (item) {
-                    var checkbox = document.createElement('input');
-                    checkbox.type = 'checkbox';
-                    checkbox.id = 'address-' + item.id;
-                    checkbox.value = item.address;
-                    checkbox.name = 'selectedAddresses[]';
+//document.addEventListener("DOMContentLoaded", function () {
+//    // Code JavaScript của bạn ở đây
+//    document.getElementById('selectLocation').onchange = function () {
+//        var locationName = this.value;
+//        var areaId = document.getElementById('selectArea').value; // Lấy AreaId từ dropdown selectArea
+//        fetch(`/HostPackage/GetAddressesByLocationNameAndAreaId?locationName=${encodeURIComponent(locationName)}&areaId=${areaId}`)
+//            .then(response => response.json())
+//            .then(data => {
+//                var checkboxesDiv = document.getElementById("checkboxOptions");
+//                checkboxesDiv.innerHTML = ''; // Xóa các checkbox cũ
+//                data.forEach(function (item) {
+//                    var checkbox = document.createElement('input');
+//                    checkbox.type = 'checkbox';
+//                    checkbox.id = 'address-' + item.id;
+//                    checkbox.value = item.address;
+//                    checkbox.name = 'selectedAddresses[]';
 
-                    var label = document.createElement('label');
-                    label.htmlFor = 'address-' + item.id;
-                    label.textContent = item.address;
+//                    var label = document.createElement('label');
+//                    label.htmlFor = 'address-' + item.id;
+//                    label.textContent = item.address;
 
-                    checkboxesDiv.appendChild(checkbox);
-                    checkboxesDiv.appendChild(label);
-                    checkboxesDiv.appendChild(document.createElement('br'));
-                });
-            }).catch(error => console.error('Error:', error));
-    };
+//                    checkboxesDiv.appendChild(checkbox);
+//                    checkboxesDiv.appendChild(label);
+//                    checkboxesDiv.appendChild(document.createElement('br'));
+//                });
+//            }).catch(error => console.error('Error:', error));
+//    };
 
-});
+//});
 
 document.addEventListener("DOMContentLoaded", function () {
     // Code JavaScript của bạn ở đây
@@ -833,6 +833,85 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('selectArea').onchange = function () {
+        var areaId = this.value;
+        if (areaId) {
+            fetch(`/HostPackage/GetLocationsByAreaId?areaId=${areaId}`)
+                .then(response => response.json())
+                .then(data => {
+                    var locationOptions = document.getElementById("locationOptions");
+                    locationOptions.innerHTML = ''; // Xóa các checkbox cũ
+                    var addressOptions = document.getElementById("addressOptions");
+                    // Xóa các checkbox đã được lọc trước đó
+                    addressOptions.innerHTML = '';
+                    data.forEach(function (item) {
+                        var checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'location-' + item.name.replace(/\s+/g, ''); // Đảm bảo id là duy nhất
+                        checkbox.value = item.name;
+                        checkbox.name = 'selectedLocations[]';
 
+                        var label = document.createElement('label');
+                        label.htmlFor = 'location-' + item.name.replace(/\s+/g, ''); // Đảm bảo id là duy nhất
+                        label.textContent = item.name;
+
+                        locationOptions.appendChild(checkbox);
+                        locationOptions.appendChild(label);
+                        locationOptions.appendChild(document.createElement('br'));
+                    });
+                    // Hiển thị Checkbox 2 sau khi đã có dữ liệu
+                    document.getElementById('checkboxLocation').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    };
+
+    document.getElementById('locationOptions').onclick = function () {
+        var selectedLocations = Array.from(document.querySelectorAll('input[name="selectedLocations[]"]:checked'))
+            .map(checkbox => checkbox.value);
+        if (selectedLocations.length > 0) {
+            var areaId = document.getElementById('selectArea').value;
+            fetch(`/HostPackage/GetAddressesByLocationsAndAreaId`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ locationNames: selectedLocations, areaId: areaId })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    var addressOptions = document.getElementById("addressOptions");
+                    // Xóa các checkbox đã được lọc trước đó
+                    addressOptions.innerHTML = '';
+
+                    data.forEach(function (item) {
+                        var checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = 'address-' + item.id;
+                        checkbox.value = item.address;
+                        checkbox.name = 'selectedAddresses[]';
+
+                        var label = document.createElement('label');
+                        label.htmlFor = 'address-' + item.id;
+                        label.textContent = item.address;
+
+                        addressOptions.appendChild(checkbox);
+                        addressOptions.appendChild(label);
+                        addressOptions.appendChild(document.createElement('br'));
+                    });
+                    // Hiển thị Checkbox Group sau khi đã có dữ liệu
+                    document.getElementById('checkboxAddress').style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+        } else {
+            // Nếu không có location nào được chọn, xóa tất cả các checkbox
+            var addressOptions = document.getElementById("addressOptions");
+            addressOptions.innerHTML = '';
+            // Ẩn Checkbox Group
+            document.getElementById('checkboxAddress').style.display = 'none';
+        }
+    };
+});
 
 

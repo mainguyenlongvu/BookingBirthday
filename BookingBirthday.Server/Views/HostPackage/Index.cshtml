@@ -124,6 +124,7 @@
                                                                         }
                                                                     </select>
                                                                 </div>
+                                                                
                                                                 <div class="form-group">
                                                                     <label>Thể loại</label>
                                                                     <select name="PackageType" class="form-control">
@@ -141,45 +142,56 @@
                                                                     </select>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <select id="selectAreaEdit">
+                                                                    <select id="selectArea">
                                                                         @* <option value="">Chọn khu vực</option> *@
                                                                         @{
                                                                             var areas = _dbContext.Areas.ToList();
-                                                                            var findpackageloction = _dbContext.PackageLocations.FirstOrDefault(x => x.PackageId == item.Id);
-                                                                            var findlocation = _dbContext.Locations.FirstOrDefault(x => x.Id == findpackageloction.LocationId);
-                                                                            var findarea = _dbContext.Areas.FirstOrDefault(x => x.Id == findlocation.AreaId);
-                                                                            var listpackagelocation = _dbContext.PackageLocations.Where(x => x.PackageId == item.Id).ToList();
+                                                                            var findpackageloction = _dbContext.PackageLocations.Where(x => x.PackageId == item.Id).ToList();
                                                                             List<Location> locations = new List<Location>();
-                                                                            foreach (var packagelocation in listpackagelocation)
+                                                                            foreach (var x in findpackageloction)
                                                                             {
-                                                                                // Thực hiện truy vấn để lấy đối tượng Location cụ thể
-                                                                                var check = _dbContext.Locations.FirstOrDefault(x => x.Id == packagelocation.LocationId);
+                                                                                var check = _dbContext.Locations.FirstOrDefault(y => y.Id == x.LocationId);
                                                                                 if (check != null)
                                                                                 {
                                                                                     locations.Add(check);
                                                                                 }
                                                                             }
-
+                                                                            var findlocation = locations.DistinctBy(x=>x.Name);
+                                                                            var findarea = _dbContext.Areas.FirstOrDefault(x => x.Id == locations[0].AreaId);
+                                                                          
                                                                         }
                                                                         @foreach (var a in areas)
                                                                         {
                                                                             <option value="@a.Id" selected="@(a.Id == findarea.Id)">@a.Name</option>
+
                                                                         }
                                                                     </select>
 
-                                                                    <select id="selectLocationEdit">
-                                                                        <option value="@(findlocation.Id)">@(findlocation.Name)</option>
-                                                                        <!-- Các option cho Location sẽ được thêm vào đây -->
+                                                                    <div id="checkboxLocation" style="display: block;">
+                                                                        <label for="selectLocation">Chọn địa điểm:</label>
+                                                                        <br>
+                                                                        <div id="locationOptions">
+                                                                            <!-- Các checkbox cho Location sẽ được thêm vào đây -->
+                                                                            @foreach (var list in findlocation)
+                                                                            {
+                                                                                <input type="checkbox" id="@("checkbox_" + list.Id)" name="selectedAddresses" value="@list.Name" checked />
+                                                                                <label for="@("checkbox_" + list.Id)">@list.Name</label>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
 
-                                                                    </select>
-
-                                                                    <div id="checkboxOptionsEdit">
-                                                                        <!-- Các checkbox cho Address sẽ được thêm vào đây -->
-                                                                        @foreach (var list in locations)
-                                                                        {
-                                                                            <input type="checkbox" id="@("checkbox_" + list.Id)" name="selectedAddresses" value="@list.Address" checked />
-                                                                            <label for="@("checkbox_" + list.Id)">@list.Address</label>
-                                                                        }
+                                                                    <!-- Checkbox Group - Hiển thị các Address của Location -->
+                                                                    <div id="checkboxAddress" style="display: block;">
+                                                                        <label for="selectedAddresses">Chọn địa chỉ:</label>
+                                                                        <br>
+                                                                        <div id="addressOptions">
+                                                                            <!-- Các checkbox cho địa chỉ sẽ được thêm vào đây -->
+                                                                            @foreach (var list in locations)
+                                                                            {
+                                                                                <input type="checkbox" id="@("checkbox_" + list.Id)" name="selectedAddresses" value="@list.Address" checked />
+                                                                                <label for="@("checkbox_" + list.Id)">@list.Address</label>
+                                                                            }
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
@@ -191,7 +203,7 @@
                                                                     <label>Hình ảnh</label>
                                                                     <input class="form-control" name="file" type="file" required />
                                                                 </div>
-                                                            </div>
+                                                            
                                                             <div class="modal-footer">
                                                                 <button type="button" onclick="closeUpdate(@item.Id)" class="btn btn-secondary">Đóng</button>
                                                                 <button type="submit" class="btn btn-success">Sửa</button>
