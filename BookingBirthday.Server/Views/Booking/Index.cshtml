@@ -45,6 +45,22 @@
                     $('#totalDisplay').show();
                 });
             });
+            $(document).ready(function () {
+                $('#LocationNameSelect').change(function () {
+                    var selectedLocationName = $(this).val();
+                    $('#LocationAddressSelect').val('');
+                    $('#LocationAddressSelect option').hide();
+                    $('#LocationAddressSelect option.' + selectedLocationName).show();
+                });
+
+                $('#LocationAddressSelect').change(function () {
+                    var selectedLocationAddress = $(this).val();
+                    // Find the corresponding LocationId based on the selected LocationAddress
+                    var selectedLocationId = $('#LocationAddressSelect option[value="' + selectedLocationAddress + '"]').data('locationid');
+                    // Update the value of the hidden input field with the selected LocationId
+                    $('#LocationId').val(selectedLocationId);
+                });
+            });
         </script>
     }
 }
@@ -171,15 +187,25 @@
                                                         </label>
                                                         <input type="hidden" id="LocationName" name="LocationName" value="">
                                                         <input type="hidden" id="LocationAddress" name="LocationAddress" value="">
+                                                        <input type="hidden" id="LocationId" name="LocationId" value="">
                                                         <div class="mb-3">
                                                             @if (Model != null && Model.PackageLocations != null && Model.PackageLocations.Any())
                                                             {
                                                                 var targetPackageId = Model.Id;
-                                                                var packageLocation = Model.PackageLocations.FirstOrDefault(pl => pl.PackageId == targetPackageId);
-                                                                if (packageLocation != null && packageLocation.Location != null)
+                                                                var distinctLocations = Model.PackageLocations.Where(pl => pl.PackageId == targetPackageId)
+                                                                .Select(pl => pl.Location.Name)
+                                                                .Distinct()
+                                                                .ToList();
+                                                                if (distinctLocations.Any())
                                                                 {
-                                                                    <label class="form-label text-blue" for="LocationName">Địa điểm tổ chức: @packageLocation.Location.Name</label>
-                                                                    <br>
+                                                                    <label class="form-label text-blue" for="LocationName">Địa điểm tổ chức:</label>
+                                                                    <select class="form-select-input form-control" id="LocationNameSelect" name="LocationName">
+                                                                        <option value="">Please choose</option> <!-- Default option -->
+                                                                        @foreach (var locationName in distinctLocations)
+                                                                        {
+                                                                            <option value="@locationName">@locationName</option>
+                                                                        }
+                                                                    </select>
                                                                 }
                                                                 else
                                                                 {
@@ -190,25 +216,30 @@
                                                             {
                                                                 <p>Thông tin gói tiệc không tồn tại</p>
                                                             }
-                                                            <select class="form-select-input form-control" id="LocationId" name="LocationId">
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label text-blue" for="LocationAddress">Địa chỉ tổ chức:</label>
+                                                            <select class="form-select-input form-control" id="LocationAddressSelect" name="LocationAddress">
+                                                                <option value="">Please choose</option> <!-- Default option -->
                                                                 @if (Model.PackageLocations != null && Model.PackageLocations.Count > 0)
                                                                 {
                                                                     foreach (var packageLocation in Model.PackageLocations)
                                                                     {
                                                                         if (packageLocation.Location != null)
                                                                         {
-                                                                            <option value="@packageLocation.Location.Id">
-                                                                                @packageLocation.Location.Address
-                                                                            </option>
+                                                                            <option class="LocationAddressOption @packageLocation.Location.Name" value="@packageLocation.Location.Address" data-locationid="@packageLocation.Location.Id">@packageLocation.Location.Address</option>
                                                                         }
                                                                     }
                                                                 }
                                                                 else
                                                                 {
-                                                                    <p>Địa chỉ tổ chức không tồn tại</p>
+                                                                    <option disabled>No locations available</option>
                                                                 }
                                                             </select>
+
                                                         </div>
+
                                                         <div class="mb-3">
                                                             <label class="form-label text-blue">
                                                                 Thời gian tổ chức
