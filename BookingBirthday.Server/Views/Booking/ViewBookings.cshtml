@@ -14,7 +14,7 @@
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                    <h1 class="display-5 mb-3">Đơn hàng đã đặt</h1>
+                    <h1 class="display-5 mb-3">Đơn tiệc đã đặt</h1>
                 </div>
             </div>
         </div>
@@ -30,55 +30,82 @@
                                 <thead class="table-green">
                                     <tr>
                                         <th>Thứ tự</th>
-                                        <th style="white-space: normal;">Mã đơn hàng</th>
-                                        <th>Số điện thoại</th>
+                                        <th>Mã đơn hàng</th>
+                                        <th>Tên chủ tiệc</th>
+                                        <th>Địa điểm tổ chức</th>
                                         <th>Địa chỉ tổ chức</th>
-                                        <th>Ngày đặt hàng</th>
-                                        <th>Thời gian tiệc diễn ra</th>
-                                        <th>Thời gian hủy tiệc</th>
                                         <th>Tổng tiền</th>
                                         <th>Ghi chú</th>
-                                        <th colspan="2">Lý do hủy đơn của chủ tiệc</th>
                                         <th>Trạng thái</th>
-                                        @* <th>Đánh giá</th> *@
+                                        <th>Lịch sử đặt tiệc</th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                     @foreach (var item in Model)
                                     {
                                         <tr>
                                             <td>@(stt++)</td>
                                             <td>
-                                                @* @foreach (var package in _dbContext.BookingPackages)
+                                                @foreach (var booking in _dbContext.Bookings)
                                                 {
-                                                    if (package.BookingId == item.Id)
+                                                    if (booking.Id == item.Id)
                                                     {
-                                                        <label style="width: auto"> <a href="@("/Package/Show?Id="+ package.PackageId)">@CreateMD5Short.MD5Short(item.Id.ToString())</a> </label>
-                                                } *@
-                                        }
-                                            </td>
-                                            <td>
-                                                <label style="width: auto">@item.Phone</label>
-                                            </td>
-                                            <td>
-                                                <label style="width: auto">@item.Date_order</label>
-                                            </td>
-                                            <td>
-                                                <label style="width: auto">@item.Date_start</label>
-                                            </td>
-                                            <td>
-                                                @if (item.Date_cancel != default(DateTime))
-                                                {
-                                                    <label style="width: auto">@item.Date_cancel</label>
+                                                        <label style="width: auto">
+                                                            <a href="@("/Package/Show?Id="+ booking.PackageId)">@CreateMD5Short.MD5Short(booking.PackageId.ToString())</a>
+                                                        </label>
+                                                    }
                                                 }
                                             </td>
-
+                                            <td>
+                                                <label style="width: auto">
+                                                    @{
+                                                        var package = _dbContext.Packages.FirstOrDefault(p => p.Id == item.PackageId);
+                                                        if (package != null)
+                                                        {
+                                                            @package.Host_name
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>No Host Available</span>
+                                                        }
+                                                    }
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">
+                                                    @{
+                                                        var location = _dbContext.Locations.FirstOrDefault(l => l.Bookings.Any(b => b.Id == item.Id));
+                                                        if (location != null)
+                                                        {
+                                                            @location.Name
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Địa điểm tổ chức không tồn tại</span>
+                                                        }
+                                                    }
+                                                </label>
+                                            </td>
+                                            <td>
+                                                <label style="width: auto">
+                                                    @{
+                                                        var locationAddress = _dbContext.Locations.FirstOrDefault(l => l.Bookings.Any(b => b.Id == item.Id));
+                                                        if (locationAddress != null)
+                                                        {
+                                                            @locationAddress.Address
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>Địa chỉ tổ chức không tồn tại</span>
+                                                        }
+                                                    }
+                                                </label>
+                                            </td>
                                             <td>
                                                 <label style="width: auto">@Convert.ToDouble(item.Total).ToString("#,##0")</label>
                                             </td>
                                             <td>
                                                 <label style="width: auto">@item.Note</label>
-                                            </td>
-                                            <td>
-                                                <label style="width: auto">@item.Reason</label>
                                             </td>
                                             <td>
                                                 @if (@item.BookingStatus == "Declined")
@@ -98,9 +125,10 @@
                                                     <label style="width: auto">Đã xác nhận</label>
                                                 }
                                             </td>
-                                            
                                             <td>
-                                                @* <a class="btn btn-primary" onclick="detailOrder(@item.Id)">Chi tiết</a> *@
+                                                <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.Reason')">Xem</button>
+                                            </td>
+                                            <td>
                                                 @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
                                                 {
                                                     <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
@@ -136,25 +164,6 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderModalLabel">Chi tiết đơn hàng</h5>
-            </div>
-            <div class="modal-body">
-                <!-- Nội dung chi tiết đơn hàng -->
-                <h4>Tên sản phẩm</h4>
-                <p>Mô tả sản phẩm</p>
-                <p>Giá sản phẩm:</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     // Get the button element
@@ -167,4 +176,34 @@
         // Redirect to the RemainingPayment page with bookingId and userId parameters
         window.location.href = "/Booking/Payment?bookingId=" + BookingId + "&userId=" + userId;
     });
+</script>
+
+<!-- Modal for displaying booking history -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="bookingHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookingHistoryModalLabel">Lịch sử đặt tiệc</h5>
+            </div>
+            <div class="modal-body">
+                <p><strong>Thời gian đặt tiệc:</strong> <span id="bookingOrderTime"></span></p>
+                <p><strong>Thời gian tổ chức:</strong> <span id="bookingStartTime"></span></p>
+                <p><strong>Thời gian hủy tiệc:</strong> <span id="bookingCancelTime"></span></p>
+                <p><strong>Lý do hủy của chủ tiệc:</strong> <span id="bookingCancelReason"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showBookingHistory(orderTime, startTime, cancelTime, cancelReason) {
+        $('#bookingOrderTime').text(orderTime);
+        $('#bookingStartTime').text(startTime);
+        $('#bookingCancelTime').text(cancelTime ? cancelTime : 'Không có');
+        $('#bookingCancelReason').text(cancelReason ? cancelReason : 'Không có');
+        $('#orderModal').modal('show');
+    }
 </script>
