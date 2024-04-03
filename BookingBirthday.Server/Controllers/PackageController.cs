@@ -23,6 +23,7 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult Show(int id)
         {
             int userId;
+            HttpContext.Session.SetString("packageid", id.ToString());
             var userIdSession = HttpContext.Session.GetString("user_id");
             if (userIdSession == null)
             {
