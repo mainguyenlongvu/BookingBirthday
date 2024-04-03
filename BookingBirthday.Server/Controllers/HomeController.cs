@@ -138,6 +138,24 @@ namespace BookingBirthday.Server.Controllers
         [HttpGet]
         public IActionResult FilterPackages(string category, string details)
         {
+            if (category == "all")
+            {
+                // Reset the partial view by returning the original view without filtering
+                return PartialView("PackageList", _dbContext.Packages
+                    .Select(p => new PackageModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Detail = p.Detail,
+                        Price = p.Price,
+                        Note = p.Note,
+                        image_url = p.image_url,
+                        Host_name = p.Host_name,
+                        Status = p.Status,
+                        UserId = p.UserId,
+                    }).ToPagedList(1, 8)); // Assuming default page number is 1 and page size is 8
+            }
+
             IQueryable<Package> filteredPackages = _dbContext.Packages;
 
             if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(details))
@@ -170,7 +188,6 @@ namespace BookingBirthday.Server.Controllers
                             .Select(x => x.Package)
                             .Distinct();
                         break;
-
                 }
             }
 
@@ -194,6 +211,5 @@ namespace BookingBirthday.Server.Controllers
 
             return PartialView("PackageList", filteredPackageModels);
         }
-
     }
 }
