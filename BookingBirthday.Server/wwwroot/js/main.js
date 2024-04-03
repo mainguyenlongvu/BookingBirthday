@@ -243,6 +243,11 @@ function closeUpdate(id) {
 function closeModal() {
     $('#orderModal').modal('hide');
 }
+
+function closeGuestModal() {
+    $('#guestInformationModal').modal('hide');
+}
+
 function openUpdate(id) {
     $('#update' + id).modal('show');
 }

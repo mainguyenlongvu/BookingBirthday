@@ -69,14 +69,15 @@
                         //@await Html.PartialAsync("_NotificationPartial")
 
                         @await Html.PartialAsync("_BookingPartial")
+                        <a href="/Booking/ViewBookings" class="nav-link">Đơn hàng</a>
 
-                        <div class="nav-item dropdown">
+                        @* <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dịch vụ</a>
                             <div class="dropdown-menu m-0">
                                  <a href="/GuestRequest" class="dropdown-item">Yêu cầu</a>
                                 <a href="/GuestReport" class="dropdown-item">Khiếu nại</a>
                             </div>
-                        </div>
+                        </div> *@
                     }
 
                     @if (Context.Session.GetString("role") == "Admin")
@@ -88,7 +89,7 @@
                                 <a href="/AdminPackage" class="dropdown-item">Quản lí bữa tiệc</a>
                                 <a href="/AdminBooking" class="dropdown-item">Quản lí đơn hàng</a>
                                 <a href="/AdminUser" class="dropdown-item">Quản lí người dùng</a>
-                                <a href="/AdminReport" class="dropdown-item">Quản lí khiếu nại</a>
+                                <a href="/AdminLocation" class="dropdown-item">Quản lí địa điểm</a>
                                 </div>
                             </div>
                     }
@@ -100,7 +101,7 @@
                                 <div class="dropdown-menu m-0">
                                 <a href="/HostPackage" class="dropdown-item">Quản lí bữa tiệc</a>
                                     <a href="/HostBooking" class="dropdown-item">Quản lí đơn hàng</a>
-                                    <a href="/HostRequest" class="dropdown-item">Quản lí yêu cầu</a>
+                                <a href="/HostTheme" class="dropdown-item">Quản lí chủ đề</a>
                                 </div>
                             </div>
                     }
@@ -119,10 +120,9 @@
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tài khoản</a>
                                 <div class="dropdown-menu m-0">
                                     <a href="/Account/Profile" class="dropdown-item">Thông tin tài khoản</a>
-                                @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
+                                @* @if (Context.Session.GetString("role") != "Admin" && Context.Session.GetString("role") != "Host")
                                 {
-                                    <a href="/Booking/ViewBookings" class="dropdown-item">Đơn hàng</a>
-                                }
+                                } *@
                                     <a href="/Account/Logout" class="dropdown-item">Đăng xuất</a>
                                 </div>
                             </div>

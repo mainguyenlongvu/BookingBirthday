@@ -2,10 +2,8 @@
 
 INSERT INTO [User] (Name, Gender, DateOfBirth, Username, Password, Email, Phone, Address, Image_url, Role, Status) VALUES
 ('Admin', 'Nam', '2000-01-01', 'admin12345', '25d55ad283aa400af464c76d713c07ad', 'admin@gmail.com', '0123456789', 'abc', '/imgProfile/avatar.png', 'Admin', 'Active'),
-('Guest', N'Nữ', '2000-01-01', 'guest12345', '25d55ad283aa400af464c76d713c07ad', 'example123@gmail.com', '9876543210', 'abc', '/imgProfile/avatar.png', 'Guest', 'Active'),
-('Host', 'Nam', '2000-01-01', 'host12345', '25d55ad283aa400af464c76d713c07ad', 'demo5678@gmail.com', '1122334455', 'abc', '/imgProfile/avatar.png', 'Host', 'Active');
-
-
+('Guest', N'Nữ', '2000-01-01', 'guest12345', '25d55ad283aa400af464c76d713c07ad', 'example123@gmail.com', '0987654321', 'abc', '/imgProfile/avatar.png', 'Guest', 'Active'),
+('Host', 'Nam', '2000-01-01', 'host12345', '25d55ad283aa400af464c76d713c07ad', 'demo5678@gmail.com', '0122334455', 'abc', '/imgProfile/avatar.png', 'Host', 'Active');
 
 INSERT INTO [Area] (Name) VALUES
 (N'Quận 1'),
@@ -200,15 +198,24 @@ INSERT INTO [Location] (Name, Address, AreaId, Status) VALUES
 (N'Popeyes', N'89 Hiệp Bình, Phường Hiệp Bình Chánh, Quận Thủ Đức, Thành phố Hồ Chí Minh', 19, 'Active'),
 (N'Popeyes', N'303 Võ Văn Ngân, Phường Linh Chiểu, Quận Thủ Đức, Thành phố Hồ Chí Minh', 19, 'Active')
 
-
-
 INSERT INTO Theme ([Name] ,[UserId] ,[Status]) Values
 (N'Pikachu',3,N'Active'),
 (N'Doraemon',3,N'Active'),
 (N'Hello Kitty',3,N'Active'),
+(N'Chuột Minnie',3,N'Active'),
+(N'Công Chúa',3,N'Active'),
+(N'Frozen',3,N'Active'),
+(N'Tiên Cá',3,N'Active'),
+(N'Kỳ Lân',3,N'Active'),
+(N'Cup Head',3,N'Active'),
 (N'Minion',3,N'Active'),
-(N'Super Car',3,N'Active'),
-(N'Khủng long',3,N'Active'),
-(N'Phù thủy',3,N'Active')
+(N'Minecraft',3,N'Active'),
+(N'Roblox',3,N'Active'),
+(N'Avengers',3,N'Active'),
+(N'Khủng Long',3,N'Active'),
+(N'Superman',3,N'Active'),
+(N'Spiderman',3,N'Active'),
+(N'Phù Thủy',3,N'Active'),
+(N'Liên Hệ',3,N'Active')
 
 
