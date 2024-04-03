@@ -11,10 +11,9 @@
     var areaNames = _dbContext.Areas.Select(a => a.Name).ToList();
     var themeNames = _dbContext.Themes.Select(t => t.Name).ToList();
 }
-<div class="row">
-    <div class="col">
+<div class="d-flex flex-row">
         <!-- First Selection Box -->
-        <select id="category">
+        <select id="category" class="form-select" style="width: auto;">
             <option value="all" selected>Tất cả</option>
             <option value="gender">Giới tính</option>
             <option value="area">Khu vực</option>
@@ -24,13 +23,12 @@
         </select>
 
         <!-- Second Selection Box (Initially Hidden) -->
-        <select id="details">
+    <select id="details" class="form-select mx-3" style="width: auto;">
             <option value="all" selected>Tất cả</option>
         </select>
 
         <!-- Filter Button -->
-        <button id="filterButton" style="width: 50px;">Lọc</button>
-    </div>
+        <button id="filterButton" style="width: 90px;" class="btn-primary">Lọc</button>
 </div>
 <div id="productListContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
     @if (Model.Count() > 0)
@@ -43,7 +41,7 @@
                 <div class="col wow fadeInUp" data-wow-delay="@(delay + "s")">
                     <div class="product-item">
                         <div class="position-relative bg-light overflow-hidden mt-2">
-                            <img class="img-fluid w-100" style="height:300px; width: 300px;" src="@item.image_url" alt="">
+                            <img class="img-fluid w-100" style="height:300px; width: 300px; object-fit: cover;" src="@item.image_url" alt="">
                         </div>
                         <div class="text-center p-4">
                             <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
@@ -72,6 +70,14 @@
         <p>Không có bữa tiệc nào</p>
     }
 </div>
+<ul class="pagination mt-5">
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <li class="pagination-item">
+            <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+        </li>
+    }
+</ul>
 <script>
     // Function to populate the details selection box based on the category selected
     function populateDetails(category) {
@@ -82,10 +88,10 @@
             case 'gender':
                 detailsSelect.style.display = 'inline'; // Show the details selection box
                 detailsSelect.innerHTML = `
-                                                <option value="Nam">Nam</option>
-                                                <option value="Nữ">Nữ</option>
-                                                    <option value="Nam & Nữ">Nam & Nữ</option>
-                                            `;
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                        <option value="Nam & Nữ">Nam & Nữ</option>
+                                                `;
                 break;
             case 'area':
                 detailsSelect.style.display = 'inline'; // Show the details selection box
@@ -93,15 +99,15 @@
     {
         <text>detailsSelect.innerHTML += '<option value="@areaName">@areaName</option>'; </text>
     }
-                                            break;
+                                                break;
             case 'age':
                 detailsSelect.style.display = 'inline'; // Show the details selection box
                 detailsSelect.innerHTML = `
-                                                <option value="0 - 5">0 - 5</option>
-                                                <option value="6 - 10">6 - 10</option>
-                                                <option value="11 - 14">11 - 14</option>
-                                                <option value="15 - 17">15 - 17</option>
-                                            `;
+                                                    <option value="0 - 5">0 - 5</option>
+                                                    <option value="6 - 10">6 - 10</option>
+                                                    <option value="11 - 14">11 - 14</option>
+                                                    <option value="15 - 17">15 - 17</option>
+                                                `;
                 break;
             case 'theme':
                 detailsSelect.style.display = 'inline'; // Show the details selection box
@@ -109,14 +115,14 @@
     {
         <text>detailsSelect.innerHTML += '<option value="@themeName">@themeName</option>'; </text>
     }
-                                            break;
+                                                break;
             case 'packageType':
                 detailsSelect.style.display = 'inline'; // Show the details selection box
                 detailsSelect.innerHTML = `
-                                                    <option value="Cơ bản">Cơ bản</option>
-                                                    <option value="Cao cấp">Cao cấp</option>
-                                                    <option value="Đặc biệt">Đặc biệt</option>
-                                            `;
+                                                        <option value="Cơ bản">Cơ bản</option>
+                                                        <option value="Cao cấp">Cao cấp</option>
+                                                        <option value="Đặc biệt">Đặc biệt</option>
+                                                `;
                 break;
             default:
                 detailsSelect.style.display = 'none'; // Hide the details selection box if none of the above

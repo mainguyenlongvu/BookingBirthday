@@ -171,35 +171,23 @@ namespace BookingBirthday.Server.Controllers
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start != null)
+                    if (request.Date_start < DateTime.Now)
                     {
-                        booking.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Không được để trống thời gian tiệc diễn ra";
+                        TempData["Message"] = "Thời gian tổ chức không được ở quá khứ";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start > DateTime.Now)
+                    if (request.Date_start > DateTime.Now.AddYears(1))
                     {
-                        booking.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Thời gian tiệc diễn ra sai";
+                        TempData["Message"] = "Thời gian tổ chức không thể vượt quá 1 năm từ ngày hiện tại";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start <= DateTime.Now.AddYears(1))
+                    if (request.Date_start.TimeOfDay < new TimeSpan(9, 0, 0) || request.Date_start.TimeOfDay > new TimeSpan(21, 0, 0))
                     {
-                        booking.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Thời gian tiệc diễn ra không thể vượt quá 1 năm từ ngày hiện tại";
+                        TempData["Message"] = "Thời gian tổ chức phải từ 9:00 AM đến 9:00 PM";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
