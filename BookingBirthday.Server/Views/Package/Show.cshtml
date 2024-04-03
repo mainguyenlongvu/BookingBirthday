@@ -35,26 +35,76 @@
                             <div class="col-md-6">
                                 <img src="@Model.image_url" alt="@Model.Name" class="img-fluid">
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
                                 <h3>@Model.Name</h3>
                                 <label style="width: auto">
                                     <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
                                 </label>
-                                <p>Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng</p>
+                                <p style="margin-top: 1rem;">Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng/bé</p>
+                                <p>Độ tuổi: @Model.Age</p>
+                                <p>Giới tính: @Model.Gender</p>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="margin-bottom: 1rem;">Địa điểm tổ chức: </label>
+                                    <select class="form-control" style="width: auto;" id="locationNameDropdown" onchange="populateAddressDropdown()">
+                                        @foreach (var locationName in Model.LocationNames)
+                                        {
+                                            <option>@locationName</option>
+                                        }
+                                    </select>
+                                    @{
+                                        var locationData = new Dictionary<string, List<string>>();
+                                        foreach (var locationName in Model.LocationNames)
+                                        {
+                                            var addresses = new List<string>();
+                                            foreach (var packageLocation in Model.PackageLocations)
+                                            {
+                                                if (packageLocation.Location.Name == locationName && !addresses.Contains(packageLocation.Location.Address))
+                                                {
+                                                    addresses.Add(packageLocation.Location.Address);
+                                                }
+                                            }
+                                            locationData[locationName] = addresses;
+                                        }
+                                        var jsonLocationData = Newtonsoft.Json.JsonConvert.SerializeObject(locationData);
+                                    }
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <label style="margin-bottom: 1rem;">Địa chỉ tổ chức: </label>
+                                    <select class="form-control" style="width: auto;" id="locationAddressDropdown"></select>
+                                </div>
                                 @if (role != "Admin" && role != "Host")
                                 {
-                                    <a class="text-body" class="btn btn-primary" asp-route="AddToBooking" asp-route-productid="@Model.Id"><i class="fa fa-shopping-bag text-primary me-2"></i>Đặt tiệc</a>
+                                    <a class="text-body" class="btn btn-primary" asp-route="AddToBooking" asp-route-productid="@Model.Id"><i class="fa fa-gift" aria-hidden="true"></i> Đặt tiệc</a>
                                 }
-                                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
-                                    <h2 class="display-5 mb-3">Mô Tả</h2>
-                                </div>
-                                @Html.Raw(Model.Detail)
-                                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
-                                    <h2 class="display-5 mb-3">Chú ý:</h2>
-                                    <br />
-                                    <label>@Model.Note</label>
-                                </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                <h2 class="display-5 mb-3">Mô tả</h2>
+            </div>
+            <div class="row">
+                <div class="container">
+                    <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="px-5 pt-3">
+                            @Html.Raw(Model.Detail)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                <h2 class="display-5 mb-3">Chú ý</h2>
+            </div>
+            <div class="row">
+                <div class="container">
+                    <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+                        <div class="px-5 pt-3">
+                            <label>@Model.Note</label>
                         </div>
                     </div>
                 </div>
@@ -63,7 +113,7 @@
         <div class="container">
             <!-- Reviews -->
             <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
-                <h2 class="display-5 mb-3">Rating</h2>
+                <h2 class="display-5 mb-3">Đánh giá</h2>
             </div>
             <div class="row">
                 <div class="container mb-5">
@@ -118,7 +168,7 @@
                                     <h5>Thời gian</h5>
                                 </div>
                             </div>
-                         
+
                             <!-- Review -->
                             @foreach (var item in ViewBag.Review)
                             {
@@ -209,3 +259,26 @@
     </section>
 </div>
 </div>
+
+<script>
+    var locationData = @Html.Raw(jsonLocationData);
+
+    function populateAddressDropdown() {
+        var selectedName = document.getElementById("locationNameDropdown").value;
+        var addressDropdown = document.getElementById("locationAddressDropdown");
+        addressDropdown.innerHTML = "";
+
+        // Get addresses based on selected name
+        var addresses = locationData[selectedName];
+
+        // Populate address dropdown
+        addresses.forEach(function (address) {
+            var option = document.createElement("option");
+            option.text = address;
+            addressDropdown.add(option);
+        });
+    }
+
+    // Set default selected name and populate address dropdown
+    populateAddressDropdown();
+</script>
