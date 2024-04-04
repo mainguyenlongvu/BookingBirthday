@@ -5,6 +5,25 @@
 @using System.Text.Json.Serialization
 @using X.PagedList.Mvc.Core
 @inject IHttpContextAccessor HttpContextAccessor
+@functions {
+    string ConvertToUnorderedList(string detail)
+    {
+        if (string.IsNullOrEmpty(detail))
+            return string.Empty;
+
+        var items = detail.Split('.').Where(item => !string.IsNullOrWhiteSpace(item)).Select(item => item.Trim());
+        if (!items.Any())
+            return string.Empty;
+
+        var ulHtml = "<ul>";
+        foreach (var item in items)
+        {
+            ulHtml += $"<li>{item}</li>";
+        }
+        ulHtml += "</ul>";
+        return ulHtml;
+    }
+}
 @inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "QL_SanPham Page";
@@ -46,35 +65,74 @@
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên bữa tiệc</th>
-                                    <th>Mô tả</th>
-                                    <th>Chú ý</th>
                                     <th>Hình ảnh</th>
-                                    <th>Giá</th>
+                                    <th>Tên bữa tiệc</th>
+                                    <th>Tên chủ tiệc</th>
+                                    <th>Địa điểm/địa chỉ tổ chức</th>
+                                    <th>Giá (đồng/bé)</th>
+                                    <th>Độ tuổi</th>
+                                    <th>Giới tính</th>
+                                    <th>Mô tả</th>
+                                    <th>Lưu ý</th>
                                     <th></th>
                                 </tr>
                                 @foreach (var item in Model)
                                 {
 
                                     <tr>
-                                        <td>@(stt++)</td>
+                                        <td>
+                                            @foreach (var booking in _dbContext.Bookings)
+                                            {
+                                                if (booking.Id == item.Id)
+                                                {
+                                                    <label style="width: auto">
+                                                        <a href="@("/Package/Show?Id="+ booking.PackageId)">@(stt++)</a>
+                                                    </label>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href="#" onclick="showImage('@item.image_url')">
+                                                <i class="fa fa-eye text-primary me-2"></i>
+                                            </a>
+                                        </td>
                                         <td>
                                             <label style="width: auto">@item.Name</label>
                                         </td>
-
                                         <td>
-                                            <label style="width: auto">
-                                                <span class="Detail">@Html.Raw(item.Detail)</span>
-                                            </label>
+                                            <label style="width: auto">@item.Host_name</label>
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (item.Locations != null && item.Locations.Any())
+                                                {
+                                                    <ul>
+                                                        @foreach (var location in item.Locations)
+                                                        {
+                                                            <li>@location.Name: @location.Address</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <span>Địa điểm tổ chức không tồn tại</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0")</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Age</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@item.Gender</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Detail))</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
-                                        </td>
-                                        <td>
-                                            <img style="width: 30%" src="@item.image_url" />
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0") đồng/bé</label>
                                         </td>
                                         <td>
                                             <a class="btn btn-primary" onclick="xoaProduct(@item.Id)">Xóa</a>
@@ -342,5 +400,29 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="guestInformationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="guestInformationModalLabel">Hình ảnh chi tiết</h5>
+            </div>
+            <div class="modal-body">
+                <img id="guestImage" src="" style="width: 300px; height: 300px;" alt="Guest Image">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    function showImage(imageUrl) {
+        // Set the image source
+        $('#guestImage').attr('src', imageUrl);
+        // Show the modal
+        $('#orderModal').modal('show');
+    }
+</script>
 

@@ -28,5 +28,6 @@ namespace BookingBirthday.Server.Models
         public List<PackageLocation> PackageLocations { get; set; }
         public List<string> LocationNames { get; set; }
         public List<string> LocationAddresses { get; set; }
+        public List<Location> Locations {  get; set; }
     }
 }
