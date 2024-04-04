@@ -4851,8 +4851,8 @@ textarea.form-control-lg {
     }
 
 .alert-warning {
-    position: fixed;
-    width: 300px;
+
+    width: 400px;
     color: white;
     background-color: red;
     padding: 1rem 3rem;
