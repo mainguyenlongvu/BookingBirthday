@@ -12,8 +12,14 @@
     DateTime defaultDate = new DateTime(0001, 1, 1); // Ngày mặc định (1/1/0001)
 
 }
-
-
+<style>
+    .background-image {
+        background-image: url('img/bookingbackground.png');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+    }
+</style>
 @await Html.PartialAsync("response")
 
 <div class="container-xxl py-5" style="margin-top: 100px">
