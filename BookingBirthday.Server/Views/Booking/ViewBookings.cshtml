@@ -37,6 +37,7 @@
                                         <th>Tổng tiền</th>
                                         <th>Ghi chú</th>
                                         <th>Trạng thái</th>
+                                        <th>Thông tin chi tiết</th>
                                         <th>Lịch sử đặt tiệc</th>
                                         <th></th>
                                         <th></th>
@@ -126,19 +127,28 @@
                                                 }
                                             </td>
                                             <td>
+                                                @foreach (var guest in _dbContext.Users)
+                                                {
+                                                    if (guest.Id == item.UserId)
+                                                    {
+                                                        <button type="button" class="btn btn-primary" onclick="showGuestInformation('@guest.Name', '@guest.Phone', '@guest.Email', '@item.ChildName', '@item.ChildDateOfBirth', '@item.ChildGender', '@item.ChildNumber')">Xem</button>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
                                                 <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.CheckIn', '@item.CheckOut', '@item.Reason')">Xem</button>
                                             
                                             </td>
                                             <td>
                                                 @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
                                                 {
-                                                    <a class="btn btn-warning" onclick="huydonhang(@item.Id)">Hủy đơn</a>
+                                                    <button class="btn btn-secondary" onclick="huydonhang(@item.Id)" style="width: max-content">Hủy đơn</button>
                                                 }
                                             </td>
                                             <td>
                                                 @if (@item.BookingStatus == "Accepted")
                                                 {
-                                                    <a class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId">Tất toán</a>
+                                                    <button class="btn btn-warning" id="remainingPaymentBtn" data-bookingId="@item.Id" data-userId="@item.UserId" style="width: max-content">Tất toán</button>
                                                 }
                                             </td>
                                         </tr>
@@ -211,4 +221,47 @@
         $('#bookingCancelReason').text(cancelReason ? cancelReason : 'Không có');
         $('#orderModal').modal('show');
     }
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="guestInformationModal" tabindex="-1" role="dialog" aria-labelledby="guestInformationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="guestInformationModalLabel">Thông tin khách hàng</h5>
+            </div>
+            <div class="modal-body">
+                <p><strong>Thông tin phụ huynh</strong></p>
+                <p><strong>Tên phụ huynh:</strong> <span id="guestName"></span></p>
+                <p><strong>Số điện thoại:</strong> <span id="guestPhone"></span></p>
+                <p><strong>Email:</strong> <span id="guestEmail"></span></p>
+            </div>
+
+            <div class="modal-body">
+                <p><strong>Thông tin của bé</strong></p>
+                <p><strong>Họ và tên:</strong> <span id="guestChildName"></span></p>
+                <p><strong>Ngày sinh:</strong> <span id="guestChildDateOfBirth"></span></p>
+                <p><strong>Giới tính:</strong> <span id="guestChildGender"></span></p>
+                <p><strong>Số lượng bé tham gia:</strong> <span id="guestChildNumber"></span></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeGuestModal()">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<<script>
+     // 'Name', 'Phone', 'Email', 'ChildName', 'ChildDateOfBirth', 'ChildGender', 'ChildNumber'
+     function showGuestInformation(name, phone, email, childName, childDateOfBirth, childGender, childNumber) {
+         $('#guestName').text(name);
+         $('#guestPhone').text(phone);
+         $('#guestEmail').text(email);
+         $('#guestChildName').text(childName);
+         $('#guestChildDateOfBirth').text(childDateOfBirth);
+         $('#guestChildGender').text(childGender);
+         $('#guestChildNumber').text(childNumber);
+         $('#guestInformationModal').modal('show');
+     }
 </script>

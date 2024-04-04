@@ -37,24 +37,31 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            var products = from a in _dbContext.Packages   select new { a };
+            var products = _dbContext.Packages
+                    .Include(p => p.PackageLocations)
+                        .ThenInclude(pl => pl.Location)
+                    .ToList();
             if (products != null)
             {
-                var lstProducts = products.OrderByDescending(x => x.a.Id).Select(x => new PackageModel()
+                var lstProducts = products.OrderByDescending(x => x.Id).Select(x => new PackageModel()
                 {
-                    Id = x.a.Id,
-                    Name = x.a.Name,
-                    Detail = x.a.Detail,
-                    Price = x.a.Price,
-                    Note = x.a.Note,
-                    Host_name = x.a.Host_name,
-                    image_url = x.a.image_url,
-                    PackageType = x.a.PackageType,
-                    PackageLocations = x.a.PackageLocations,
-                    ThemeId = x.a.ThemeId,
-                    Gender = x.a.Gender,
-                    Status = x.a.Status,
-                    UserId = x.a.UserId,
+                    Id = x.Id,
+                    Name = x.Name,
+                    Detail = x.Detail,
+                    Price = x.Price,
+                    Note = x.Note,
+                    Host_name = x.Host_name,
+                    image_url = x.image_url,
+                    PackageType = x.PackageType,
+                    PackageLocations = x.PackageLocations,
+                    ThemeId = x.ThemeId,
+                    Gender = x.Gender,
+                    Age = x.Age,
+                    Theme = x.Theme,
+                    Status = x.Status,
+                    UserId = x.UserId,
+                    Locations = x.PackageLocations.Select(pl => pl.Location).ToList(),
+
                 }).ToList();
                 int pageSize = 8;
                 int pageNumber = page == null || page < 0 ? 1 : page.Value;

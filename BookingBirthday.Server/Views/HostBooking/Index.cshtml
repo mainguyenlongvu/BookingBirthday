@@ -19,9 +19,27 @@
 <div class="container-xxl py-5" style="margin-top: 100px">
     <div class="container">
         <div class="row g-0 gx-5 align-items-end">
-            <div class="col-lg-6">
+            <div class="d-flex justify-content-between">
                 <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                     <h1 class="display-5 mb-3">Quản lí đơn hàng</h1>
+                </div>
+                <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                    @{
+                        double doanhThu = 0;
+
+                        foreach (var item in Model)
+                        {
+                            if (item.BookingStatus == "Paid")
+                            {
+                                doanhThu += item.Total;
+                            }
+                            else if (item.BookingStatus == "Accepted" || item.BookingStatus == "Processing")
+                            {
+                                doanhThu += item.Total / 2;
+                            }
+                        }
+                    }
+                    <h1 class="display-5 mb-3">Doanh thu: @Convert.ToDouble(doanhThu).ToString("#,##0")</h1>
                 </div>
             </div>
         </div>
@@ -37,12 +55,12 @@
                                 <tr>
                                     <th>Thứ tự</th>
                                     <th>Mã đơn hàng</th>
-                                    <th>Thông tin khách hàng</th>
                                     <th>Địa điểm tổ chức</th>
                                     <th>Địa chỉ tổ chức</th>
-                                    <th>Tổng tiền: đồng</th>
+                                    <th>Tổng tiền (đồng)</th>
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
+                                    <th>Thông tin khách hàng</th>
                                     <th>Lịch sử đặt tiệc</th>
                                     <th></th>
                                 </tr>
@@ -59,15 +77,6 @@
                                                     <label style="width: auto">
                                                         <a href="@("/Package/Show?Id="+ booking.PackageId)">@CreateMD5Short.MD5Short(booking.PackageId.ToString())</a>
                                                     </label>
-                                                }
-                                            }
-                                        </td>
-                                        <td>
-                                            @foreach (var guest in _dbContext.Users)
-                                            {
-                                                if (guest.Id == item.UserId)
-                                                {
-                                                    <button type="button" class="btn btn-primary" onclick="showGuestInformation('@guest.Name', '@guest.Phone', '@guest.Email', '@item.ChildName', '@item.ChildDateOfBirth', '@item.ChildGender', '@item.ChildNumber')">Xem</button>
                                                 }
                                             }
                                         </td>
@@ -127,12 +136,21 @@
                                             }
                                         </td>
                                         <td>
+                                            @foreach (var guest in _dbContext.Users)
+                                            {
+                                                if (guest.Id == item.UserId)
+                                                {
+                                                    <button type="button" class="btn btn-primary" onclick="showGuestInformation('@guest.Name', '@guest.Phone', '@guest.Email', '@item.ChildName', '@item.ChildDateOfBirth', '@item.ChildGender', '@item.ChildNumber')">Xem</button>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
                                             <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.CheckIn', '@item.CheckOut', '@item.Reason')">Xem</button>
                                         </td>
                                         <td>
                                             @if (@item.BookingStatus == "Processing")
                                             {
-                                                <a class="btn btn-primary" onclick="DuyetDon(@item.Id)">Đồng ý</a>
+                                                <a class="btn btn-primary" onclick="DuyetDon(@item.Id)" style="border-radius: 30px; margin-bottom: 10px;>Đồng ý</a>
                                                 <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
                                             }
                                             @if (@item.BookingStatus == "Accepted")
