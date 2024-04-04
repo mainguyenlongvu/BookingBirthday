@@ -2,6 +2,26 @@
 @using Newtonsoft.Json
 @inject IHttpContextAccessor HttpContextAccessor
 @inject BookingBirthday.Data.EF.BookingDbContext _dbContext
+@* Function to convert string to unordered list *@
+@functions {
+    string ConvertToUnorderedList(string detail)
+    {
+        if (string.IsNullOrEmpty(detail))
+            return string.Empty;
+
+        var items = detail.Split('.').Where(item => !string.IsNullOrWhiteSpace(item)).Select(item => item.Trim());
+        if (!items.Any())
+            return string.Empty;
+
+        var ulHtml = "<ul>";
+        foreach (var item in items)
+        {
+            ulHtml += $"<li>{item}</li>";
+        }
+        ulHtml += "</ul>";
+        return ulHtml;
+    }
+}
 @{
     ViewData["Title"] = "Detail Product Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -70,7 +90,7 @@
                                 </div>
                                 <div style="margin-bottom: 1rem;">
                                     <label style="margin-bottom: 1rem;">Địa chỉ tổ chức: </label>
-                                    <select class="form-control" style="width: auto;" id="locationAddressDropdown"></select>
+                                    <select class="form-control" style="width: 598px;" id="locationAddressDropdown"></select>
                                 </div>
                                 @if (role != "Admin" && role != "Host")
                                 {
@@ -83,33 +103,50 @@
             </div>
         </div>
         <div class="container">
-            <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
-                <h2 class="display-5 mb-3">Mô tả</h2>
-            </div>
             <div class="row">
-                <div class="container">
-                    <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                        <div class="px-5 pt-3">
-                            @Html.Raw(Model.Detail)
+                <div class="col">
+                    <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                        <h2 class="display-5 mb-3">Mô tả</h2>
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            <div class="row p-4 pt-lg-4 align-items-center" id="firstColContent" style="border-top-left-radius: 2rem; border-bottom-left-radius: 2rem; box-shadow: -1rem 0 3rem rgba(0, 0, 0, 0.175); border-right: 2px solid #e0e0e0;">
+                                <div class="px-5 pt-3">
+                                    <label style="width: auto">@Html.Raw(ConvertToUnorderedList(Model.Detail))</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
+                        <h2 class="display-5 mb-3">Chú ý</h2>
+                    </div>
+                    <div class="row">
+                        <div class="container">
+                            <div class="row p-4 pt-lg-4 align-items-center" id="secondColContent" style="border-top-right-radius: 2rem; border-bottom-right-radius: 2rem; box-shadow: 1rem 0 3rem rgba(0, 0, 0, 0.175);">
+                                <div class="px-5 pt-3">
+                                    @Html.Raw(ConvertToUnorderedList(Model.Note))
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">
-                <h2 class="display-5 mb-3">Chú ý</h2>
-            </div>
-            <div class="row">
-                <div class="container">
-                    <div class="row p-4 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-                        <div class="px-5 pt-3">
-                            <label>@Model.Note</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <script>
+            // Function to set the height of the second column to match the height of the first column
+            function setSecondColumnHeight() {
+                var firstColHeight = document.getElementById('firstColContent').clientHeight;
+                document.getElementById('secondColContent').style.height = firstColHeight + 'px';
+            }
+
+            // Call the function when the document is ready
+            document.addEventListener('DOMContentLoaded', function () {
+                setSecondColumnHeight();
+            });
+        </script>
+
         <div class="container">
             <!-- Reviews -->
             <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;margin-top: 50px">

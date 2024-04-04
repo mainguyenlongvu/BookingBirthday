@@ -1,9 +1,29 @@
 ﻿@model X.PagedList.IPagedList<BookingBirthday.Server.Models.PackageModel>
 @using X.PagedList.Mvc.Core
-
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     ViewData["Title"] = "QL_SanPham Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@* Function to convert string to unordered list *@
+@functions {
+    string ConvertToUnorderedList(string detail)
+    {
+        if (string.IsNullOrEmpty(detail))
+            return string.Empty;
+
+        var items = detail.Split('.').Where(item => !string.IsNullOrWhiteSpace(item)).Select(item => item.Trim());
+        if (!items.Any())
+            return string.Empty;
+
+        var ulHtml = "<ul>";
+        foreach (var item in items)
+        {
+            ulHtml += $"<li>{item}</li>";
+        }
+        ulHtml += "</ul>";
+        return ulHtml;
+    }
 }
 @await Html.PartialAsync("response")
 @section Scripts {
@@ -38,37 +58,79 @@
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
-                                    <th>Tên chủ tiệc</th>
+                                    <th>Hình ảnh</th>
                                     <th>Tên bữa tiệc</th>
-                                    <th>Địa chỉ</th>
+                                    <th>Tên chủ tiệc</th>
+                                    <th>Địa điểm tổ chức</th>
+                                    <th>Địa chỉ tổ chức</th>
+                                    <th>Giá (đồng/bé)</th>
                                     <th>Mô tả</th>
                                     <th>Chú ý</th>
-                                    <th>Hình ảnh</th>
-                                    <th>Giá</th>
                                 </tr>
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@(stt++)</td>
                                         <td>
-                                            <label style="width: auto">@item.Host_name</label>
+                                            @foreach (var booking in _dbContext.Bookings)
+                                            {
+                                                if (booking.Id == item.Id)
+                                                {
+                                                    <label style="width: auto">
+                                                        <a href="@("/Package/Show?Id="+ booking.PackageId)">@(stt++)</a>
+                                                    </label>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            <img style="width:25%" src="@item.image_url" />
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Name</label>
                                         </td>
                                         <td>
+                                            <label style="width: auto">@item.Host_name</label>
+                                        </td>
+                                        <td>
                                             <label style="width: auto">
-                                                <span class="Detail">@Html.Raw(item.Detail)</span>
+                                                @{
+                                                    var location = _dbContext.Locations.FirstOrDefault(l => l.Bookings.Any(b => b.Id == item.Id));
+                                                    if (location != null)
+                                                    {
+                                                        @location.Name
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Địa điểm tổ chức không tồn tại</span>
+                                                    }
+                                                }
                                             </label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">
+                                                @{
+                                                    var locationAddress = _dbContext.Locations.FirstOrDefault(l => l.Bookings.Any(b => b.Id == item.Id));
+                                                    if (locationAddress != null)
+                                                    {
+                                                        @locationAddress.Address
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Địa chỉ tổ chức không tồn tại</span>
+                                                    }
+                                                }
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0")</label>
+                                        </td>
+                                        <td>
+                                            <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Detail))</label>
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
                                         </td>
                                         <td>
-                                            <img style="width:100%" src="@item.image_url" />
-                                        </td>
-                                        <td>
-                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0") đồng</label>
+                                            <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0") đồng/bé</label>
                                         </td>
                                     </tr>
                                 }
