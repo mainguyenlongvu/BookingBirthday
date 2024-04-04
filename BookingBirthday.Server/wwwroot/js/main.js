@@ -1,3 +1,14 @@
+$(document).ready(function () {
+    // Tự động ẩn thông báo sau 3 giây
+    setTimeout(function () {
+        $('#successMessage').fadeOut('slow');
+        $('#msgAlert').fadeOut('slow');
+        
+    }, 5000); // Thời gian mili giây, ở đây là 8 giây
+});
+
+
+
 (function ($) {
     "use strict";
 
@@ -997,10 +1008,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-$(document).ready(function () {
-    // Tự động ẩn thông báo sau 3 giây
-    setTimeout(function () {
-        $('#successMessage').fadeOut('slow');
-        $('#errorMessage').fadeOut('slow');
-    }, 8000); // Thời gian mili giây, ở đây là 8 giây
-});
+
