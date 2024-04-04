@@ -31,7 +31,7 @@
                             {
                                 doanhThu += item.Total;
                             }
-                            else if (item.BookingStatus == "Accepted")
+                            else if (item.BookingStatus == "Accepted" || item.BookingStatus == "Processing")
                             {
                                 doanhThu += item.Total / 2;
                             }
