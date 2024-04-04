@@ -23,6 +23,7 @@ namespace BookingBirthday.Server.Controllers
         public IActionResult Show(int id)
         {
             int userId;
+            HttpContext.Session.SetString("packageid", id.ToString());
             var userIdSession = HttpContext.Session.GetString("user_id");
             if (userIdSession == null)
             {
@@ -104,7 +105,9 @@ namespace BookingBirthday.Server.Controllers
                 session.SetString("notification", jsonNotification);
             }
 
-            package = _dbContext.Packages.Where(x => x.Id == id).FirstOrDefault();
+            package = _dbContext.Packages.Include(p => p.PackageLocations)
+                                      .ThenInclude(pl => pl.Location)
+                                      .FirstOrDefault(p => p.Id == id);
             if (package != null)
             {
                 var p = new PackageModel();
@@ -117,6 +120,11 @@ namespace BookingBirthday.Server.Controllers
                 p.Status = package.Status;
                 p.Host_name = package.Host_name;
                 p.UserId = package.UserId;
+                p.Age = package.Age;
+                p.Gender = package.Gender;
+                p.LocationNames = package.PackageLocations.Select(pl => pl.Location.Name).Distinct().ToList();
+                p.LocationAddresses = package.PackageLocations.Select(pl => pl.Location.Address).Distinct().ToList();
+                p.PackageLocations = package.PackageLocations;
                 return View(p);
             }
 

@@ -24,7 +24,6 @@ namespace BookingBirthday.Data.Configurations
 			builder.Property(x => x.Success).IsRequired();
 			builder.Property(x => x.Token).IsRequired();
 			builder.Property(x => x.VnPayResponseCode).IsRequired();
-			builder.Property(x => x.OrderDescription).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.HasIndex(b => b.BookingId);
 

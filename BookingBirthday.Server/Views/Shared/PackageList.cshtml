@@ -4,45 +4,158 @@
 @using Newtonsoft.Json
 @using BookingBirthday.Data.EF
 @inject IHttpContextAccessor HttpContextAccessor
+@inject BookingBirthday.Data.EF.BookingDbContext _dbContext
 @{
     var session = HttpContextAccessor.HttpContext!.Session;
     var role = session.GetString("role");
+    var areaNames = _dbContext.Areas.Select(a => a.Name).ToList();
+    var themeNames = _dbContext.Themes.Select(t => t.Name).ToList();
 }
-@if (Model.Count() > 0)
-{
-    var delay = 0.1;
-    @foreach (var item in Model)
+<div class="d-flex flex-row">
+        <!-- First Selection Box -->
+        <select id="category" class="form-select" style="width: auto;">
+            <option value="all" selected>Tất cả</option>
+            <option value="gender">Giới tính</option>
+            <option value="area">Khu vực</option>
+            <option value="age">Độ tuổi</option>
+            <option value="theme">Chủ đề</option>
+            <option value="packageType">Loại gói</option>
+        </select>
+
+        <!-- Second Selection Box (Initially Hidden) -->
+    <select id="details" class="form-select mx-3" style="width: auto;">
+            <option value="all" selected>Tất cả</option>
+        </select>
+
+        <!-- Filter Button -->
+        <button id="filterButton" style="width: 90px;" class="btn-primary">Lọc</button>
+</div>
+<div id="productListContainer" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    @if (Model.Count() > 0)
     {
-        if (item.Status == "Active")
+        var delay = 0.1;
+        foreach (var item in Model)
         {
-            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay + "s")">
-                <div class="product-item">
-                    <div class="position-relative bg-light overflow-hidden mt-2">
-                        <img class="img-fluid w-100" style="height:300px; width: 300px;" src="@item.image_url" alt="">
-                    </div>
-                    <div class="text-center p-4">
-                        <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
-                        <a class="d-block h5 mb-2" href="@("/Package/ProfileHost?UserId=" + item.UserId)">Chủ tiệc: @item.Host_name</a>
-                        <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng</span>
-                    </div>
-                    <div class="d-flex border-top">
-                        <small class="w-50 text-center border-end py-2">
-                            <a class="text-body" href="@("/Package/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem bữa tiệc</a>
-                        </small>
-                        <small class="w-50 text-center py-2">
-                            @if (role != "Admin" && role != "Host")
-                            {
-                                <a class="text-body" asp-route="AddToBooking" asp-route-productid="@item.Id"><i class="fa fa-gift" aria-hidden="true"></i> Đặt tiệc</a>
-                            }
-                        </small>
+            if (item.Status == "Active")
+            {
+                <div class="col wow fadeInUp" data-wow-delay="@(delay + "s")">
+                    <div class="product-item">
+                        <div class="position-relative bg-light overflow-hidden mt-2">
+                            <img class="img-fluid w-100" style="height:300px; width: 300px; object-fit: cover;" src="@item.image_url" alt="">
+                        </div>
+                        <div class="text-center p-4">
+                            <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
+                            <a class="d-block h5 mb-2" href="@("/Package/ProfileHost?UserId=" + item.UserId)">Chủ tiệc: @item.Host_name</a>
+                            <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng/bé</span>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="w-50 text-center border-end py-2">
+                                <a class="text-body" href="@("/Package/Show?Id=" + item.Id)"><i class="fa fa-eye text-primary me-2"></i>Xem bữa tiệc</a>
+                            </small>
+                            <small class="w-50 text-center py-2">
+                                @if (role != "Admin" && role != "Host")
+                                {
+                                    <a class="text-body" asp-route="AddToBooking" asp-route-productid="@item.Id"><i class="fa fa-gift" aria-hidden="true"></i> Đặt tiệc</a>
+                                }
+                            </small>
+                        </div>
                     </div>
                 </div>
-            </div>
-            delay += 0.1;
+                delay += 0.1;
+            }
         }
     }
-}
-else
-{
-    <p>Không có bữa tiệc nào</p>
-}
+    else
+    {
+        <p>Không có bữa tiệc nào</p>
+    }
+</div>
+<ul class="pagination mt-5">
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <li class="pagination-item">
+            <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+        </li>
+    }
+</ul>
+<script>
+    // Function to populate the details selection box based on the category selected
+    function populateDetails(category) {
+        const detailsSelect = document.getElementById('details');
+        detailsSelect.innerHTML = ''; // Clear previous options
+
+        switch (category) {
+            case 'gender':
+                detailsSelect.style.display = 'inline'; // Show the details selection box
+                detailsSelect.innerHTML = `
+                                                    <option value="Nam">Nam</option>
+                                                    <option value="Nữ">Nữ</option>
+                                                        <option value="Nam & Nữ">Nam & Nữ</option>
+                                                `;
+                break;
+            case 'area':
+                detailsSelect.style.display = 'inline'; // Show the details selection box
+    @foreach (var areaName in areaNames)
+    {
+        <text>detailsSelect.innerHTML += '<option value="@areaName">@areaName</option>'; </text>
+    }
+                                                break;
+            case 'age':
+                detailsSelect.style.display = 'inline'; // Show the details selection box
+                detailsSelect.innerHTML = `
+                                                    <option value="0 - 5">0 - 5</option>
+                                                    <option value="6 - 10">6 - 10</option>
+                                                    <option value="11 - 14">11 - 14</option>
+                                                    <option value="15 - 17">15 - 17</option>
+                                                `;
+                break;
+            case 'theme':
+                detailsSelect.style.display = 'inline'; // Show the details selection box
+    @foreach (var themeName in themeNames)
+    {
+        <text>detailsSelect.innerHTML += '<option value="@themeName">@themeName</option>'; </text>
+    }
+                                                break;
+            case 'packageType':
+                detailsSelect.style.display = 'inline'; // Show the details selection box
+                detailsSelect.innerHTML = `
+                                                        <option value="Cơ bản">Cơ bản</option>
+                                                        <option value="Cao cấp">Cao cấp</option>
+                                                        <option value="Đặc biệt">Đặc biệt</option>
+                                                `;
+                break;
+            default:
+                detailsSelect.style.display = 'none'; // Hide the details selection box if none of the above
+                break;
+        }
+    }
+
+    // Event listener for changes in the category selection
+    document.getElementById('category').addEventListener('change', function () {
+        const selectedCategory = this.value;
+        populateDetails(selectedCategory); // Populate the details selection box accordingly
+    });
+
+    // Event listener for the filter button click
+    document.getElementById('filterButton').addEventListener('click', function () {
+        filterPackages();
+    });
+
+    // Function to handle filtering
+    function filterPackages() {
+        const category = document.getElementById('category').value;
+        const details = document.getElementById('details').value;
+
+        $.ajax({
+            url: '@Url.Action("FilterPackages", "Home")',
+            type: 'GET',
+            data: { category: category, details: details },
+            success: function (result) {
+                $('#productListContainer').html(result);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+</script>

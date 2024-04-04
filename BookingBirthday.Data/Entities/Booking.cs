@@ -12,17 +12,18 @@ namespace BookingBirthday.Data.Entities
         public int Id { get; set; }
         public DateTime Date_order { get; set; }
         public DateTime Date_start { get; set; }
-        public DateTime Date_cancel { get; set; }
-        public string? Address { get; set; }
+        public DateTime? Date_cancel { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Note { get; set; }
         public string? Reason { get; set; }
         public string ChildName { get; set; }
         public DateTime ChildDateOfBirth { get; set; }
-        public string Gender { get; set; }
+        
+        public string ChildGender { get; set; }
         public int ChildNumber { get; set; }
-
+        public DateTime? CheckIn { get; set; }   
+        public DateTime? CheckOut { get; set; }
         public String? BookingStatus { get; set; }
         public double Total { get; set; }
 

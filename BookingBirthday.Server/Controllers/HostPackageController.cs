@@ -59,7 +59,13 @@ public class HostPackageController : HostBaseController
                 image_url = x.image_url,
                 Host_name = x.Host_name,
                 Status = x.Status,
-                UserId = x.UserId
+                PackageType = x.PackageType,
+                Age = x.Age,
+                ThemeId = x.ThemeId,
+                PackageLocations = x.PackageLocations,
+                Gender  = x.Gender,
+                UserId = x.UserId,
+
             });
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
@@ -81,8 +87,8 @@ public class HostPackageController : HostBaseController
         }
         try
         {
-            var address = productData.selectedAddresses.ToList().First();
-            var location = _dbContext.Locations.FirstOrDefault(x => x.Address == address);
+            var address = productData.selectedAddresses.ToList();
+            var location = _dbContext.Locations.FirstOrDefault(x => x.Address == address[0]);
             var area = _dbContext.Areas.FirstOrDefault(x => x.Id == location.AreaId);
             var theme = _dbContext.Themes.FirstOrDefault(x => x.Id == productData.ThemeId);
             var product = "Gói tiệc " + productData.PackageType + " Chủ đề " + theme.Name + " " + area.Name;
@@ -93,8 +99,7 @@ public class HostPackageController : HostBaseController
                 TempData["Success"] = false;
                 return RedirectToAction("Index");
             }
-            var p = new Package();
-            p = new Package
+          var  p = new Package
             {
                 
                 UserId = user_id,
@@ -105,8 +110,7 @@ public class HostPackageController : HostBaseController
                 ThemeId = productData.ThemeId,
                 PackageType = productData.PackageType,
                 Age = productData.Age,
-                Gender = productData.Gender,
-                
+                Gender = productData.Gender,               
                 image_url = UploadedFile(productData.file!),
                 Status = "Active",
                 Host_name = HttpContext.Session.GetString("name")!,
@@ -269,6 +273,8 @@ public class HostPackageController : HostBaseController
         }
     }
 
+
+    [HttpGet]
     public async Task<IActionResult> GetLocationsByAreaId(int areaId)
     {
         var locations = await _dbContext.Locations
@@ -278,6 +284,17 @@ public class HostPackageController : HostBaseController
                                        .ToListAsync();
 
         return Json(locations);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetAddressesByLocationsAndAreaId([FromBody] LocationRequestModel request)
+    {
+        var addresses = await _dbContext.Locations
+                                       .Where(l => request.LocationNames.Contains(l.Name) && l.AreaId == request.AreaId).OrderBy(l=>l.Name)
+                                       .Select(l => new { l.Id, l.Address })
+                                       .ToListAsync();
+
+        return Json(addresses);
     }
 
     public async Task<IActionResult> GetAddressesByLocationNameAndAreaId(string locationName, int areaId)
@@ -290,8 +307,14 @@ public class HostPackageController : HostBaseController
         return Json(addresses);
     }
 
-
-
+    //[HttpPost]
+    //public IActionResult SaveSelectedAddresses([FromBody] List<string> selectedAddresses)
+    //{
+    //    // Lưu danh sách địa chỉ đã chọn vào thuộc tính selectedAddresses của Packagemodel
+    //    PackageModel.selectedAddresses = selectedAddresses;
+    //    // Trả về mã trạng thái HTTP 200 để cho biết lưu dữ liệu thành công
+    //    return Ok();
+    //}
 
 
 }

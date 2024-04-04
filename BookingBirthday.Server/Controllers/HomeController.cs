@@ -52,7 +52,7 @@ namespace BookingBirthday.Server.Controllers
                 }
             }
             int pageSize = 8;
-            int pageNumber = page == null || page < 0 ? 1 : page.Value;
+            int pageNumber = page ?? 1;
             //var lstsanpham = _dbContext.Packages.Include(x => x.Category).AsNoTracking().OrderBy(x => x.Id);
 
             var products = from a in _dbContext.Packages
@@ -71,8 +71,9 @@ namespace BookingBirthday.Server.Controllers
                     Host_name = x.a.Host_name,
                     UserId = x.a.UserId,
                 }).ToList();
-                PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
-                return View(lst);
+                // Convert the list to a paged list
+                var pagedList = lstProducts.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
             }
             return View();
         }
@@ -103,9 +104,9 @@ namespace BookingBirthday.Server.Controllers
         //    int pageSize = 8;
         //    int pageNumber = page == null || page < 0 ? 1 : page.Value;
         //    PagedList<PackageModel> lst = new PagedList<PackageModel>(lstProducts, pageNumber, pageSize);
-            
+
         //        return PartialView("PackageList", lst);
-            
+
         //}
 
 
@@ -114,7 +115,7 @@ namespace BookingBirthday.Server.Controllers
             var filteredProducts = from a in _dbContext.Packages
                                    select new { a };
 
-            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword)  || x.a.Host_name!.Contains(keyword)) ;
+            filteredProducts = filteredProducts.Where(x => x.a.Name!.Contains(keyword) || x.a.Host_name!.Contains(keyword));
             if (filteredProducts != null)
             {
                 var lstProducts = filteredProducts.Select(x => new PackageModel()
@@ -132,6 +133,83 @@ namespace BookingBirthday.Server.Controllers
                 return View(lstProducts);
             }
             return View(filteredProducts);
+        }
+
+        [HttpGet]
+        public IActionResult FilterPackages(string category, string details)
+        {
+            if (category == "all")
+            {
+                // Reset the partial view by returning the original view without filtering
+                return PartialView("PackageList", _dbContext.Packages
+                    .Select(p => new PackageModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Detail = p.Detail,
+                        Price = p.Price,
+                        Note = p.Note,
+                        image_url = p.image_url,
+                        Host_name = p.Host_name,
+                        Status = p.Status,
+                        UserId = p.UserId,
+                    }).ToPagedList(1, 8)); // Assuming default page number is 1 and page size is 8
+            }
+
+            IQueryable<Package> filteredPackages = _dbContext.Packages;
+
+            if (!string.IsNullOrEmpty(category) && !string.IsNullOrEmpty(details))
+            {
+                switch (category)
+                {
+                    case "gender":
+                        filteredPackages = filteredPackages.Where(p => p.Gender == details);
+                        break;
+                    case "age":
+                        filteredPackages = filteredPackages.Where(p => p.Age == details);
+                        break;
+                    case "packageType":
+                        filteredPackages = filteredPackages.Where(p => p.PackageType == details);
+                        break;
+                    case "theme":
+                        filteredPackages = filteredPackages.Where(p => p.Theme.Name == details);
+                        break;
+                    case "area":
+                        filteredPackages = filteredPackages
+                            .Join(_dbContext.PackageLocations,
+                                p => p.Id,
+                                pl => pl.PackageId,
+                                (p, pl) => new { Package = p, PackageLocation = pl })
+                            .Join(_dbContext.Locations,
+                                pl => pl.PackageLocation.LocationId,
+                                l => l.Id,
+                                (pl, l) => new { pl.Package, Location = l })
+                            .Where(x => x.Location.Area.Name == details)
+                            .Select(x => x.Package)
+                            .Distinct();
+                        break;
+                }
+            }
+
+            var pageNumber = 1; // Default page number
+            var pageSize = 8; // Default page size
+
+            var pagedFilteredPackages = filteredPackages.ToPagedList(pageNumber, pageSize);
+
+            var filteredPackageModels = pagedFilteredPackages.Select(p => new PackageModel
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Detail = p.Detail,
+                Price = p.Price,
+                Note = p.Note,
+                image_url = p.image_url,
+                Host_name = p.Host_name,
+                Status = p.Status,
+                UserId = p.UserId,
+            }).ToPagedList(pageNumber, pageSize); // Convert to paged list of PackageModel
+
+            return PartialView("PackageList", filteredPackageModels);
         }
     }
 }

@@ -179,7 +179,7 @@ namespace BookingBirthday.Server.Controllers
 
                     donHang.Date_start = request.Date_start;
                     donHang.BookingStatus = "Processing";
-                    donHang.Address = request.Address;
+                    //donHang.Address = request.Address;
                     donHang.Phone = request.Phone;
                     donHang.Note = request.Note;
                     donHang.Email = request.Email;
@@ -188,28 +188,28 @@ namespace BookingBirthday.Server.Controllers
                     await _dbContext.AddAsync(donHang);
                     await _dbContext.SaveChangesAsync();
 
-                    if (request.CartModels != null)
-                    {
-                        //foreach (var item in request.CartModels)
-                        //{
-                        //    var chiTietDonHang = new BookingPackage();
-                        //    chiTietDonHang.BookingId = donHang.Id;
-                        //    chiTietDonHang.PackageId = item.Package!.Id;
-                        //    chiTietDonHang.Price = item.Package!.Price;
-                        //    await _dbContext.AddAsync(chiTietDonHang);
-                        //    await _dbContext.SaveChangesAsync();
-                        //}
+                    //if (request.CartModels != null)
+                    //{
+                    //    //foreach (var item in request.CartModels)
+                    //    //{
+                    //    //    var chiTietDonHang = new BookingPackage();
+                    //    //    chiTietDonHang.BookingId = donHang.Id;
+                    //    //    chiTietDonHang.PackageId = item.Package!.Id;
+                    //    //    chiTietDonHang.Price = item.Package!.Price;
+                    //    //    await _dbContext.AddAsync(chiTietDonHang);
+                    //    //    await _dbContext.SaveChangesAsync();
+                    //    //}
 
-                        TempData["Message"] = "Đặt thành công";
-                        TempData["Success"] = true;
-                        return RedirectToAction("Payment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Đặt không thành công";
-                        TempData["Success"] = false;
-                    }
-                    return RedirectToAction("", "Cart");
+                    //    TempData["Message"] = "Đặt thành công";
+                    //    TempData["Success"] = true;
+                    //    return RedirectToAction("Payment", "Cart", new { bookingId = donHang.Id, userId = donHang.UserId });
+                    //}
+                    //else
+                    //{
+                    //    TempData["Message"] = "Đặt không thành công";
+                    //    TempData["Success"] = false;
+                    //}
+                    //return RedirectToAction("", "Cart");
                 }
                 catch (Exception)
                 {

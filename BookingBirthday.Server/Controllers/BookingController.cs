@@ -3,8 +3,11 @@ using BookingBirthday.Data.Entities;
 using BookingBirthday.Server.Models;
 using BookingBirthday.Server.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using X.PagedList;
 
 namespace BookingBirthday.Server.Controllers
@@ -85,6 +88,11 @@ namespace BookingBirthday.Server.Controllers
                     Detail = product.Detail,
                     Note = product.Note,
                     Status = product.Status,
+                    Gender = product.Gender,
+                    Age = product.Age,
+                    PackageType = product.PackageType,
+                    
+                    Theme = product.Theme,
                     PackageLocations = product.PackageLocations
                 };
                 SaveBookingSession(bookingItem);
@@ -93,7 +101,7 @@ namespace BookingBirthday.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBooking(BookingModel request)
+        public async Task<IActionResult> AddBooking(int packageId, BookingModel request)
         {
             if (HttpContext.Session.GetString("user_id") != null)
             {
@@ -102,76 +110,105 @@ namespace BookingBirthday.Server.Controllers
                 try
                 {
                     request.UserId = userId;
-                    var donHang = new Booking();
-                    donHang.UserId = request.UserId;
-                    donHang.Date_order = DateTime.Now;
+                    var booking = new Booking();
+                    booking.UserId = request.UserId;
+                    booking.Date_order = DateTime.Now;
+                    int childAge = DateTime.Today.Year - request.ChildDateOfBirth.Year;
+                    var product = _dbContext.Packages.FirstOrDefault(p => p.Id == packageId);
 
-                    if (request.Date_start != null)
+                    if (!Regex.IsMatch(request.Phone, @"^(0[0-9]{9,10})$"))
                     {
-                        donHang.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Không được để trống thời gian tiệc diễn ra";
+                        TempData["Message"] = "Số điện thoại không hợp lệ";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start > DateTime.Now)
+                    if (!request.Email.EndsWith("@gmail.com"))
                     {
-                        donHang.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Thời gian tiệc diễn ra sai";
+                        TempData["Message"] = "Email phải là địa chỉ theo định dạng XXX@gmail.com";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start <= DateTime.Now.AddYears(1))
+                    if (request.ChildName.Length > 30)
                     {
-                        donHang.Date_start = request.Date_start;
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Thời gian tiệc diễn ra không thể vượt quá 1 năm từ ngày hiện tại";
+                        TempData["Message"] = " Tên bé không được vượt quá 30 kí tự";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
 
-                    donHang.Date_start = request.Date_start;
-                    donHang.BookingStatus = "Processing";
-                    donHang.Address = request.Address;
-                    donHang.Phone = request.Phone;
-                    donHang.Note = request.Note;
-                    donHang.Email = request.Email;
-                    donHang.Total = request.Total;
+                    if (request.ChildDateOfBirth > DateTime.Now)
+                    {
+                        TempData["Message"] = " Ngày tháng năm sinh của bé không hợp lệ";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
 
-                    await _dbContext.AddAsync(donHang);
+                    if (childAge >= 18)
+                    {
+                        TempData["Message"] = " Ngày tháng năm sinh của bé không được lớn hơn 17 tuổi";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+                    else if ((product.Age == "0 - 5" && childAge > 5) || (product.Age == "6 - 10" && (childAge < 6 || childAge > 11)) ||
+                        (product.Age == "11 - 14" && (childAge < 11 || childAge > 14)) || (product.Age == "15 - 17" && (childAge < 15 || childAge > 17)))
+                    {
+                        TempData["Message"] = " Ngày tháng năm sinh của bé không phù hợp với gói này";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    if ((product.Gender == "Nam" && request.ChildGender != "Nam") || (product.Gender == "Nữ" && request.ChildGender != "Nữ"))
+                    {
+                        TempData["Message"] = " Giới tính của bé không phù hợp với gói này";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    if (request.ChildNumber == 0)
+                    {
+                        TempData["Message"] = " Số lượng bé tham dự không được bằng 0";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    if (request.Date_start < DateTime.Now)
+                    {
+                        TempData["Message"] = "Thời gian tổ chức không được ở quá khứ";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    if (request.Date_start > DateTime.Now.AddYears(1))
+                    {
+                        TempData["Message"] = "Thời gian tổ chức không thể vượt quá 1 năm từ ngày hiện tại";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    if (request.Date_start.TimeOfDay < new TimeSpan(9, 0, 0) || request.Date_start.TimeOfDay > new TimeSpan(21, 0, 0))
+                    {
+                        TempData["Message"] = "Thời gian tổ chức phải từ 9:00 AM đến 9:00 PM";
+                        TempData["Success"] = false;
+                        return RedirectToAction("", "Booking");
+                    }
+
+                    booking.Date_start = request.Date_start;
+                    booking.Phone = request.Phone;
+                    booking.Note = request.Note;
+                    booking.Email = request.Email;
+                    booking.ChildName = request.ChildName;
+                    booking.ChildDateOfBirth = request.ChildDateOfBirth;
+                    booking.ChildGender = request.ChildGender;
+                    booking.ChildNumber = request.ChildNumber;
+                    booking.LocationId = int.Parse(request.LocationId);
+                    booking.Total = request.Total;
+                    booking.PackageId = packageId;
+                    booking.CheckIn = null;
+                    booking.CheckOut = null;
+                    await _dbContext.AddAsync(booking);
                     await _dbContext.SaveChangesAsync();
-
-                    if (request.CartModels != null)
-                    {
-                        //foreach (var item in request.CartModels)
-                        //{
-                        //    var chiTietDonHang = new BookingPackage();
-                        //    chiTietDonHang.BookingId = donHang.Id;
-                        //    chiTietDonHang.PackageId = item.Package!.Id;
-                        //    chiTietDonHang.Price = item.Package!.Price;
-                        //    await _dbContext.AddAsync(chiTietDonHang);
-                        //    await _dbContext.SaveChangesAsync();
-                        //}
-
-                        TempData["Message"] = "Đặt thành công";
-                        TempData["Success"] = true;
-                        return RedirectToAction("Payment", "Booking", new { bookingId = donHang.Id, userId = donHang.UserId });
-                    }
-                    else
-                    {
-                        TempData["Message"] = "Đặt không thành công";
-                        TempData["Success"] = false;
-                    }
-                    return RedirectToAction("", "Booking");
+                    return RedirectToAction("Payment", "Booking", new { bookingId = booking.Id, userId = booking.UserId });
                 }
                 catch (Exception)
                 {
@@ -194,6 +231,13 @@ namespace BookingBirthday.Server.Controllers
             return View();
         }
 
+        public IActionResult CreatePaymentUrl(PaymentInformationModel model, int bookingId)
+        {
+            ViewData["BookingId"] = bookingId;
+            var url = _vnPayService.CreatePaymentUrl(bookingId, model, HttpContext);
+            return Redirect(url);
+        }
+
         public IActionResult PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
@@ -210,7 +254,6 @@ namespace BookingBirthday.Server.Controllers
                 Success = response.Success,
                 Token = response.Token,
                 VnPayResponseCode = response.VnPayResponseCode,
-                OrderDescription = response.OrderDescription,
                 Amount = response.Amount,
                 BookingId = int.Parse(response.BookingId)
             };
@@ -219,24 +262,29 @@ namespace BookingBirthday.Server.Controllers
             _dbContext.SaveChanges();
 
             var booking = _dbContext.Bookings.Find(int.Parse(response.BookingId));
-
-            _dbContext.SaveChanges();
-
-            TempData["Message"] = $"Thanh toán VNPay thành công";
-            return RedirectToAction("Succ", "Booking");
+            if (booking.BookingStatus == null)
+            {
+                booking.BookingStatus = "Processing";
+                _dbContext.SaveChanges();
+                TempData["Message"] = $"Thanh toán VNPay thành công";
+                return RedirectToAction("Succ", "Booking");
+            }
+            else
+            {
+                booking.BookingStatus = "Paid";
+                _dbContext.SaveChanges();
+                TempData["Message"] = $"Thanh toán VNPay thành công";
+                return RedirectToAction("ViewBookings", "Booking");
+            }
         }
 
         public IActionResult ViewBookings(int? page)
         {
-
-            //Ràng điều kiện ở đây
-
-            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.UserId == int.Parse(HttpContext.Session.GetString("user_id")!)).ToList();
+            var orders = _dbContext.Bookings.OrderByDescending(x => x.Date_order).Where(x => x.UserId == int.Parse(HttpContext.Session.GetString("user_id")!) && x.BookingStatus != null).ToList();
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
             PagedList<Booking> lst = new PagedList<Booking>(orders, pageNumber, pageSize);
             return View(lst);
-
         }
         //public IActionResult ViewBooking(int Id)
         //{

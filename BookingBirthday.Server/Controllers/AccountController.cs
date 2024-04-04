@@ -66,21 +66,29 @@ namespace BookingBirthday.Server.Controllers
                     HttpContext.Session.SetString("date", user.DateOfBirth.ToString()!);
                     HttpContext.Session.SetString("gender", user.Gender!);
 
-                    if (user.Role == "Admin")
+                    //if (user.Role == "Admin")
+                    //{
+                    //    TempData["Message"] = "Chào mừng quản trị viên";
+                    //}
+                    //else if (user.Role == "Host")
+                    //{
+                    //    TempData["Message"] = " Chào mừng chủ tiệc";
+                    //}
+                    //else
+                    //{
+                    //    TempData["Message"] = " Chào mừng khách hàng";
+                    //}
+
+                    if (HttpContext.Session.GetString("packageid") is string packageIdString && int.TryParse(packageIdString, out int checkpackage))
                     {
-                        TempData["Message"] = "Chào mừng quản trị viên";
+                        TempData["Success"] = true;
+                        return Redirect($"/Package/Show?Id={checkpackage}");
                     }
-                    else if (user.Role == "Host")
-                    {
-                        TempData["Message"] = " Chào mừng chủ tiệc";
-                    }
-                    else
-                    {
-                        TempData["Message"] = " Chào mừng khách hàng";
-                    }
+
                     TempData["Success"] = true;
                     return RedirectToAction("Index", "Home");
-                }
+                }             
+
                 TempData["Message"] = " Tài khoản không tồn tại";
                 TempData["Success"] = false;
                 return View(loginData);
@@ -218,7 +226,7 @@ namespace BookingBirthday.Server.Controllers
 
                 if (!userData.Email.EndsWith("@gmail.com"))
                 {
-                    TempData["Message"] = "Email phải là địa chỉ theo format XXX@gmail.com";
+                    TempData["Message"] = " Email phải là địa chỉ theo định dạng XXX@gmail.com";
                     TempData["Success"] = false;
                     return View(userData);
                 }

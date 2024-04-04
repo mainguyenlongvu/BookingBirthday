@@ -31,11 +31,11 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="@(delay + "s")">
                                     <div class="product-item">
                                         <div class="position-relative bg-light overflow-hidden mt-2">
-                                            <img class="img-fluid w-100" src="@item.image_url" alt="">
+                                            <img class="img-fluid w-100" src="@item.image_url" alt="" style="height:300px; width: 300px; object-fit: cover;">
                                         </div>
                                         <div class="text-center p-4">
                                             <a class="d-block h5 mb-2" href="">@item.Name</a>
-                                            <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng</span>
+                                            <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng/bé</span>
                                         </div>
                                         <div class="d-flex border-top">
                                             <small class="w-50 text-center border-end py-2">
