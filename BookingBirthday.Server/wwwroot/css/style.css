@@ -84,7 +84,7 @@
     align-items: center;
     justify-content: center;
     font-weight: normal;
-    background-color: #00a0f0;
+    background-color: #63c644;
 }
 
 
@@ -272,8 +272,8 @@
     .nav-pills .nav-item .btn:hover,
     .nav-pills .nav-item .btn.active {
         color: #FFFFFF;
-        background-color: #00a0f0;
-        border-color: #00a0f0;
+        background-color: #63c644;
+        border-color: #63c644;
     }
 
 .product-item {
