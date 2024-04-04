@@ -8,7 +8,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @await Html.PartialAsync("response")
+<style>
+    th {
+        border: 1px solid #ddd;
+        vertical-align: middle;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+    }
 
+    td {
+        border: 1px solid #ddd;
+    }
+</style>
 <div class="container-xxl py-5" style="margin-top: 100px">
     <div class="container">
         <div class="row g-0 gx-5 align-items-end">
