@@ -37,7 +37,18 @@
         }
     </script>
 }
-
+<style>
+    th {
+        border: 1px solid #ddd;
+        vertical-align: middle;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    td {
+        border: 1px solid #ddd;
+    }
+</style>
 <div class="container-xxl py-5" style="margin-top: 100px">
     <div class="container">
         <div class="row g-0 gx-5 align-items-end">
@@ -54,7 +65,7 @@
                     {
                         int stt = 1;
 
-                        <div class="table-responsive card mt-2">
+                        <div class="table-responsive card mt-2 px-0">
                             <table class="table table-hover">
                                 <tr>
                                     <th>#</th>
@@ -71,7 +82,7 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>
+                                        <td style="border: 1px solid #ddd;">
                                             @foreach (var booking in _dbContext.Bookings)
                                             {
                                                 if (booking.Id == item.Id)
@@ -123,7 +134,7 @@
                                             <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Detail))</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Note</label>
+                                            <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Note))</label>
                                         </td>
                                     </tr>
                                 }
