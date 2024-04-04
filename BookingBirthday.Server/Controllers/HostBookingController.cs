@@ -22,7 +22,7 @@ namespace BookingBirthday.Server.Controllers
         public async Task<IActionResult> Index(int? page)
         {
             var user_id = int.Parse(HttpContext.Session.GetString("user_id")!);
-
+           
             var session = HttpContext.Session;
             List<Category_requests> category_request = null!;
 
@@ -212,11 +212,20 @@ namespace BookingBirthday.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Tìm booking theo Id
                 var booking = await _dbContext.Bookings.FindAsync(model.BookingId);
 
                 if (booking != null)
                 {
+                    // Kiểm tra điều kiện thời gian check-in so với Date_start
+                    if (model.CheckinTime < booking.Date_start.AddHours(-1) || model.CheckinTime > booking.Date_start.AddHours(1))
+
+                    {
+                        TempData["Message"] = "Thời gian check-in chỉ được sớm hoặc chậm hơn so với thời gian đặt 1 giờ.";
+                        TempData["Success"] = false;
+                        return BadRequest(new { error = "Failed to save checkin time." });
+
+                    }
+
                     // Lưu thời gian Checkin vào booking
                     booking.CheckIn = model.CheckinTime;
 
@@ -224,38 +233,65 @@ namespace BookingBirthday.Server.Controllers
                     await _dbContext.SaveChangesAsync();
 
                     // Trả về một phản hồi thành công (nếu cần)
+                    TempData["Message"] = "Lưu checkin thành công";
+                    TempData["Success"] = true;
                     return Ok(new { success = true });
+
                 }
             }
 
             // Trả về một phản hồi lỗi nếu có lỗi xảy ra
+            TempData["Message"] = "Lưu checkin không thành công";
+            TempData["Success"] = false;
             return BadRequest(new { error = "Failed to save checkin time." });
+
         }
+
 
         [HttpPost]
         public async Task<IActionResult> SaveCheckoutTime([FromBody] CheckoutViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Tìm booking theo Id
                 var booking = await _dbContext.Bookings.FindAsync(model.BookingId);
 
                 if (booking != null)
                 {
-                    // Lưu thời gian Checkin vào booking
+                    // Kiểm tra xem thời gian check-out có lớn hơn thời gian check-in không
+                    if (model.CheckoutTime <= booking.CheckIn)
+                    {
+                        TempData["Message"] = "Thời gian check-out phải sau thời gian check-in.";
+                        TempData["Success"] = false;
+                        return BadRequest(new { error = "Failed to save checkin time." });
+                    }
+
+                    // Kiểm tra xem thời gian check-out có trong cùng một ngày với thời gian check-in không
+                    if (model.CheckoutTime.Date != booking.CheckIn.Value.Date)
+                    {
+                        TempData["Message"] = "Thời gian check-out phải trong cùng một ngày với thời gian check-in";
+                        TempData["Success"] = false;
+                        return BadRequest(new { error = "Failed to save checkin time." });
+                    }
+
+                    // Lưu thời gian CheckOut vào booking
                     booking.CheckOut = model.CheckoutTime;
 
                     // Lưu thay đổi vào cơ sở dữ liệu
                     await _dbContext.SaveChangesAsync();
 
                     // Trả về một phản hồi thành công (nếu cần)
+                    TempData["Message"] = "Lưu check-out thành công";
+                    TempData["Success"] = true;
                     return Ok(new { success = true });
                 }
             }
 
             // Trả về một phản hồi lỗi nếu có lỗi xảy ra
+            TempData["Message"] = "Lưu checkout không thành công";
+            TempData["Success"] = false;
             return BadRequest(new { error = "Failed to save checkin time." });
         }
+
 
         public class CheckinViewModel
         {

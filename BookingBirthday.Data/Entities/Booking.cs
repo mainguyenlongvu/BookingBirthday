@@ -22,8 +22,8 @@ namespace BookingBirthday.Data.Entities
         
         public string ChildGender { get; set; }
         public int ChildNumber { get; set; }
-        public DateTime CheckIn { get; set; }   
-        public DateTime CheckOut { get; set; }
+        public DateTime? CheckIn { get; set; }   
+        public DateTime? CheckOut { get; set; }
         public String? BookingStatus { get; set; }
         public double Total { get; set; }
 

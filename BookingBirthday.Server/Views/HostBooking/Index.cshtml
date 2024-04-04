@@ -12,6 +12,8 @@
     DateTime defaultDate = new DateTime(0001, 1, 1); // Ngày mặc định (1/1/0001)
 
 }
+
+
 @await Html.PartialAsync("response")
 
 <div class="container-xxl py-5" style="margin-top: 100px">
@@ -105,7 +107,7 @@
                                         </td>
                                         <td>
                                             <label style="width: auto">@item.Note</label>
-                                        </td>                                       
+                                        </td>
                                         <td>
                                             @if (@item.BookingStatus == "Declined")
                                             {
@@ -138,11 +140,11 @@
                                                 <a class="btn btn-primary" onclick="dathanhtoan(@item.Id)">Đã thanh toán</a>
                                                 <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
                                             }
-                                            @if (item.BookingStatus == "Paid" && item.CheckIn == defaultDate)
+                                            @if (item.BookingStatus == "Paid" && item.CheckIn == null)
                                             {
                                                 <button type="button" class="btn btn-primary" data-booking-id="@item.Id" onclick="showCheckinModal(this)">Checkin</button>
                                             }
-                                            @if (@item.BookingStatus == "Paid" && item.CheckOut == defaultDate && item.CheckIn != defaultDate)
+                                            @if (@item.BookingStatus == "Paid" && item.CheckOut == null && item.CheckIn != null)
                                             {
                                                 <button type="button" class="btn btn-primary" data-booking-id="@item.Id" onclick="showCheckoutModal(this)">Checkout</button>
 
@@ -275,16 +277,20 @@
             data: JSON.stringify({ bookingId: bookingId, checkinTime: checkinTime }),
             contentType: 'application/json',
             success: function (response) {
-                // Xử lý kết quả trả về nếu cần
-                console.log(response);
-                $('#checkinModal').modal('hide');
+                window.location.reload() = true;
+               
             },
-            error: function (error) {
+
+            error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
+                window.location.reload() = true;
+              
                 console.error(error);
             }
         });
     }
+
+
     function closeCheckInModal() {
         $('#checkinModal').modal('hide');
     }
@@ -299,12 +305,14 @@
             data: JSON.stringify({ bookingId: bookingId, checkoutTime: checkoutTime }),
             contentType: 'application/json',
             success: function (response) {
-                // Xử lý kết quả trả về nếu cần
-                console.log(response);
-                $('#checkoutModal').modal('hide');
+                window.location.reload() = true;
+
             },
-            error: function (error) {
+
+            error: function (xhr, status, error) {
                 // Xử lý lỗi nếu có
+                window.location.reload() = true;
+
                 console.error(error);
             }
         });
@@ -314,7 +322,7 @@
         $('#checkoutModal').modal('hide');
     }
 
-
+   
 </script>
 
 <div class="modal fade" id="checkinModal" tabindex="-1" role="dialog" aria-labelledby="checkinModalLabel" aria-hidden="true">

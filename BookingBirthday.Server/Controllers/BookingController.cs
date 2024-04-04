@@ -91,6 +91,7 @@ namespace BookingBirthday.Server.Controllers
                     Gender = product.Gender,
                     Age = product.Age,
                     PackageType = product.PackageType,
+                    
                     Theme = product.Theme,
                     PackageLocations = product.PackageLocations
                 };
@@ -203,7 +204,8 @@ namespace BookingBirthday.Server.Controllers
                     booking.LocationId = int.Parse(request.LocationId);
                     booking.Total = request.Total;
                     booking.PackageId = packageId;
-
+                    booking.CheckIn = null;
+                    booking.CheckOut = null;
                     await _dbContext.AddAsync(booking);
                     await _dbContext.SaveChangesAsync();
                     return RedirectToAction("Payment", "Booking", new { bookingId = booking.Id, userId = booking.UserId });

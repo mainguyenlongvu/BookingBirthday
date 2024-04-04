@@ -807,26 +807,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then(response => response.json())
                 .then(data => {
                     var addressOptions = document.getElementById("addressOptionsCreate");
-                    // Xóa các checkbox đã được lọc trước đó
-                    addressOptions.innerHTML = '';
+                    // Lưu trữ các checkbox đã chọn trước khi cập nhật
+                    var selectedAddresses = new Set(Array.from(document.querySelectorAll('input[name="selectedAddresses[]"]:checked'))
+                        .map(checkbox => checkbox.value));
 
-                    data.forEach(function (item) {
-                        var checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.id = 'address-' + item.id;
-                        checkbox.value = item.address;
-                        checkbox.name = 'selectedAddresses[]';
+                    // Tạo một Set để lưu trữ các địa chỉ mới
+                    var newDataAddresses = new Set(data.map(item => item.address));
 
-                        var label = document.createElement('label');
-                        label.htmlFor = 'address-' + item.id;
-                        label.textContent = item.address;
-
-                        addressOptions.appendChild(checkbox);
-                        addressOptions.appendChild(label);
-                        addressOptions.appendChild(document.createElement('br'));
+                    // Xóa các checkbox không còn trong dữ liệu mới
+                    document.querySelectorAll('input[name="selectedAddresses[]"]').forEach((checkbox) => {
+                        // Kiểm tra xem checkbox có liên quan đến các lựa chọn mới trong bảng 2 không
+                        if (!newDataAddresses.has(checkbox.value) && !isRelated(checkbox.value, selectedLocations)) {
+                            checkbox.parentElement.removeChild(checkbox.nextSibling); // Xóa label
+                            checkbox.parentElement.removeChild(checkbox.nextSibling); // Xóa br
+                            checkbox.remove(); // Xóa checkbox
+                        }
                     });
-                    // Hiển thị Checkbox Group sau khi đã có dữ liệu
-                    document.getElementById('checkboxAddressCreate').style.display = 'block';
+
+                    // Thêm các checkbox mới từ dữ liệu
+                    data.forEach(function (item) {
+                        if (!document.getElementById('address-' + item.id)) {
+                            var checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
+                            checkbox.id = 'address-' + item.id;
+                            checkbox.value = item.address;
+                            checkbox.name = 'selectedAddresses[]';
+
+                            var label = document.createElement('label');
+                            label.htmlFor = 'address-' + item.id;
+                            label.textContent = item.address;
+
+                            addressOptions.appendChild(checkbox);
+                            addressOptions.appendChild(label);
+                            addressOptions.appendChild(document.createElement('br'));
+                        }
+                    });
+
+                    // Khôi phục trạng thái đã chọn cho các checkbox
+                    selectedAddresses.forEach((address) => {
+                        var checkbox = document.querySelector(`input[name="selectedAddresses[]"][value="${address}"]`);
+                        if (checkbox) checkbox.checked = true;
+                    });
+
+                    // Quản lý hiển thị Checkbox Group
+                    if (data.length > 0) {
+                        document.getElementById('checkboxAddressCreate').style.display = 'block';
+                    } else {
+                        document.getElementById('checkboxAddressCreate').style.display = 'none';
+                    }
                 }).catch(error => console.error('Error:', error));
         } else {
             // Nếu không có location nào được chọn, xóa tất cả các checkbox
@@ -836,6 +864,19 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('checkboxAddressCreate').style.display = 'none';
         }
     };
+
+    // Hàm kiểm tra xem một địa chỉ có liên quan đến các địa điểm đã chọn không
+    function isRelated(address, selectedLocations) {
+        // Kiểm tra từng địa điểm đã chọn
+        for (var i = 0; i < selectedLocations.length; i++) {
+            // Kiểm tra xem địa chỉ có chứa trong địa điểm đã chọn không
+            if (address.includes(selectedLocations[i])) {
+                return true; // Nếu có, trả về true
+            }
+        }
+        return false; // Nếu không, trả về false
+    }
+
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -875,22 +916,38 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('locationOptions').onclick = function () {
         var selectedLocations = Array.from(document.querySelectorAll('input[name="selectedLocations[]"]:checked'))
             .map(checkbox => checkbox.value);
-        if (selectedLocations.length > 0) {
-            var areaId = document.getElementById('selectArea').value;
-            fetch(`/HostPackage/GetAddressesByLocationsAndAreaId`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ locationNames: selectedLocations, areaId: areaId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    var addressOptions = document.getElementById("addressOptions");
-                    // Xóa các checkbox đã được lọc trước đó
-                    addressOptions.innerHTML = '';
 
-                    data.forEach(function (item) {
+        var areaId = document.getElementById('selectArea').value;
+        fetch(`/HostPackage/GetAddressesByLocationsAndAreaId`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ locationNames: selectedLocations, areaId: areaId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                var addressOptions = document.getElementById("addressOptions");
+                // Lưu trữ các checkbox đã chọn trước khi cập nhật
+                var selectedAddresses = new Set(Array.from(document.querySelectorAll('input[name="selectedAddresses[]"]:checked'))
+                    .map(checkbox => checkbox.value));
+
+                // Tạo một Set để lưu trữ các địa chỉ mới
+                var newDataAddresses = new Set(data.map(item => item.address));
+
+                // Xóa các checkbox không còn trong dữ liệu mới
+                document.querySelectorAll('input[name="selectedAddresses[]"]').forEach((checkbox) => {
+                    // Kiểm tra xem checkbox có liên quan đến các lựa chọn mới trong bảng 2 không
+                    if (!newDataAddresses.has(checkbox.value) && !isRelated(checkbox.value, selectedLocations)) {
+                        checkbox.parentElement.removeChild(checkbox.nextSibling); // Xóa label
+                        checkbox.parentElement.removeChild(checkbox.nextSibling); // Xóa br
+                        checkbox.remove(); // Xóa checkbox
+                    }
+                });
+
+                // Thêm các checkbox mới từ dữ liệu
+                data.forEach(function (item) {
+                    if (!document.getElementById('address-' + item.id)) {
                         var checkbox = document.createElement('input');
                         checkbox.type = 'checkbox';
                         checkbox.id = 'address-' + item.id;
@@ -904,19 +961,46 @@ document.addEventListener("DOMContentLoaded", function () {
                         addressOptions.appendChild(checkbox);
                         addressOptions.appendChild(label);
                         addressOptions.appendChild(document.createElement('br'));
-                    });
-                    // Hiển thị Checkbox Group sau khi đã có dữ liệu
+                    }
+                });
+
+                // Khôi phục trạng thái đã chọn cho các checkbox
+                selectedAddresses.forEach((address) => {
+                    var checkbox = document.querySelector(`input[name="selectedAddresses[]"][value="${address}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+
+                // Quản lý hiển thị Checkbox Group
+                if (data.length > 0) {
                     document.getElementById('checkboxAddress').style.display = 'block';
-                })
-                .catch(error => console.error('Error:', error));
-        } else {
-            // Nếu không có location nào được chọn, xóa tất cả các checkbox
-            var addressOptions = document.getElementById("addressOptions");
-            addressOptions.innerHTML = '';
-            // Ẩn Checkbox Group
-            document.getElementById('checkboxAddress').style.display = 'none';
-        }
+                } else {
+                    document.getElementById('checkboxAddress').style.display = 'none';
+                }
+            })
+            .catch(error => console.error('Error:', error));
     };
+
+    // Hàm kiểm tra xem một địa chỉ có liên quan đến các địa điểm đã chọn không
+    function isRelated(address, selectedLocations) {
+        // Kiểm tra từng địa điểm đã chọn
+        for (var i = 0; i < selectedLocations.length; i++) {
+            // Kiểm tra xem địa chỉ có chứa trong địa điểm đã chọn không
+            if (address.includes(selectedLocations[i])) {
+                return true; // Nếu có, trả về true
+            }
+        }
+        return false; // Nếu không, trả về false
+    }
+
+
+
+
 });
 
-
+$(document).ready(function () {
+    // Tự động ẩn thông báo sau 3 giây
+    setTimeout(function () {
+        $('#successMessage').fadeOut('slow');
+        $('#errorMessage').fadeOut('slow');
+    }, 8000); // Thời gian mili giây, ở đây là 8 giây
+});
