@@ -2867,15 +2867,15 @@ textarea.form-control-lg {
 
 .btn-primary {
     color: white;
-    background-color: #00a0f0;
-    border-color: #00a0f0;
+    background-color: #63c644;
+    border-color: #50bf2c;
 }
 
 
     .btn-primary:hover {
         color: #000;
         background-color: #59c338;
-        border-color: #50bf2c
+        border-color: #50bf2c;
     }
 
     .btn-check:focus + .btn-primary, .btn-primary:focus {
@@ -4879,7 +4879,6 @@ textarea.form-control-lg {
     /*background-position: left calc(1.075em + .1875rem) center;*/
     position: relative;
     background-size: 30px;
-    width: 100px;
 }
 
     .alert-danger .alert-link {
