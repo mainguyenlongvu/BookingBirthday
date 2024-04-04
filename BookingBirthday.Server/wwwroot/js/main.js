@@ -4,7 +4,7 @@ $(document).ready(function () {
         $('#successMessage').fadeOut('slow');
         $('#msgAlert').fadeOut('slow');
         
-    }, 5000); // Thời gian mili giây, ở đây là 8 giây
+    }, 3000); // Thời gian mili giây, ở đây là 8 giây
 });
 
 
