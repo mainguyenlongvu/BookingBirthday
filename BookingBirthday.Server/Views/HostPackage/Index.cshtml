@@ -132,10 +132,10 @@
                                             <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Detail))</label>
                                         </td>
                                         <td>
-                                            <label style="width: auto">@item.Note</label>
+                                            <label style="width: auto">@Html.Raw(ConvertToUnorderedList(item.Note))</label>
                                         </td>
                                         <td>
-                                            <a class="btn btn-primary" onclick="xoaProduct(@item.Id)">Xóa</a>
+                                            <a class="btn btn-primary" onclick="xoaProduct(@item.Id)" style="border-radius: 30px; margin-bottom: 10px;">Xóa</a>
                                             <a class="btn btn-success" onclick="openUpdate(@item.Id)">Sửa</a>
 
                                             <!-- Modal -->
