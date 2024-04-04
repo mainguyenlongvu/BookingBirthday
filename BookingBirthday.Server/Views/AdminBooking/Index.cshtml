@@ -35,12 +35,12 @@
                                     <th>Thứ tự</th>
                                     <th>Mã đơn hàng</th>
                                     <th>Chủ gói tiệc</th>
-                                    <th>Thông tin khách hàng</th>
                                     <th>Địa điểm tổ chức</th>
                                     <th>Địa chỉ tổ chức</th>
                                     <th>Tổng tiền: đồng</th>
                                     <th>Ghi chú</th>
                                     <th>Trạng thái</th>
+                                    <th>Thông tin khách hàng</th>
                                     <th>Lịch sử đặt tiệc</th>
                                 </tr>
                                 @foreach (var item in Model)
@@ -76,15 +76,6 @@
                                                             </label>
                                                         }
                                                     }
-                                                }
-                                            }
-                                        </td>
-                                        <td>
-                                            @foreach (var guest in _dbContext.Users)
-                                            {
-                                                if (guest.Id == item.UserId)
-                                                {
-                                                    <button type="button" class="btn btn-primary" onclick="showGuestInformation('@guest.Name', '@guest.Phone', '@guest.Email', '@item.ChildName', '@item.ChildDateOfBirth', '@item.ChildGender', '@item.ChildNumber')">Xem</button>
                                                 }
                                             }
                                         </td>
@@ -141,6 +132,15 @@
                                             @if (@item.BookingStatus == "Accepted")
                                             {
                                                 <label style="width: auto">Đã xác nhận</label>
+                                            }
+                                        </td>
+                                        <td>
+                                            @foreach (var guest in _dbContext.Users)
+                                            {
+                                                if (guest.Id == item.UserId)
+                                                {
+                                                    <button type="button" class="btn btn-primary" onclick="showGuestInformation('@guest.Name', '@guest.Phone', '@guest.Email', '@item.ChildName', '@item.ChildDateOfBirth', '@item.ChildGender', '@item.ChildNumber')">Xem</button>
+                                                }
                                             }
                                         </td>
                                         <td>
