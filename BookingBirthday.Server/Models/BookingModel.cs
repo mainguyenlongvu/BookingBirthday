@@ -18,6 +18,8 @@ namespace BookingBirthday.Server.Models
         public string LocationName { get; set; }
         public string LocationAddress { get; set; }
         public string LocationId { get; set; }
+        public DateTime CheckIn { get; set; }
+        public DateTime CheckOut { get; set; }
 
         public string? BookingStatus { get; set; }
         public double Total { get; set; }

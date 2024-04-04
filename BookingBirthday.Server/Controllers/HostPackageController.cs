@@ -64,7 +64,8 @@ public class HostPackageController : HostBaseController
                 ThemeId = x.ThemeId,
                 PackageLocations = x.PackageLocations,
                 Gender  = x.Gender,
-                UserId = x.UserId
+                UserId = x.UserId,
+
             });
             int pageSize = 8;
             int pageNumber = page == null || page < 0 ? 1 : page.Value;
