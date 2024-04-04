@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookingBirthday.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class inital : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -165,6 +165,8 @@ namespace BookingBirthday.Data.Migrations
                     ChildDateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ChildGender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChildNumber = table.Column<int>(type: "int", nullable: false),
+                    CheckIn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: false),
                     BookingStatus = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Total = table.Column<double>(type: "float", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),

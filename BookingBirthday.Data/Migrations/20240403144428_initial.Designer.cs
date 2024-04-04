@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingBirthday.Data.Migrations
 {
     [DbContext(typeof(BookingDbContext))]
-    [Migration("20240403080658_inital")]
-    partial class inital
+    [Migration("20240403144428_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,6 +53,12 @@ namespace BookingBirthday.Data.Migrations
 
                     b.Property<string>("BookingStatus")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CheckIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CheckOut")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ChildDateOfBirth")
                         .HasColumnType("datetime2");

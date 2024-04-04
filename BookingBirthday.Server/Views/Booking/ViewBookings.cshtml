@@ -126,7 +126,8 @@
                                                 }
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.Reason')">Xem</button>
+                                                <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.CheckIn', '@item.CheckOut', '@item.Reason')">Xem</button>
+                                            
                                             </td>
                                             <td>
                                                 @if (@item.BookingStatus == "Processing" || @item.BookingStatus == "Accepted")
@@ -149,7 +150,7 @@
                             @for (int i = 1; i <= Model.PageCount; i++)
                             {
                                 <li class="pagination-item">
-                                    <a href="@Url.Action("Index", new { page = i })" class="pagination-item_link">@i</a>
+                                    <a href="@Url.Action("ViewBookings", new { page = i })" class="pagination-item_link">@i</a>
                                 </li>
                             }
                         </ul>
@@ -189,6 +190,8 @@
                 <p><strong>Thời gian đặt tiệc:</strong> <span id="bookingOrderTime"></span></p>
                 <p><strong>Thời gian tổ chức:</strong> <span id="bookingStartTime"></span></p>
                 <p><strong>Thời gian hủy tiệc:</strong> <span id="bookingCancelTime"></span></p>
+                <p><strong>Thời gian bắt đầu:</strong> <span id="bookingCheckin"></span></p>
+                <p><strong>Thời gian kết thúc:</strong> <span id="bookingCheckout"></span></p>
                 <p><strong>Lý do hủy của chủ tiệc:</strong> <span id="bookingCancelReason"></span></p>
             </div>
             <div class="modal-footer">
@@ -199,10 +202,12 @@
 </div>
 
 <script>
-    function showBookingHistory(orderTime, startTime, cancelTime, cancelReason) {
+    function showBookingHistory(orderTime, startTime, cancelTime, CheckIn, CheckOut, cancelReason) {
         $('#bookingOrderTime').text(orderTime);
         $('#bookingStartTime').text(startTime);
         $('#bookingCancelTime').text(cancelTime ? cancelTime : 'Không có');
+        $('#bookingCheckin').text(CheckIn ? CheckIn : 'Không có');
+        $('#bookingCheckout').text(CheckOut ? CheckOut : 'Không có');
         $('#bookingCancelReason').text(cancelReason ? cancelReason : 'Không có');
         $('#orderModal').modal('show');
     }

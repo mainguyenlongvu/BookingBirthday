@@ -59,6 +59,11 @@ public class HostPackageController : HostBaseController
                 image_url = x.image_url,
                 Host_name = x.Host_name,
                 Status = x.Status,
+                PackageType = x.PackageType,
+                Age = x.Age,
+                ThemeId = x.ThemeId,
+                PackageLocations = x.PackageLocations,
+                Gender  = x.Gender,
                 UserId = x.UserId
             });
             int pageSize = 8;

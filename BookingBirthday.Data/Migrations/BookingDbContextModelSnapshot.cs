@@ -51,6 +51,12 @@ namespace BookingBirthday.Data.Migrations
                     b.Property<string>("BookingStatus")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CheckIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CheckOut")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("ChildDateOfBirth")
                         .HasColumnType("datetime2");
 

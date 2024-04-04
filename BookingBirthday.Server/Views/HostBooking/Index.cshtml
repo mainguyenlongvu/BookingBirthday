@@ -9,6 +9,8 @@
 @{
     ViewData["Title"] = "QL_DonHang Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    DateTime defaultDate = new DateTime(0001, 1, 1); // Ngày mặc định (1/1/0001)
+
 }
 @await Html.PartialAsync("response")
 
@@ -123,7 +125,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.Reason')">Xem</button>
+                                            <button type="button" class="btn btn-primary" onclick="showBookingHistory('@item.Date_order', '@item.Date_start', '@(item.Date_cancel)', '@item.CheckIn', '@item.CheckOut', '@item.Reason')">Xem</button>
                                         </td>
                                         <td>
                                             @if (@item.BookingStatus == "Processing")
@@ -136,6 +138,16 @@
                                                 <a class="btn btn-primary" onclick="dathanhtoan(@item.Id)">Đã thanh toán</a>
                                                 <a class="btn btn-success" onclick="TuChoiDon(@item.Id)">Từ chối</a>
                                             }
+                                            @if (item.BookingStatus == "Paid" && item.CheckIn == defaultDate)
+                                            {
+                                                <button type="button" class="btn btn-primary" data-booking-id="@item.Id" onclick="showCheckinModal(this)">Checkin</button>
+                                            }
+                                            @if (@item.BookingStatus == "Paid" && item.CheckOut == defaultDate && item.CheckIn != defaultDate)
+                                            {
+                                                <button type="button" class="btn btn-primary" data-booking-id="@item.Id" onclick="showCheckoutModal(this)">Checkout</button>
+
+                                            }
+
                                         </td>
 
                                         @*  <td>
@@ -216,6 +228,8 @@
                 <p><strong>Thời gian đặt tiệc:</strong> <span id="bookingOrderTime"></span></p>
                 <p><strong>Thời gian tổ chức:</strong> <span id="bookingStartTime"></span></p>
                 <p><strong>Thời gian hủy tiệc:</strong> <span id="bookingCancelTime"></span></p>
+                <p><strong>Thời gian bắt đầu:</strong> <span id="bookingCheckin"></span></p>
+                <p><strong>Thời gian kết thúc:</strong> <span id="bookingCheckout"></span></p>
                 <p><strong>Lý do hủy của chủ tiệc:</strong> <span id="bookingCancelReason"></span></p>
             </div>
             <div class="modal-footer">
@@ -226,10 +240,12 @@
 </div>
 
 <script>
-    function showBookingHistory(orderTime, startTime, cancelTime, cancelReason) {
+    function showBookingHistory(orderTime, startTime, cancelTime, CheckIn, CheckOut, cancelReason) {
         $('#bookingOrderTime').text(orderTime);
         $('#bookingStartTime').text(startTime);
         $('#bookingCancelTime').text(cancelTime ? cancelTime : 'Không có');
+        $('#bookingCheckin').text(CheckIn ? CheckIn : 'Không có');
+        $('#bookingCheckout').text(CheckOut ? CheckOut : 'Không có');
         $('#bookingCancelReason').text(cancelReason ? cancelReason : 'Không có');
         $('#orderModal').modal('show');
     }
@@ -238,6 +254,120 @@
         $('#guestInformationModal').modal('hide');
     }
 
+    function showCheckinModal(button) {
+        var bookingId = $(button).data('booking-id');
+        $('#checkinModal').modal('show').data('booking-id', bookingId);
+    }
+
+    function showCheckoutModal(button) {
+        var bookingId = $(button).data('booking-id');
+        $('#checkoutModal').modal('show').data('booking-id', bookingId);
+    }
+
+
+    function saveCheckinTime() {
+        var bookingId = $('#checkinModal').data('booking-id');
+        var checkinTime = $('#checkinTime').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/HostBooking/SaveCheckinTime',
+            data: JSON.stringify({ bookingId: bookingId, checkinTime: checkinTime }),
+            contentType: 'application/json',
+            success: function (response) {
+                // Xử lý kết quả trả về nếu cần
+                console.log(response);
+                $('#checkinModal').modal('hide');
+            },
+            error: function (error) {
+                // Xử lý lỗi nếu có
+                console.error(error);
+            }
+        });
+    }
+    function closeCheckInModal() {
+        $('#checkinModal').modal('hide');
+    }
+
+    function saveCheckoutTime() {
+        var bookingId = $('#checkoutModal').data('booking-id');
+        var checkoutTime = $('#checkoutTime').val();
+
+        $.ajax({
+            type: 'POST',
+            url: '/HostBooking/SaveCheckoutTime',
+            data: JSON.stringify({ bookingId: bookingId, checkoutTime: checkoutTime }),
+            contentType: 'application/json',
+            success: function (response) {
+                // Xử lý kết quả trả về nếu cần
+                console.log(response);
+                $('#checkoutModal').modal('hide');
+            },
+            error: function (error) {
+                // Xử lý lỗi nếu có
+                console.error(error);
+            }
+        });
+    }
+
+    function closeCheckOutModal() {
+        $('#checkoutModal').modal('hide');
+    }
+
+
 </script>
 
+<div class="modal fade" id="checkinModal" tabindex="-1" role="dialog" aria-labelledby="checkinModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkinModalLabel">Checkin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form nhập thời gian Checkin -->
+                <form id="checkinForm">
+                    <div class="form-group">
+                        <label for="checkinTime">Checkin:</label>
+                        <input type="datetime-local" class="form-control" id="checkinTime" name="checkinTime">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveCheckinTime()">Lưu</button>
+                <button type="button" class="btn btn-secondary" onclick="closeCheckInModal()">Đóng</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="checkoutModalLabel">Checkout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Form nhập thời gian Checkin -->
+                <form id="checkinForm">
+                    <div class="form-group">
+                        <label for="checkTime">Checkout:</label>
+                        <input type="datetime-local" class="form-control" id="checkoutTime" name="checkoutTime">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveCheckoutTime()">Lưu</button>
+                <button type="button" class="btn btn-secondary" onclick="closeCheckOutModal()">Đóng</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 

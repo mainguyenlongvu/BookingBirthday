@@ -59,6 +59,8 @@ namespace BookingBirthday.Server.Controllers
                 LocationId = x.a.LocationId,
                 PackageId = x.a.PackageId,
                 Date_order = x.a.Date_order,
+                CheckIn = x.a.CheckIn,
+                CheckOut = x.a.CheckOut,
                 Date_start = x.a.Date_start,
                 Date_cancel = x.a.Date_cancel,
                 Total = x.a.Total,
@@ -204,5 +206,70 @@ namespace BookingBirthday.Server.Controllers
             }
 
         }
-}
+
+        [HttpPost]
+        public async Task<IActionResult> SaveCheckinTime([FromBody] CheckinViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Tìm booking theo Id
+                var booking = await _dbContext.Bookings.FindAsync(model.BookingId);
+
+                if (booking != null)
+                {
+                    // Lưu thời gian Checkin vào booking
+                    booking.CheckIn = model.CheckinTime;
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    await _dbContext.SaveChangesAsync();
+
+                    // Trả về một phản hồi thành công (nếu cần)
+                    return Ok(new { success = true });
+                }
+            }
+
+            // Trả về một phản hồi lỗi nếu có lỗi xảy ra
+            return BadRequest(new { error = "Failed to save checkin time." });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveCheckoutTime([FromBody] CheckoutViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Tìm booking theo Id
+                var booking = await _dbContext.Bookings.FindAsync(model.BookingId);
+
+                if (booking != null)
+                {
+                    // Lưu thời gian Checkin vào booking
+                    booking.CheckOut = model.CheckoutTime;
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    await _dbContext.SaveChangesAsync();
+
+                    // Trả về một phản hồi thành công (nếu cần)
+                    return Ok(new { success = true });
+                }
+            }
+
+            // Trả về một phản hồi lỗi nếu có lỗi xảy ra
+            return BadRequest(new { error = "Failed to save checkin time." });
+        }
+
+        public class CheckinViewModel
+        {
+            public int BookingId { get; set; }
+            public DateTime CheckinTime { get; set; }
+        }
+
+        public class CheckoutViewModel
+        {
+            public int BookingId { get; set; }
+            public DateTime CheckoutTime { get; set; }
+        }
     }
+
+
+}
+    

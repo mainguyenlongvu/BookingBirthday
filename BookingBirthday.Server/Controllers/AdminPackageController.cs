@@ -49,6 +49,10 @@ namespace BookingBirthday.Server.Controllers
                     Note = x.a.Note,
                     Host_name = x.a.Host_name,
                     image_url = x.a.image_url,
+                    PackageType = x.a.PackageType,
+                    PackageLocations = x.a.PackageLocations,
+                    ThemeId = x.a.ThemeId,
+                    Gender = x.a.Gender,
                     Status = x.a.Status,
                     UserId = x.a.UserId,
                 }).ToList();
