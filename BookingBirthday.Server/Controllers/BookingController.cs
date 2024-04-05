@@ -186,9 +186,9 @@ namespace BookingBirthday.Server.Controllers
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (request.Date_start.TimeOfDay < new TimeSpan(9, 0, 0) || request.Date_start.TimeOfDay > new TimeSpan(21, 0, 0))
+                    if (request.Date_start.TimeOfDay < new TimeSpan(9, 0, 0) || request.Date_start.TimeOfDay > new TimeSpan(19, 0, 0))
                     {
-                        TempData["Message"] = "Thời gian tổ chức phải từ 9:00 AM đến 9:00 PM";
+                        TempData["Message"] = "Thời gian tổ chức phải từ 9:00 AM đến 7:00 PM";
                         TempData["Success"] = false;
                         return RedirectToAction("", "Booking");
                     }
