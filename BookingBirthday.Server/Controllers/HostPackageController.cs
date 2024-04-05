@@ -290,7 +290,7 @@ public class HostPackageController : HostBaseController
     public async Task<IActionResult> GetAddressesByLocationsAndAreaId([FromBody] LocationRequestModel request)
     {
         var addresses = await _dbContext.Locations
-                                       .Where(l => request.LocationNames.Contains(l.Name) && l.AreaId == request.AreaId).OrderBy(l=>l.Name)
+                                       .Where(l => request.LocationNames.Contains(l.Name) && l.AreaId == request.AreaId && l.Status == "Active").OrderBy(l=>l.Name)
                                        .Select(l => new { l.Id, l.Address })
                                        .ToListAsync();
 
@@ -300,7 +300,7 @@ public class HostPackageController : HostBaseController
     public async Task<IActionResult> GetAddressesByLocationNameAndAreaId(string locationName, int areaId)
     {
         var addresses = await _dbContext.Locations
-                                       .Where(l => l.Name == locationName && l.AreaId == areaId)
+                                       .Where(l => l.Name == locationName && l.AreaId == areaId && l.Status == "Active")
                                        .Select(l => new { l.Id, l.Address })
                                        .ToListAsync();
 

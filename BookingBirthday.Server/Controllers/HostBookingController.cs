@@ -272,7 +272,13 @@ namespace BookingBirthday.Server.Controllers
                         TempData["Success"] = false;
                         return BadRequest(new { error = "Failed to save checkin time." });
                     }
-
+                    var latestCheckoutTime = new DateTime(model.CheckoutTime.Year, model.CheckoutTime.Month, model.CheckoutTime.Day, 21, 0, 0);
+                    if (model.CheckoutTime > latestCheckoutTime)
+                    {
+                        TempData["Message"] = "Thời gian check-out không được vượt quá 9 giờ tối.";
+                        TempData["Success"] = false;
+                        return BadRequest(new { error = "Checkout time cannot be later than 9 PM." });
+                    }
                     // Lưu thời gian CheckOut vào booking
                     booking.CheckOut = model.CheckoutTime;
 
