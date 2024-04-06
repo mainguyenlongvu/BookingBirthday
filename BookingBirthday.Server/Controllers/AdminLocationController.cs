@@ -124,21 +124,7 @@ namespace BookingBirthday.Server.Controllers
 
                     _dbContext.SaveChanges();
                 }
-                else if (locationModel.Status == "Active")
-
-                {
-                    var packagesToUpdate = (from a in _dbContext.Packages
-                                            join b in _dbContext.Users on a.UserId equals b.Id
-                                            where a.UserId == b.Id && b.Status == "InActive"
-                                            select a).ToList();
-
-                    foreach (var package in packagesToUpdate)
-                    {
-                        package.Status = "Active";
-                    }
-
-                    _dbContext.SaveChanges();
-                }
+                
                 location.Address = locationModel.Address;
                 location.Name = locationModel.Name;
 

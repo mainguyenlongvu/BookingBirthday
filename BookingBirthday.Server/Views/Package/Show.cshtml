@@ -61,8 +61,8 @@
                                     <a href="@("/Package/ProfileHost?UserId="+ Model.UserId)">Tên chủ tiệc: @Model.Host_name</a>
                                 </label>
                                 <p style="margin-top: 1rem;">Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng/bé</p>
-                                <p>Độ tuổi: @Model.Age</p>
-                                <p>Giới tính: @Model.Gender</p>
+                                @* <p>Độ tuổi: @Model.Age</p>
+                                <p>Giới tính: @Model.Gender</p> *@
                                 <div style="margin-bottom: 1rem;">
                                     <label style="margin-bottom: 1rem;">Địa điểm tổ chức: </label>
                                     <select class="form-control" style="width: auto;" id="locationNameDropdown" onchange="populateAddressDropdown()">
@@ -243,7 +243,7 @@
                             {
                                 <center><strong class="mtext-107 cl2">Bạn phải <a href="/Account/Login" class="href_style">đăng nhập</a> để sử dụng chức năng này</strong></center>
                             }
-                            else if (ViewBag.PackageRated == false)
+                            else if (ViewBag.PackageRated == false && role =="Guest")
                             {
                                 if (@ViewBag.CustomerPurchased != 0 && user > 0)
                                 {

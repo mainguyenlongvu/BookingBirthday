@@ -144,6 +144,19 @@ namespace BookingBirthday.Server.Controllers
             try
             {
                 var user = _dbContext.Users.SingleOrDefault(x => x.Id == userData.User_id);
+                if(userData.Role == "Guest")
+                {
+                    var packagesToUpdate = (from a in _dbContext.Packages
+                                            join b in _dbContext.Users on a.UserId equals b.Id
+                                            where a.UserId == b.Id && b.Status == "Active"
+                                            select a).ToList();
+
+                    foreach (var package in packagesToUpdate)
+                    {
+                        package.Status = "InActive";
+                    }
+                    _dbContext.SaveChanges();
+                }
                 user.Role = userData.Role;
                 user.Status = userData.Status;
 

@@ -70,6 +70,7 @@ namespace BookingBirthday.Server.Controllers
                     Status = x.a.Status,
                     Host_name = x.a.Host_name,
                     UserId = x.a.UserId,
+                    Theme = x.a.Theme,
                 }).ToList();
                 // Convert the list to a paged list
                 var pagedList = lstProducts.ToPagedList(pageNumber, pageSize);

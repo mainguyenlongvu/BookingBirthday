@@ -86,8 +86,8 @@
                         double total = Model.Price;
                         <div class="col-4 p-5" style="background-color: #b89c74; border-top-left-radius: 20px; border-bottom-left-radius: 20px;">
                             <h1 class="display-5 fw-bold">@Model.Name</h1>
-                            <p class="col-md-8 fs-5"><i class="zmdi zmdi-star"></i> Độ tuổi: @Model.Age</p>
-                            <p class="col-md-8 fs-5"><i class="zmdi zmdi-star"></i> Giới tính: @Model.Gender</p>
+                            @* <p class="col-md-8 fs-5"><i class="zmdi zmdi-star"></i> Độ tuổi: @Model.Age</p>
+                            <p class="col-md-8 fs-5"><i class="zmdi zmdi-star"></i> Giới tính: @Model.Gender</p> *@
                             <p class="col-md-8 fs-5"><i class="zmdi zmdi-star"></i> Giá: @Convert.ToDouble(Model.Price).ToString("#,##0") đồng/bé</p>
                             <div d-flex justify-content-center>
                                 <a href="@("/Package/Show?Id=" + Model.Id)">

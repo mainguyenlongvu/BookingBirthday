@@ -82,13 +82,13 @@
                                 @foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td style="border: 1px solid #ddd;">
-                                            @foreach (var booking in _dbContext.Bookings)
+                                        <td>
+                                            @foreach (var package in _dbContext.Packages)
                                             {
-                                                if (booking.Id == item.Id)
+                                                if (package.Id == item.Id)
                                                 {
                                                     <label style="width: auto">
-                                                        <a href="@("/Package/Show?Id="+ booking.PackageId)">@(stt++)</a>
+                                                        <a href="@("/Package/Show?Id="+ package.Id)">@(stt++)</a>
                                                     </label>
                                                 }
                                             }

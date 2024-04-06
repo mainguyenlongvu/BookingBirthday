@@ -17,9 +17,9 @@
             <option value="all" selected>Tất cả</option>
             <option value="gender">Giới tính</option>
             <option value="area">Khu vực</option>
-            <option value="age">Độ tuổi</option>
+            @* <option value="age">Độ tuổi</option> *@
             <option value="theme">Chủ đề</option>
-            <option value="packageType">Loại gói</option>
+            @* <option value="packageType">Loại gói</option> *@
         </select>
 
         <!-- Second Selection Box (Initially Hidden) -->
@@ -47,6 +47,11 @@
                             <a class="d-block h5 mb-2" href="@("/Package/Show?Id=" + item.Id)">@item.Name</a>
                             <a class="d-block h5 mb-2" href="@("/Package/ProfileHost?UserId=" + item.UserId)">Chủ tiệc: @item.Host_name</a>
                             <span class="text-primary me-1">@Convert.ToDouble(@item.Price).ToString("#,##0") đồng/bé</span>
+                            <br>
+                            <span class="text-primary me-1">Khu vực: @String.Join(" ", @item.Name.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Reverse().Take(2).Reverse())</span>
+                            <br>
+                            <span class="text-primary me-1">Chủ đề: @item.Theme.Name</span>
+
                         </div>
                         <div class="d-flex border-top">
                             <small class="w-50 text-center border-end py-2">

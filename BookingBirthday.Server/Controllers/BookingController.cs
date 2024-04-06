@@ -144,26 +144,26 @@ namespace BookingBirthday.Server.Controllers
                         return RedirectToAction("", "Booking");
                     }
 
-                    if (childAge >= 18)
-                    {
-                        TempData["Message"] = " Ngày tháng năm sinh của bé không được lớn hơn 17 tuổi";
-                        TempData["Success"] = false;
-                        return RedirectToAction("", "Booking");
-                    }
-                    else if ((product.Age == "0 - 5" && childAge > 5) || (product.Age == "6 - 10" && (childAge < 6 || childAge > 11)) ||
-                        (product.Age == "11 - 14" && (childAge < 11 || childAge > 14)) || (product.Age == "15 - 17" && (childAge < 15 || childAge > 17)))
-                    {
-                        TempData["Message"] = " Ngày tháng năm sinh của bé không phù hợp với gói này";
-                        TempData["Success"] = false;
-                        return RedirectToAction("", "Booking");
-                    }
+                    //if (childAge >= 18)
+                    //{
+                    //    TempData["Message"] = " Ngày tháng năm sinh của bé không được lớn hơn 17 tuổi";
+                    //    TempData["Success"] = false;
+                    //    return RedirectToAction("", "Booking");
+                    //}
+                    //else if ((product.Age == "0 - 5" && childAge > 5) || (product.Age == "6 - 10" && (childAge < 6 || childAge > 11)) ||
+                    //    (product.Age == "11 - 14" && (childAge < 11 || childAge > 14)) || (product.Age == "15 - 17" && (childAge < 15 || childAge > 17)))
+                    //{
+                    //    TempData["Message"] = " Ngày tháng năm sinh của bé không phù hợp với gói này";
+                    //    TempData["Success"] = false;
+                    //    return RedirectToAction("", "Booking");
+                    //}
 
-                    if ((product.Gender == "Nam" && request.ChildGender != "Nam") || (product.Gender == "Nữ" && request.ChildGender != "Nữ"))
-                    {
-                        TempData["Message"] = " Giới tính của bé không phù hợp với gói này";
-                        TempData["Success"] = false;
-                        return RedirectToAction("", "Booking");
-                    }
+                    //if ((product.Gender == "Nam" && request.ChildGender != "Nam") || (product.Gender == "Nữ" && request.ChildGender != "Nữ"))
+                    //{
+                    //    TempData["Message"] = " Giới tính của bé không phù hợp với gói này";
+                    //    TempData["Success"] = false;
+                    //    return RedirectToAction("", "Booking");
+                    //}
 
                     if (request.ChildNumber == 0)
                     {
