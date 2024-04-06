@@ -38,7 +38,9 @@ public class HostPackageController : HostBaseController
             session.SetString("notification", jsonNotification);
         }
         var products = _dbContext.Packages
-                       .Where(x => x.UserId == user_id).ToList();
+                    .Include(p => p.PackageLocations)
+                        .ThenInclude(pl => pl.Location)
+                    .ToList();
         //var location = _dbContext.Locations.ToList();
         //var area = _dbContext.Areas.ToList();
         //var viewModel = new PackageModel
@@ -65,6 +67,7 @@ public class HostPackageController : HostBaseController
                 PackageLocations = x.PackageLocations,
                 Gender  = x.Gender,
                 UserId = x.UserId,
+                Locations = x.PackageLocations.Select(pl => pl.Location).ToList(),
 
             });
             int pageSize = 8;

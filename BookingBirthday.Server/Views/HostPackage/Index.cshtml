@@ -76,7 +76,7 @@
                                     <th>Hình ảnh</th>
                                     <th>Tên bữa tiệc</th>
                                     <th>Tên chủ tiệc</th>
-                                    @* <th>Địa điểm/địa chỉ tổ chức</th> *@
+                                    <th>Địa điểm/địa chỉ tổ chức</th>
                                     <th>Giá (đồng/bé)</th>
                                     <th>Độ tuổi</th>
                                     <th>Giới tính</th>
@@ -110,7 +110,7 @@
                                         <td>
                                             <label style="width: auto">@item.Host_name</label>
                                         </td>
-                                        @* <td>
+                                        <td>
                                             @{
                                                 if (item.Locations != null && item.Locations.Any())
                                                 {
@@ -126,7 +126,7 @@
                                                     <span>Địa điểm tổ chức không tồn tại</span>
                                                 }
                                             }
-                                        </td> *@
+                                        </td>
                                         <td>
                                             <label style="width: auto">@Convert.ToDouble(item.Price).ToString("#,##0")</label>
                                         </td>
